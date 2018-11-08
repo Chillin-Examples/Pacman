@@ -29,17 +29,17 @@ class Constants(object):
 		return 'Constants'
 
 
-	def __init__(self, food_score=None, super_food_score=None, ghost_death_score=None, pacman_death_score=None, pacman_max_health=None, pacman_giant_form_time=None, max_cycles=None):
-		self.initialize(food_score, super_food_score, ghost_death_score, pacman_death_score, pacman_max_health, pacman_giant_form_time, max_cycles)
+	def __init__(self, food_score=None, super_food_score=None, ghost_death_score=None, pacman_death_score=None, pacman_max_health=None, pacman_giant_form_duration=None, max_cycles=None):
+		self.initialize(food_score, super_food_score, ghost_death_score, pacman_death_score, pacman_max_health, pacman_giant_form_duration, max_cycles)
 	
 
-	def initialize(self, food_score=None, super_food_score=None, ghost_death_score=None, pacman_death_score=None, pacman_max_health=None, pacman_giant_form_time=None, max_cycles=None):
+	def initialize(self, food_score=None, super_food_score=None, ghost_death_score=None, pacman_death_score=None, pacman_max_health=None, pacman_giant_form_duration=None, max_cycles=None):
 		self.food_score = food_score
 		self.super_food_score = super_food_score
 		self.ghost_death_score = ghost_death_score
 		self.pacman_death_score = pacman_death_score
 		self.pacman_max_health = pacman_max_health
-		self.pacman_giant_form_time = pacman_giant_form_time
+		self.pacman_giant_form_duration = pacman_giant_form_duration
 		self.max_cycles = max_cycles
 	
 
@@ -71,10 +71,10 @@ class Constants(object):
 		if self.pacman_max_health is not None:
 			s += struct.pack('i', self.pacman_max_health)
 		
-		# serialize self.pacman_giant_form_time
-		s += b'\x00' if self.pacman_giant_form_time is None else b'\x01'
-		if self.pacman_giant_form_time is not None:
-			s += struct.pack('i', self.pacman_giant_form_time)
+		# serialize self.pacman_giant_form_duration
+		s += b'\x00' if self.pacman_giant_form_duration is None else b'\x01'
+		if self.pacman_giant_form_duration is not None:
+			s += struct.pack('i', self.pacman_giant_form_duration)
 		
 		# serialize self.max_cycles
 		s += b'\x00' if self.max_cycles is None else b'\x01'
@@ -130,14 +130,14 @@ class Constants(object):
 		else:
 			self.pacman_max_health = None
 		
-		# deserialize self.pacman_giant_form_time
+		# deserialize self.pacman_giant_form_duration
 		tmp5 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
 		if tmp5:
-			self.pacman_giant_form_time = struct.unpack('i', s[offset:offset + 4])[0]
+			self.pacman_giant_form_duration = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
-			self.pacman_giant_form_time = None
+			self.pacman_giant_form_duration = None
 		
 		# deserialize self.max_cycles
 		tmp6 = struct.unpack('B', s[offset:offset + 1])[0]

@@ -56,7 +56,7 @@ protected:
 	int __ghost_death_score;
 	int __pacman_death_score;
 	int __pacman_max_health;
-	int __pacman_giant_form_time;
+	int __pacman_giant_form_duration;
 	int __max_cycles;
 
 	bool __has_food_score;
@@ -64,7 +64,7 @@ protected:
 	bool __has_ghost_death_score;
 	bool __has_pacman_death_score;
 	bool __has_pacman_max_health;
-	bool __has_pacman_giant_form_time;
+	bool __has_pacman_giant_form_duration;
 	bool __has_max_cycles;
 
 
@@ -95,9 +95,9 @@ public: // getters
 		return __pacman_max_health;
 	}
 	
-	inline int pacman_giant_form_time() const
+	inline int pacman_giant_form_duration() const
 	{
-		return __pacman_giant_form_time;
+		return __pacman_giant_form_duration;
 	}
 	
 	inline int max_cycles() const
@@ -133,9 +133,9 @@ public: // reference getters
 		return (int&) __pacman_max_health;
 	}
 	
-	inline int &ref_pacman_giant_form_time() const
+	inline int &ref_pacman_giant_form_duration() const
 	{
-		return (int&) __pacman_giant_form_time;
+		return (int&) __pacman_giant_form_duration;
 	}
 	
 	inline int &ref_max_cycles() const
@@ -176,10 +176,10 @@ public: // setters
 		has_pacman_max_health(true);
 	}
 	
-	inline void pacman_giant_form_time(const int &pacman_giant_form_time)
+	inline void pacman_giant_form_duration(const int &pacman_giant_form_duration)
 	{
-		__pacman_giant_form_time = pacman_giant_form_time;
-		has_pacman_giant_form_time(true);
+		__pacman_giant_form_duration = pacman_giant_form_duration;
+		has_pacman_giant_form_duration(true);
 	}
 	
 	inline void max_cycles(const int &max_cycles)
@@ -216,9 +216,9 @@ public: // has_attribute getters
 		return __has_pacman_max_health;
 	}
 	
-	inline bool has_pacman_giant_form_time() const
+	inline bool has_pacman_giant_form_duration() const
 	{
-		return __has_pacman_giant_form_time;
+		return __has_pacman_giant_form_duration;
 	}
 	
 	inline bool has_max_cycles() const
@@ -254,9 +254,9 @@ public: // has_attribute setters
 		__has_pacman_max_health = has_pacman_max_health;
 	}
 	
-	inline void has_pacman_giant_form_time(const bool &has_pacman_giant_form_time)
+	inline void has_pacman_giant_form_duration(const bool &has_pacman_giant_form_duration)
 	{
-		__has_pacman_giant_form_time = has_pacman_giant_form_time;
+		__has_pacman_giant_form_duration = has_pacman_giant_form_duration;
 	}
 	
 	inline void has_max_cycles(const bool &has_max_cycles)
@@ -274,7 +274,7 @@ public:
 		has_ghost_death_score(false);
 		has_pacman_death_score(false);
 		has_pacman_max_health(false);
-		has_pacman_giant_form_time(false);
+		has_pacman_giant_form_duration(false);
 		has_max_cycles(false);
 	}
 	
@@ -337,11 +337,11 @@ public:
 			s += std::string(tmp14, sizeof(int));
 		}
 		
-		// serialize pacman_giant_form_time
-		s += __has_pacman_giant_form_time;
-		if (__has_pacman_giant_form_time)
+		// serialize pacman_giant_form_duration
+		s += __has_pacman_giant_form_duration;
+		if (__has_pacman_giant_form_duration)
 		{
-			int tmp16 = __pacman_giant_form_time;
+			int tmp16 = __pacman_giant_form_duration;
 			auto tmp17 = reinterpret_cast<char*>(&tmp16);
 			s += std::string(tmp17, sizeof(int));
 		}
@@ -405,12 +405,12 @@ public:
 			offset += sizeof(int);
 		}
 		
-		// deserialize pacman_giant_form_time
-		__has_pacman_giant_form_time = *((unsigned char*) (&s[offset]));
+		// deserialize pacman_giant_form_duration
+		__has_pacman_giant_form_duration = *((unsigned char*) (&s[offset]));
 		offset += sizeof(unsigned char);
-		if (__has_pacman_giant_form_time)
+		if (__has_pacman_giant_form_duration)
 		{
-			__pacman_giant_form_time = *((int*) (&s[offset]));
+			__pacman_giant_form_duration = *((int*) (&s[offset]));
 			offset += sizeof(int);
 		}
 		

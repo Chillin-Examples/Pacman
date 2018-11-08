@@ -25,7 +25,7 @@ super_food_score = int
 ghost_death_score = int 
 pacman_death_score = int
 pacman_max_health = int
-pacman_giant_form_time = int
+pacman_giant_form_duration = int
 max_cycles = int
 
 

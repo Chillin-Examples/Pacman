@@ -1,4 +1,4 @@
-[EDirection]
+[ECommandDirection]
 _def = enum <byte>
     {
         Up,
@@ -10,10 +10,10 @@ _def = enum <byte>
 
 [ChangePacmanDirection]
 _def = class 
-direction = EDirection
+direction = ECommandDirection
 
 
 [ChangeGhostDirection]
 _def = class 
 id = int
-direction = EDirection
+direction = ECommandDirection
