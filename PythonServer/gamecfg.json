@@ -47,6 +47,6 @@
 		"auto_change_turn": true,
 		"auto_change_turn_sequence": ["Pacman", "Ghost"],
 		"": "my configs",
-		"maps":""
+		"map": "maps/map.json"
 	}
 }
