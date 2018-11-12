@@ -1,0 +1,24 @@
+{
+    "board": [
+        "wwwwwwwwwww",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "weeeeeeeeew",
+        "wwwwwwwwwww"
+    ],
+
+    "food_score" : 2,
+    "super_food_score" : 5,
+    "ghost_death_score" : 15,
+    "pacman_death_score" : 20,
+    "pacman_max_health" : 0,
+    "pacman_giant_form_duration" : 5,
+    "max_cycles" : 200
+  }
+  
