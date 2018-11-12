@@ -9,7 +9,7 @@ class LogicHandler ():
         self.world = world
         
     def store_command(self, side_name, command):
-        pass
+        return command
 
     def clear_commands():
         pass

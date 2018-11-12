@@ -1,13 +1,10 @@
 import enum
 class GuiEventType(enum.Enum):
-    def MovePacman():
-        pass
-    def MoveGhost():
-        pass
-    def ChangePacmanDirection():
-        pass
-    def ChangeGhostDirection():
-        pass
+    
+    MovePacman = 0
+    MoveGhost = 1
+    ChangePacmanDirection = 2
+    ChangeGhostDirection = 3
 
 class GuiEvent():
 

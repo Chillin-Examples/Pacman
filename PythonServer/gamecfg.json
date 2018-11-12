@@ -46,6 +46,7 @@
 		"": "turnbased game handler configs",
 		"auto_change_turn": true,
 		"auto_change_turn_sequence": ["Pacman", "Ghost"],
-		"": "my configs"
+		"": "my configs",
+		"maps":""
 	}
 }
