@@ -1,18 +1,22 @@
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+import math
 
 class GuiHandler ():
 
-    _sides = []
-    # _world = World()
-    
 
     def __init__(self, sides, world, canvas):
 
         self._sides = sides
-        self.world = world
+        self._world = world
         self._canvas = canvas
+    # Oo
+    def config(self, gameobj):
+        # gameobj.scale_factor = (gameobj.canvas.width - gameobj.config['statuses_width']) / (gameobj.world.width * gameobj.config['cell_size'])
+        # gameobj.scale_percent = math.ceil(gameobj.scale_factor * 100)
+        # gameobj.cell_size = math.ceil(gameobj.config['cell_size'] * gameobj.scale_factor)
+        # gameobj.font_size = gameobj.cell_size // 2
+        print("gameconfig")
 
-    
     def draw_board(self, height, width, board):
         for y in range(height):
             for x in range(width):
