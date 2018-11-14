@@ -9,7 +9,7 @@ import sys
 from chillin_server import GameServer, Config
 
 # project imports
-from game_handler import GameHandler
+from Management.game_handler import GameHandler
 
 
 config_path = os.path.join(

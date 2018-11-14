@@ -1,15 +1,16 @@
-class GuiHandler ():
 
-    _sides = []
-    _world = World()
-    _canvas = Canvas()
+# class GuiHandler ():
 
-    def __init__(self, sides, world, canvas):
+#     _sides = []
+#     _world = World()
+#     _canvas = Canvas()
 
-        self._sides = sides
-        self._world = world
-        self._canvas = canvas
+#     def __init__(self, sides, world, canvas):
 
-    def update(self, events):
-        pass
+#         self._sides = sides
+#         self._world = world
+#         self._canvas = canvas
+
+#     def update(self, events):
+#         pass
     
