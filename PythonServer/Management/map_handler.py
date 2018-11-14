@@ -7,6 +7,17 @@ class MapHandler ():
     def __init__(self, sides):
         self._sides = sides
 
+    def create_board(self, height, width, board, new):
+        
+        for y in range(height):
+                for x in range(width):
+                    if board[y][x] == 'w': # Tree
+                        print("www")
+                        new[y][x] = ECell.Wall
+                    elif board[y][x] == 'e': # Box
+                        new[y][x] = ECell.Empty
+        
+        return new
     def load_map(self, config):
 
         map_config = json.loads(open((config['map']), "r").read())
