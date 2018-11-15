@@ -3,6 +3,8 @@
 # python imports
 import enum
 
+
+# TODO: some other events are left
 class GuiEventType(enum.Enum):
     
     MovePacman = 0
@@ -10,11 +12,10 @@ class GuiEventType(enum.Enum):
     ChangePacmanDirection = 2
     ChangeGhostDirection = 3
 
-class GuiEvent():
+class GuiEvent(object):
 
     gui_type = GuiEventType()
-    extra_properties = {"", object}
+    extra_properties = {"": object}
 
     def __init__(self, gui_type):
         self.gui_type = gui_type
-
