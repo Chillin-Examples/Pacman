@@ -22,7 +22,6 @@ from . import map_handler
 class GameHandler(TurnbasedGameHandler):
     
     current_process = 0
-    # _logic_handler = None
     
 
     def on_recv_command(self, side_name, agent_name, command_type, command):

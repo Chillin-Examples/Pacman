@@ -12,6 +12,5 @@ def apply_command(self, side_name, command):
     pass
 
 
-
 World.validate_command = validate_command
 World.apply_command = apply_command
