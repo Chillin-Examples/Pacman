@@ -26,6 +26,7 @@ class GameHandler(TurnbasedGameHandler):
     
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
+
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
@@ -38,11 +39,6 @@ class GameHandler(TurnbasedGameHandler):
         
         _map_handler = map_handler.MapHandler(self.sides)
         self.world, board  = _map_handler.load_map(self.config)
-        self.world.board = [[ECell.Empty for _ in range(self.world.width)] for _ in range(self.world.height)]
-        self.world.board = _map_handler.create_board(self.world.height,self.world.width, board, self.world.board)
-        
-        # _gui_handler = gui_handler.GuiHandler(self.world, self.sides, self.canvas)
-        # _gui_handler.config(self)
 
         # self._logic_handler = LogicHandler(world, self.sides)
         # status config
@@ -50,15 +46,17 @@ class GameHandler(TurnbasedGameHandler):
 
     def on_initialize_gui(self):
         print('initialize gui')
+        
         # self._gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
         _gui_handler = gui_handler.GuiHandler(self.world, self.sides, self.canvas)
         _gui_handler.draw_board(self.world.height, self.world.width , self.world.board)
 
       
     def on_process_cycle(self):
+
         print('cycle %i' % (self.current_cycle, ))
         # self.apply_command(None, None)
-        #check endgame
+        # check endgame
         # end_game_info = self._logic_handler.check_end_game()
         
 

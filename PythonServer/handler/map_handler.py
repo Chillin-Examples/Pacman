@@ -13,17 +13,17 @@ class MapHandler ():
     def __init__(self, sides):
         self._sides = sides
 
-    def create_board(self, height, width, board, new):
+    def create_board(self, height, width, board, new_board):
         
         for y in range(height):
                 for x in range(width):
-                    if board[y][x] == 'w': # Tree
-                        print("www")
+                    if board[y][x] == 'w':
                         new[y][x] = ECell.Wall
-                    elif board[y][x] == 'e': # Box
+                    elif board[y][x] == 'e':
                         new[y][x] = ECell.Empty
         
-        return new
+        return new_board
+
     def load_map(self, config):
 
         map_config = json.loads(open((config['map']), "r").read())
@@ -31,8 +31,9 @@ class MapHandler ():
         world = World()
         world.width = len(board[0])
         world.height = len(board)
+        # board initialization
+        world.board = [[ECell.Empty for _ in range(world.width)] for _ in range(world.height)]
+        world.board = self.create_board(world.height, world.width, board, world.board)
         # self.world.scores = {side: 0 for side in self.sides}
-        # create_board(world.height, world.width, world.board)
-        
-    # world is an instance of World 
-        return world, board
+
+        return world, world.board
