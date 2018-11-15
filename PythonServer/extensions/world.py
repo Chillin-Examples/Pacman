@@ -4,12 +4,9 @@
 from ks.models import World
 
 
-def validate_command(self, side_name, command):
-    return True
-
-
 def apply_command(self, side_name, command):
-    pass
+    
+    return True
 
 
 World.validate_command = validate_command
