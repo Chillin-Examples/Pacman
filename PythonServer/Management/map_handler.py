@@ -1,5 +1,11 @@
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+# -*- coding: utf-8 -*-
+
+# python imports
 import json
+
+# project imports
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+
 
 class MapHandler ():
     _sides = []

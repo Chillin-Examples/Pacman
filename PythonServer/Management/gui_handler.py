@@ -1,6 +1,13 @@
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+# -*- coding: utf-8 -*-
+
+# python imports
 import math
+
+# chillin imports
 from chillin_server.gui.canvas_elements import ScaleType
+
+# project imports
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 
 class GuiHandler ():
 
@@ -30,7 +37,7 @@ class GuiHandler ():
                 elif cell == ECell.Empty and (x==width or x==0): 
                     self._canvas.create_image('RLwall', 30,30)
                 else:
-                    self._convas.create_image
+                    self._convas.create_image()
 
     
     def update(self, events):

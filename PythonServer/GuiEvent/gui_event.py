@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+
+# python imports
 import enum
+
 class GuiEventType(enum.Enum):
     
     MovePacman = 0
