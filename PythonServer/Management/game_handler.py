@@ -17,10 +17,11 @@ from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDir
 from extensions import *
 from . import  gui_handler, logic_handler, map_handler
 from . import map_handler
+
 class GameHandler(TurnbasedGameHandler):
     
     current_process = 0
-    _logic_handler = None
+    # _logic_handler = None
     
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
@@ -35,7 +36,6 @@ class GameHandler(TurnbasedGameHandler):
         print('initialize')
         
         _map_handler = map_handler.MapHandler(self.sides)
-
         self.world, board  = _map_handler.load_map(self.config)
         self.world.board = [[ECell.Empty for _ in range(self.world.width)] for _ in range(self.world.height)]
         self.world.board = _map_handler.create_board(self.world.height,self.world.width, board, self.world.board)
@@ -46,6 +46,7 @@ class GameHandler(TurnbasedGameHandler):
         # self._logic_handler = LogicHandler(world, self.sides)
         # status config
 
+
     def on_initialize_gui(self):
         print('initialize gui')
         # self._gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
@@ -55,7 +56,6 @@ class GameHandler(TurnbasedGameHandler):
       
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
-        
         # self.apply_command(None, None)
         #check endgame
         # end_game_info = self._logic_handler.check_end_game()

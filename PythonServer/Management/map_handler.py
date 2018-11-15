@@ -22,14 +22,9 @@ class MapHandler ():
 
         map_config = json.loads(open((config['map']), "r").read())
         board = map_config['board']
-
-        global BOARD_WIDTH, BOARD_HEIGHT
-        BOARD_WIDTH = len(board[0])
-        BOARD_HEIGHT = len(board)
-
         world = World()
-        world.width = BOARD_WIDTH
-        world.height = BOARD_HEIGHT
+        world.width = len(board[0])
+        world.height = len(board)
         # self.world.scores = {side: 0 for side in self.sides}
       
         

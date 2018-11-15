@@ -24,13 +24,15 @@
 		"save_replay": true,
 		"replay_dir": "replays",
 		"replay_filename": null,
-		"width": 500,
-		"height": 500,
+		"width": 1650,
+		"height": 1650,
 		"images": {
 		"Background": "images/background.png",
 		"Pacman": "images/pacman.png",
 		"Ghost": "images/ghost.png",
 		"Wall": "images/wall.png",
+		"RLwall": "images/RLwall.png",
+		"UDwall": "images/UDwall.png",
 		"Empty": "images/empty.png"
 		}
 	},
