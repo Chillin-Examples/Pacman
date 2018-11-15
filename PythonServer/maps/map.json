@@ -12,7 +12,11 @@
         "weeeeeeeeew",
         "wwwwwwwwwww"
     ],
-
+    "pacman_initial_position_x":0,
+    "pacman_initial_position_y":0,
+    "ghost_initial_position_x":1000,
+    "ghost_initial_position_y":1000,
+    "pacman_head_initial_direction": "east",
     "food_score" : 2,
     "super_food_score" : 5,
     "ghost_death_score" : 15,
