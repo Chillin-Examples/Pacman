@@ -33,7 +33,8 @@
 		"Wall": "images/wall.png",
 		"RLwall": "images/RLwall.png",
 		"UDwall": "images/UDwall.png",
-		"Empty": "images/empty.png"
+		"Block": "images/block.png"
+		
 		}
 	},
 

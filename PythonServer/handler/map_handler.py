@@ -32,7 +32,7 @@ class MapHandler ():
         world.width = len(board[0])
         world.height = len(board)
         # self.world.scores = {side: 0 for side in self.sides}
-      
+        # create_board(world.height, world.width, world.board)
         
     # world is an instance of World 
         return world, board

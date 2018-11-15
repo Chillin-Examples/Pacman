@@ -9,6 +9,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 # project imports
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 
+
 class GuiHandler ():
 
 
@@ -31,14 +32,17 @@ class GuiHandler ():
         for y in range(height):
             for x in range(width):
                 cell = board[y][x]
-                if cell == ECell.Wall and (y == height or y==0): 
+                if cell == ECell.Wall and (y == height-1 or y==0): 
+                    print("tooo y")
+                    self._canvas.create_image('UDwall', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+                elif cell == ECell.Wall and (x==width-1 or x==0):
+                    print("tooo x") 
+                    self._canvas.create_image('RLwall', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+                elif cell == ECell.Empty:
                     # self._canvas.create_image('UDwall', 20,20)
-                    self._canvas.create_image('Wall', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
-                elif cell == ECell.Empty and (x==width or x==0): 
-                    self._canvas.create_image('RLwall', 30,30)
+                    self._canvas.create_image('Wall', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
                 else:
-                    self._convas.create_image()
-
+                    self._canvas.create_image('Block', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
     
     def update(self, events):
         pass
