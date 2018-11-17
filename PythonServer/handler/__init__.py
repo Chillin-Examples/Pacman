@@ -1,1 +1,1 @@
-from . import game_handler
+# -*- coding: utf-8 -*-

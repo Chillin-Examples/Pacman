@@ -8,7 +8,7 @@ import math
 from enum import Enum
 
 # chillin imports
-from chillin_server import TurnbasedGameHandler
+from chillin_server import RealtimeGameHandler
 from chillin_server.gui.canvas_elements import ScaleType
 
 # project imports
@@ -19,25 +19,21 @@ from . import  gui_handler, logic_handler, map_handler
 from . import map_handler
 
 
-class GameHandler(TurnbasedGameHandler):
-    
-    current_process = 0
-    
+class GameHandler(RealtimeGameHandler):   
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
-
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
         # Store ?
         self.commands[side_name][command.id] = command
-        
+
 
     def on_initialize(self):
         print('initialize')
         
         _map_handler = map_handler.MapHandler(self.sides)
-        self.world, board  = _map_handler.load_map(self.config)
+        self.world = _map_handler.load_map(self.config)
 
         # self._logic_handler = LogicHandler(world, self.sides)
         # status config
@@ -50,14 +46,13 @@ class GameHandler(TurnbasedGameHandler):
         _gui_handler = gui_handler.GuiHandler(self.world, self.sides, self.canvas)
         _gui_handler.draw_board(self.world.height, self.world.width , self.world.board)
 
-      
-    def on_process_cycle(self):
 
+    def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
         # self.apply_command(None, None)
         # check endgame
         # end_game_info = self._logic_handler.check_end_game()
-        
+
 
     def on_update_clients(self):
         print('update clients')
