@@ -13,14 +13,15 @@ class MapHandler:
         self._sides = sides
 
 
-    def create_board(self, height, width, board, new_board):        
-        for y in range(height):
-                for x in range(width):
-                    if board[y][x] == 'w':
-                        new_board[y][x] = ECell.Wall
-                    elif board[y][x] == 'e':
-                        new_board[y][x] = ECell.Empty
-        return new_board
+    def  _fill_board(self, world, map_board):
+        world.board = [[ECell.Empty for _ in range(world.width)] for _ in range(world.height)]   
+        
+        for y in range(world.height):
+                for x in range(world.width):
+                    if map_board[y][x] == 'w':
+                        world.board[y][x] = ECell.Wall
+                    elif map_board[y][x] == 'e':
+                        world.board[y][x] = ECell.Empty
 
 
     def load_map(self, config):
@@ -30,7 +31,6 @@ class MapHandler:
         world.width = len(board[0])
         world.height = len(board)
         # board initialization
-        world.board = [[ECell.Empty for _ in range(world.width)] for _ in range(world.height)]
-        world.board = self.create_board(world.height, world.width, board, world.board)
+        world.board = self._fill_board(world, board)
         # self.world.scores = {side: 0 for side in self.sides}
         return world

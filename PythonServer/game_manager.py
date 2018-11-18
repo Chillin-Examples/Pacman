@@ -15,7 +15,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
 from extensions import *
-from . import  gui_handler, logic_handler, map_handler
+from . import gui_handler, logic_handler, map_handler
 from . import map_handler
 
 

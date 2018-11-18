@@ -1,42 +1,40 @@
 {
     "board": [
         "wwwwwwwwwww",
-        "weeeeeweeew",
-        "weeeeeeeeew",
+        "weseeewesew",
+        "weeeffffeew",
         "weeeweeeeew",
         "weeeweeeeew",
         "weeewwweeew",
+        "weefffffeew",
         "weeeeeeeeew",
-        "weeeeeeeeew",
-        "weeeeeeeeew",
-        "weeeeeeeeew",
+        "weefffffeew",
+        "weseeeeesew",
         "wwwwwwwwwww"
     ],
 
-    "ghosts": [
-        {
-            "x": 0,
-            "y": 0
-        }
-    ],
+    "players":{
 
-    "pacman": 
-        {
-            "x": 1000,
-            "y": 1000,
-            "head_direction": "east"
-        },
-    
-    "super_foods": [
-        {
-            "x": 300,
-            "y": 300
-        },
-        {
-            "x": 600,
-            "y": 600
-        }
-    ],
+        "ghosts": [
+            {
+                "x": 0,
+                "y": 0,
+                "direction": "Left"
+            },
+            {
+                "x": 750,
+                "y": 150,
+                "direction": "Up"
+            }
+        ],
+        
+        "pacman": 
+            {
+                "x": 1000,
+                "y": 1000,
+                "direction": "Right"
+            }
+    },
 
     "constants": {
         "food_score" : 2,
