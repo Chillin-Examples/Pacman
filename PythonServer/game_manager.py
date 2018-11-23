@@ -15,8 +15,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
 from extensions import *
-from . import gui_handler, logic_handler, map_handler
-from . import map_handler
+from handlers import gui_handler, logic_handler, map_handler
 
 
 class GameHandler(RealtimeGameHandler):   
@@ -32,19 +31,17 @@ class GameHandler(RealtimeGameHandler):
     def on_initialize(self):
         print('initialize')
         
-        _map_handler = map_handler.MapHandler(self.sides)
-        self.world = _map_handler.load_map(self.config)
-
-        # self._logic_handler = LogicHandler(world, self.sides)
+        self._map_handler = map_handler.MapHandler(self.sides)
+        world = self._map_handler.load_map(self.config)
+        self._logic_handler = logic_handler.LogicHandler(world, self.sides)
         # status config
 
 
     def on_initialize_gui(self):
         print('initialize gui')
         
-        # self._gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
-        _gui_handler = gui_handler.GuiHandler(self.world, self.sides, self.canvas)
-        _gui_handler.draw_board(self.world.height, self.world.width , self.world.board)
+        self._gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
+        self._gui_handler.draw_board(self._logic_handler.world.height, self._logic_handler.world.width , self._logic_handler.world.board)
 
 
     def on_process_cycle(self):
@@ -56,7 +53,7 @@ class GameHandler(RealtimeGameHandler):
 
     def on_update_clients(self):
         print('update clients')
-        self.send_snapshot(self.world)
+        self.send_snapshot(self._logic_handler.world)
         # self.send_snapshot(self._logic_handler.world)
 
 

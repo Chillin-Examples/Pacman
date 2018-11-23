@@ -13,7 +13,6 @@ from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 # TODO: Define static variables
 class GuiHandler ():
 
-
     def __init__(self, sides, world, canvas):
 
         self._sides = sides
@@ -46,6 +45,7 @@ class GuiHandler ():
 
                 else:
                     self._canvas.create_image('Block', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+    
     
     def update(self, events):
         pass

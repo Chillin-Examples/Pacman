@@ -31,6 +31,6 @@ class MapHandler:
         world.width = len(board[0])
         world.height = len(board)
         # board initialization
-        world.board = self._fill_board(world, board)
+        self._fill_board(world, board)
         # self.world.scores = {side: 0 for side in self.sides}
         return world
