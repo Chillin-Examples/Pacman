@@ -34,7 +34,8 @@ class GuiHandler ():
         for y in range(height):
             for x in range(width):
                 cell = board[y][x]
-                if cell == ECell.Wall and (y == height-1 or y==0): 
+
+                if cell == ECell.Wall and (y == height-1 or y==0):
                     self._canvas.create_image('UDwall', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
 
                 elif cell == ECell.Wall and (x==width-1 or x==0):
@@ -43,9 +44,12 @@ class GuiHandler ():
                 elif cell == ECell.Empty:
                     self._canvas.create_image('Wall', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
 
-                else:
-                    self._canvas.create_image('Block', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
-    
-    
+                elif cell == ECell.Food:
+                    self._canvas.create_image('Food', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+
+                elif cell == ECell.SuperFood:
+                    self._canvas.create_image('SuperFood', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+
+
     def update(self, events):
         pass

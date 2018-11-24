@@ -33,7 +33,9 @@
 		"Wall": "images/wall.png",
 		"RLwall": "images/RLwall.png",
 		"UDwall": "images/UDwall.png",
-		"Block": "images/block.png"
+		"Block": "images/block.png",
+		"Food": "images/Food.png",
+		"SuperFood": "images/SuperFood.png"
 		
 		}
 	},

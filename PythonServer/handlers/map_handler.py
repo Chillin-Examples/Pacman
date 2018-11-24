@@ -22,6 +22,10 @@ class MapHandler:
                         world.board[y][x] = ECell.Wall
                     elif map_board[y][x] == 'e':
                         world.board[y][x] = ECell.Empty
+                    elif map_board[y][x] == 'f':
+                        world.board[y][x] = ECell.Food
+                    elif map_board[y][x] == 's':
+                        world.board[y][x] = ECell.SuperFood
 
 
     def load_map(self, config):
