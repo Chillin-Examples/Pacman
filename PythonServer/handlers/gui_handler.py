@@ -13,7 +13,7 @@ from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 # TODO: Define static variables
 class GuiHandler ():
 
-    def __init__(self, sides, world, canvas):
+    def __init__(self,world ,sides, canvas):
 
         self._sides = sides
         self._world = world
@@ -30,7 +30,7 @@ class GuiHandler ():
 
 
     def draw_board(self, height, width, board):
-
+        
         for y in range(height):
             for x in range(width):
                 cell = board[y][x]
