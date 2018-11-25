@@ -5,8 +5,18 @@ class LogicHandler ():
     def __init__ (self, world, sides):
         self._sides = sides
         self.world = world
- 
-        
+
+
+    def initialize(self):
+
+        self.move_dirs = {
+            ECommandDirection.Up.name: Position(x=0, y=-1),
+            ECommandDirection.Right.name: Position(x=1, y=0),
+            ECommandDirection.Down.name: Position(x=0, y=1),
+            ECommandDirection.Left.name: Position(x=-1, y=0)
+        }
+
+
     def store_command(self, side_name, command):
         return command
 
