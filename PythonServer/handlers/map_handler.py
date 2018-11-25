@@ -36,7 +36,6 @@ class MapHandler:
         world.constants.super_food_score = constants_config["super_food_score"]
         world.constants.ghost_death_score = constants_config["ghost_death_score"]
         world.constants.pacman_death_score = constants_config["pacman_death_score"]
-        world.constants.pacman_max_health = constants_config["pacman_max_health"]
         world.constants.pacman_giant_form_duration = constants_config["pacman_giant_form_duration"]
         world.constants.max_cycles = constants_config["max_cycles"]
 
@@ -49,7 +48,7 @@ class MapHandler:
         pacman.id = 1
         pacman.position = Position(x=pacman_config["position"][0], y=pacman_config["position"][1])
         pacman.direction = EDirection[pacman_config["direction"]]
-        pacman.health = 1
+        pacman.health = pacman_config["health"]
         pacman.giant_form_remaining_time = 0
         world.pacman = pacman
 
