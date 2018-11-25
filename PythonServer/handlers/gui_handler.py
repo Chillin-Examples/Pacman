@@ -35,21 +35,25 @@ class GuiHandler ():
             for x in range(width):
                 cell = board[y][x]
 
-                if cell == ECell.Wall and (y == height-1 or y==0):
-                    self._canvas.create_image('UDwall', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+                if cell == ECell.Wall and (y == height - 1 or y == 0 or x == width - 1 or x == 0):
+                    self._canvas.create_image('RoundWall', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                                              scale_value=150)
 
-                elif cell == ECell.Wall and (x==width-1 or x==0):
-                    self._canvas.create_image('RLwall', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+                elif cell == ECell.Wall:
+                    self._canvas.create_image('InterWall', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                                              scale_value=150)
 
                 elif cell == ECell.Empty:
-                    self._canvas.create_image('Wall', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+                    self._canvas.create_image('Empty', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                                              scale_value=150)
 
                 elif cell == ECell.Food:
-                    self._canvas.create_image('Food', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
+                    self._canvas.create_image('Food', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                                              scale_value=150)
 
                 elif cell == ECell.SuperFood:
-                    self._canvas.create_image('SuperFood', x*150, y*150, scale_type=ScaleType.ScaleToWidth, scale_value=150)
-
+                    self._canvas.create_image('SuperFood', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                                              scale_value=150)
 
     def update(self, events):
         pass

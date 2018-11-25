@@ -1,0 +1,182 @@
+Metadata-Version: 2.1
+Name: PyDbLite
+Version: 3.0.4
+Summary: PyDbLite, a fast, pure-Python in-memory database
+
+Home-page: http://www.pydblite.net/
+Author: Pierre Quentel, Bendik Rønning Opstad
+Author-email: pierre.quentel@gmail.com
+License: BSD
+Description: .. |build-status| image:: https://api.travis-ci.org/bendikro/PyDbLite.svg?branch=master
+            :target: https://travis-ci.org/bendikro/PyDbLite
+        
+        .. |docs| image:: https://readthedocs.org/projects/pydblite/badge/?version=latest
+            :target: https://pydblite.readthedocs.org
+            :alt: Documentation Status
+        
+        .. |pypi| image:: http://img.shields.io/pypi/v/pydblite.png
+            :alt: PYPI Package
+            :target: https://pypi.python.org/pypi/PyDbLite
+        
+        PyDbLite
+        =============
+        
+        PyDbLite is
+        
+        * a fast, pure-Python, untyped, in-memory database engine, using
+          Python syntax to manage data, instead of SQL
+        * a pythonic interface to SQLite using the same syntax as the
+          pure-Python engine for most operations (except database connection
+          and table creation because of each database specificities)
+        
+        PyDbLite is suitable for a small set of data where a fully fledged DB would be overkill.
+        
+        Supported Python versions: 2.6+
+        
+        Build status: |build-status|
+        
+        Read the documentation: |docs|
+        
+        Installation
+        ---------------
+        
+        PIP
+        ~~~~~~~~~
+        
+        .. code-block:: bash
+        
+            pip install pydblite
+        
+        Manually
+        ~~~~~~~~~
+        
+        Download the source and execute
+        
+        .. code-block:: bash
+        
+            python setup.py install
+        
+        
+        Changelog
+        *********
+        
+        
+        3.0.4 (2016-04-17)
+        ==================
+        
+        * Added functions `__enter__()
+          <api.rst#pydblite.sqlite.Database.__enter__>`_ and `__exit__()
+          <api.rst#pydblite.sqlite.Database.__exit__>`_ to `Database
+          <api.rst#pydblite.sqlite.Database>`_
+        
+        
+        3.0.3 (2016-04-02)
+        ==================
+        
+        * Fixed bug where db_filter argument of function `_len()
+          <api.rst#pydblite.sqlite.Table._len>`_, `get_unique_ids()
+          <api.rst#pydblite.sqlite.Table.get_unique_ids>`_, and
+          `get_group_count() <api.rst#pydblite.sqlite.Table.get_group_count>`_
+          was ignored if filter returns 0 matches.
+        
+        
+        3.0.2 (2015-04-18)
+        ==================
+        
+        * Fixed bug (#1) in Base where calling `db.create()
+          <api.rst#pydblite.pydblite._Base.create>`_ without supplying a value
+          for the "mode" parameter with give an error.
+        
+        
+        3.0.1 (2015-02-23)
+        ==================
+        
+        * Fixed bug in Base where opening existing database would fail.
+        
+        
+        3.0 (2014-09-18)
+        ================
+        
+        Note: Some changes in this release are not backwards compatible with
+        2.X versions.
+        
+        * pydblite and sqlite are rewritten to use a common Filter object.
+        
+        * Tests have been improved and standardised in `Unit tests
+          <http://pydblite.readthedocs.org/en/latest/unittests.html>`_.
+        
+        * Updated `Example code
+          <http://pydblite.readthedocs.org/en/latest/examples.html>`_.
+        
+        * Renamed module and package names to lower case according to `PEP 8
+          <https://www.python.org/dev/peps/pep-0008>`_
+        
+        * Converted to UNIX line endings and follow `PEP 8
+          <https://www.python.org/dev/peps/pep-0008>`_ code style.
+        
+        * MySQL adapter has been dropped until it can be tested with unit
+          tests.
+        
+        
+        2.6
+        ===
+        
+        * if db exists, read field names on instance creation
+        
+        * allow add_field on an instance even if it was not open()
+        
+        * attribute path is the path of the database in the file system (was
+          called "name" in previous versions)
+        
+        * attribute name is the base name of the database, without the
+          extension
+        
+        * adapt code to run on Python 2 and Python 3
+        
+        
+        2.5
+        ===
+        
+        * test is now in folder "test"
+        
+        * SQLite changes:
+        
+          * many changes to support "legacy" SQLite databases
+        
+            * no control on types declared in CREATE TABLE or ALTER TABLE
+        
+            * no control on value types in INSERT or UPDATE
+        
+            * no version number in records
+        
+          * add methods to specify a conversion function for fields after a
+            SELECT
+        
+          * change names to be closer to SQLite names
+        
+            * a class Database to modelise the database
+        
+            * a class Table (not Base) for each table in the database
+        
+        
+        2.4
+        ===
+        
+        * add BSD Licence
+        
+        * raise exception if unknown fields in insert
+        
+        
+        2.3
+        ===
+        
+        * introduce syntax (db('name')>'f') & (db('age') == 30)
+        
+        
+        2.2
+        ===
+        
+        * add __contains__
+        
+Keywords: Python database engine SQLite
+Platform: Platform-independent, runs with Python2.6+
