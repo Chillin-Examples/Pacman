@@ -45,7 +45,8 @@ class GameHandler(RealtimeGameHandler):
 
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
-        # self.apply_command(None, None)
+        # self.logic_handler.world.apply_command(None, None)
+        # self.logic_handler
         # check endgame
         # end_game_info = self.logic_handler.check_end_game()
 

@@ -18,6 +18,12 @@ _def = enum <byte>
     }
 
 
+[Position]
+_def = class
+x = int
+y = int
+
+
 [Constants]
 _def = class
 food_score = int
@@ -31,8 +37,7 @@ max_cycles = int
 
 [Pacman]
 _def = class
-x = int
-y = int
+position = Position
 direction = EDirection
 health = int
 giant_form_remaining_time = int
@@ -41,8 +46,7 @@ giant_form_remaining_time = int
 [Ghost]
 _def = class
 id = int
-x = int
-y = int
+position = Position
 direction = EDirection
 
 

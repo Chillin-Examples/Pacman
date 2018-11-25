@@ -14,8 +14,9 @@ class MapHandler:
 
 
     def  _fill_board(self, world, map_board):
+
         world.board = [[ECell.Empty for _ in range(world.width)] for _ in range(world.height)]   
-        
+
         for y in range(world.height):
                 for x in range(world.width):
                     if map_board[y][x] == 'w':
@@ -31,10 +32,14 @@ class MapHandler:
     def load_map(self, config):
         map_config = json.loads(open((config['map']), "r").read())
         board = map_config['board']
+        constants_config = map_config['constants']
+        players_config = map_config['players']
         world = World()
         world.width = len(board[0])
         world.height = len(board)
         # board initialization
         self._fill_board(world, board)
+        # self._fill_constants(world, constants_config)
+        # self._fill_players(world, players_config)
         # self.world.scores = {side: 0 for side in self.sides}
         return world
