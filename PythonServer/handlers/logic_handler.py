@@ -26,5 +26,4 @@ class LogicHandler ():
 
     def check_end_game(self):
         pass
-        # return ("": {"": {"": {"": ""}}})
         #should return tuple<string, dict<string,dict<string, duct<string,string>>>
