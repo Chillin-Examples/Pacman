@@ -24,8 +24,9 @@ class GameManager(RealtimeGameHandler):
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
+        print('command: %s(%i) %s' % (side_name, command.id, command_type))
+        store_command(side_name,command)
         # Store ?
-        self.commands[side_name][command.id] = command
 
 
     def on_initialize(self):
@@ -45,7 +46,7 @@ class GameManager(RealtimeGameHandler):
 
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, )) 
-        self._logic_handler.process(self.current_cycle)
+        self.logic_handler.process(self.current_cycle)
         # self.logic_handler.world.apply_command(None, None)
 
 

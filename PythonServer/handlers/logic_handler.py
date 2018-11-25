@@ -16,8 +16,11 @@ class LogicHandler ():
             ECommandDirection.Left.name: Position(x=-1, y=0)
         }
 
+        self.commands = {side: {} for side in self._sides}
+
 
     def store_command(self, side_name, command):
+        self.commands[side_name][command.id] = command
         return command
 
 
@@ -26,8 +29,20 @@ class LogicHandler ():
 
 
     def process(self, current_cycle):
-        # guievent is a list of GuiEvents-> guievent = Guievent[]
-        return guievent
+        # test code
+        if self.world.pacman.health == 0:
+            return
+
+        command = self.commands["pacman"][1]
+        if command.name() == ChangePacmanDirection.name():
+            new_position = Pos(position=pacman.position) + self.move_dirs[command.direction.name]
+
+            if self.world.board[new_position.y][new_position.x] != ECell.Wall:
+                # if there was a ghost there
+                world.pacman.position = new_position
+        
+        # self.world.apply_command(None, None)
+        # return guievent
 
 
     def get_client_world(self, side_name):
