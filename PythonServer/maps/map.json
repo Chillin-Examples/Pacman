@@ -17,18 +17,18 @@
 
         "ghosts": [
             {
-                "position": [0, 0],
+                "position": [1000, 1000],
                 "direction": "Left"
             },
             {
-                "position": [750, 150],
+                "position": [1150, 150],
                 "direction": "Up"
             }
         ],
         
         "pacman": 
             {
-                "position": [1000,1000],
+                "position": [150,150],
                 "direction": "Right",
                 "health": 1
             }
