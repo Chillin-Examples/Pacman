@@ -8,21 +8,17 @@ import math
 from enum import Enum
 
 # chillin imports
-from chillin_server import TurnbasedGameHandler
+from chillin_server import RealtimeGameHandler
 from chillin_server.gui.canvas_elements import ScaleType
 
 # project imports
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
 from extensions import *
-from . import game_handler, gui_handler, logic_handler, map_handler
+from handlers import gui_handler, logic_handler, map_handler
 
-class GameHandler(TurnbasedGameHandler):
-    
-    current_process = 0
-    _logic_handler = None
-    _map_handler = None
-    _gui_handler = None
+
+class GameManager(RealtimeGameHandler):   
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
         if None in command.__dict__.values():
@@ -30,39 +26,36 @@ class GameHandler(TurnbasedGameHandler):
             return
         # Store ?
         self.commands[side_name][command.id] = command
-        
+
 
     def on_initialize(self):
-
         print('initialize')
-
-        _map_handler = map_handler.MapHandler(sides)
-        world = self._map_handler.load_map("mappath")
-        self._logic_handler = LogicHandler(world, self.sides)
-        # create world board
+        
+        world = map_handler.MapHandler(self.sides).load_map(self.config)
+        self.logic_handler = logic_handler.LogicHandler(world, self.sides)
         # status config
+
 
     def on_initialize_gui(self):
         print('initialize gui')
-        self._gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
+        
+        self.gui_handler = gui_handler.GuiHandler(self.logic_handler.world, self.sides, self.canvas)
+        self.gui_handler.draw_board(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
 
 
     def on_process_cycle(self):
-        print('cycle %i' % (self.current_cycle, ))
-        
-        self.apply_command(None, None)
-    
-        #check endgame
-        end_game_info = self._logic_handler.check_end_game()
-        
+        print('cycle %i' % (self.current_cycle, )) 
+        #self._logic_handler.process(self.current_cycle)
+        # self.logic_handler.world.apply_command(None, None)
+
 
     def on_update_clients(self):
         print('update clients')
-        self.send_snapshot(self._logic_handler.world)
+        self.send_snapshot(self.logic_handler.world)
 
 
     def on_update_gui(self):
         print('update gui')
         # gui_event 
-        self._gui_handler.update(gui_event)
+        # self.gui_handler.update(gui_event)
         self.canvas.apply_actions()

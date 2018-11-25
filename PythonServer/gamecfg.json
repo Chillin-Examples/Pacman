@@ -24,9 +24,18 @@
 		"save_replay": true,
 		"replay_dir": "replays",
 		"replay_filename": null,
-		"width": 500,
-		"height": 500,
-		"images": {}
+		"width": 1650,
+		"height": 1650,
+		"images": {
+		"Pacman": "images/pacman.png",
+		"Ghost": "images/ghost.png",
+		"Empty": "images/empty.png",
+		"RoundWall": "images/roundWall.png",
+		"InterWall": "images/interWall.png",
+		"Food": "images/food.png",
+		"SuperFood": "images/superFood.png"
+		
+		}
 	},
 
 	"sides": {
@@ -47,6 +56,9 @@
 		"auto_change_turn": true,
 		"auto_change_turn_sequence": ["Pacman", "Ghost"],
 		"": "my configs",
+		"cell_size": 150,
+		"show_statuses": true,
+		"statuses_width": 800,
 		"map": "maps/map.json"
 	}
 }

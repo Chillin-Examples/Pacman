@@ -4,14 +4,14 @@
 import random
 
 # chillin imports
-from chillin_client import TurnbasedAI
+from chillin_client import RealtimeAI
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection, Position
 from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
 
 
-class AI(TurnbasedAI):
+class AI(RealtimeAI):
 
     def __init__(self, world):
         super(AI, self).__init__(world)
