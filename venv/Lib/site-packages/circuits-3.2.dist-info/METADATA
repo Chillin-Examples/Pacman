@@ -1,0 +1,305 @@
+Metadata-Version: 2.0
+Name: circuits
+Version: 3.2
+Summary: Asynchronous Component based Event Application Framework
+Home-page: http://circuitsframework.com/
+Author: James Mills
+Author-email: prologic@shortcircuit.net.au
+License: MIT
+Download-URL: http://bitbucket.org/circuits/circuits/downloads/
+Keywords: event framework distributed concurrent component asynchronous
+Platform: POSIX
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Environment :: No Input/Output (Daemon)
+Classifier: Environment :: Other Environment
+Classifier: Environment :: Plugins
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: Telecommunications Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: BSD
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.1
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Adaptive Technologies
+Classifier: Topic :: Communications :: Chat :: Internet Relay Chat
+Classifier: Topic :: Communications :: Email :: Mail Transport Agents
+Classifier: Topic :: Database
+Classifier: Topic :: Internet :: WWW/HTTP :: HTTP Servers
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Server
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System :: Clustering
+Classifier: Topic :: System :: Distributed Computing
+
+.. _Python Programming Language: http://www.python.org/
+.. _#circuits IRC Channel: http://webchat.freenode.net/?randomnick=1&channels=circuits&uio=d4
+.. _FreeNode IRC Network: http://freenode.net
+.. _Python Standard Library: http://docs.python.org/library/
+.. _MIT License: http://www.opensource.org/licenses/mit-license.php
+.. _Create an Issue: https://github.com/circuits/circuits/issues/new
+.. _Mailing List: http://groups.google.com/group/circuits-users
+.. _Website: http://circuitsframework.com/
+.. _PyPi: http://pypi.python.org/pypi/circuits
+.. _Documentation: http://circuits.readthedocs.org/en/latest/
+.. _Downloads: https://github.com/circuits/circuits/releases
+.. _Ask a Question: http://stackoverflow.com/questions/ask
+.. _Stackoverflow: http://stackoverflow.com/
+.. _Google+ Group: https://plus.google.com/communities/107775112577294599973
+
+.. image:: https://travis-ci.org/circuits/circuits.svg
+   :target: https://travis-ci.org/circuits/circuits
+   :alt: Build Status
+
+.. image:: https://coveralls.io/repos/circuits/circuits/badge.png
+   :target: https://coveralls.io/r/circuits/circuits
+   :alt: Coverage
+
+.. image:: https://landscape.io/github/circuits/circuits/master/landscape.png
+   :target: https://landscape.io/github/circuits/circuits/master
+   :alt: Quality
+
+.. image:: https://badge.waffle.io/circuits/circuits.png?label=ready&title=Ready 
+   :target: https://waffle.io/circuits/circuits
+   :alt: Stories Ready
+
+.. image:: https://requires.io/bitbucket/circuits/circuits/requirements.png?branch=default
+   :target: https://requires.io/bitbucket/circuits/circuits/requirements?branch=default
+   :alt: Requirements Status
+
+circuits is a **Lightweight** **Event** driven and **Asynchronous**
+**Application Framework** for the `Python Programming Language`_
+with a strong **Component** Architecture.
+
+circuits also includes a lightweight, high performance and scalable
+HTTP/WSGI compliant web server as well as various I/O and Networking
+components.
+
+- `Website`_
+- `Downloads`_
+- `Documentation`_
+
+Got questions? 
+
+- `Ask a Question`_ (Tag it: ``circuits-framework``)
+
+
+Examples
+--------
+
+Hello
+.....
+
+
+.. code:: python
+
+    #!/usr/bin/env python
+
+    """circuits Hello World"""
+
+    from circuits import Component, Event
+
+
+    class hello(Event):
+        """hello Event"""
+
+
+    class App(Component):
+
+        def hello(self):
+            """Hello Event Handler"""
+
+            print("Hello World!")
+
+        def started(self, component):
+            """Started Event Handler
+
+            This is fired internally when your application starts up and can be used to
+            trigger events that only occur once during startup.
+            """
+
+            self.fire(hello())  # Fire hello Event
+
+            raise SystemExit(0)  # Terminate the Application
+
+    App().run()
+
+
+Echo Server
+...........
+
+
+.. code:: python
+
+    #!/usr/bin/env python
+
+    """Simple TCP Echo Server
+
+    This example shows how you can create a simple TCP Server (an Echo Service)
+    utilizing the builtin Socket Components that the circuits library ships with.
+    """
+
+    from circuits import handler, Debugger
+    from circuits.net.sockets import TCPServer
+
+
+    class EchoServer(TCPServer):
+
+        @handler("read")
+        def on_read(self, sock, data):
+            """Read Event Handler
+
+            This is fired by the underlying Socket Component when there has been
+            new data read from the connected client.
+
+            ..note :: By simply returning, client/server socket components listen
+                      to ValueChagned events (feedback) to determine if a handler
+                      returned some data and fires a subsequent Write event with
+                      the value returned.
+            """
+
+            return data
+
+    # Start and "run" the system.
+    # Bind to port 0.0.0.0:9000
+    app = EchoServer(9000)
+    Debugger().register(app)
+    app.run()
+
+
+Hello Web
+.........
+
+
+.. code:: python
+
+    #!/usr/bin/env python
+
+    from circuits.web import Server, Controller
+
+
+    class Root(Controller):
+
+        def index(self):
+            """Index Request Handler
+
+            Controller(s) expose implicitly methods as request handlers.
+            Request Handlers can still be customized by using the ``@expose``
+            decorator. For example exposing as a different path.
+            """
+
+            return "Hello World!"
+
+    app = Server(("0.0.0.0", 9000))
+    Root().register(app)
+    app.run()
+
+
+More `examples <https://github.com/circuits/circuits/tree/master/examples>`_...
+
+
+
+Features
+--------
+
+- event driven
+- concurrency support
+- component architecture
+- asynchronous I/O components
+- no required external dependencies
+- full featured web framework (circuits.web)
+- coroutine based synchronization primitives
+
+
+Requirements
+------------
+
+- circuits has no dependencies beyond the `Python Standard Library`_.
+
+
+Supported Platforms
+-------------------
+
+- Linux, FreeBSD, Mac OS X, Windows
+- Python 2.6, 2.7, 3.2, 3.3, 3.4
+- pypy 2.0, 2.1, 2.2
+
+
+Installation
+------------
+
+The simplest and recommended way to install circuits is with pip.
+You may install the latest stable release from PyPI with pip::
+
+    $ pip install circuits
+
+If you do not have pip, you may use easy_install::
+
+    $ easy_install circuits
+
+Alternatively, you may download the source package from the
+`PyPi`_ or the `Downloads`_ extract it and install using::
+
+    $ python setup.py install
+
+
+.. note::
+    You can install the `development version
+    <https://github.com/circuits/circuits/archive/master.zip#egg=circuits-dev>`_
+    via ``pip install circuits==dev``.
+
+
+License
+-------
+
+circuits is licensed under the `MIT License`_.
+
+
+Feedback
+--------
+
+We welcome any questions or feedback about bugs and suggestions on how to
+improve circuits.
+
+Let us know what you think about circuits. `@pythoncircuits <http://twitter.com/pythoncircuits>`_.
+
+Do you have suggestions for improvement? Then please `Create an Issue`_
+with details of what you would like to see. I'll take a look at it and
+work with you to either incorporate the idea or find a better solution.
+
+
+Community
+---------
+
+There are also several places you can reach out to the circuits community:
+
+- `Mailing List`_
+- `Google+ Group`_
+- `#circuits IRC Channel`_ on the `FreeNode IRC Network`_
+- `Ask a Question`_ on `Stackoverflow`_ (Tag it: ``circuits-framework``)
+
+----
+
+Disclaimer
+----------
+
+Whilst I (James Mills) continue to contribute and maintain the circuits project
+I do not represent the interests or business of my employer Facebook Inc. The
+contributions I make are of my own free time and have no bearing or relevance
+o Facebook Inc.
+
+

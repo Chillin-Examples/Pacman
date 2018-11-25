@@ -27,15 +27,13 @@
 		"width": 1650,
 		"height": 1650,
 		"images": {
-		"Background": "images/background.png",
 		"Pacman": "images/pacman.png",
 		"Ghost": "images/ghost.png",
-		"Wall": "images/wall.png",
-		"RLwall": "images/RLwall.png",
-		"UDwall": "images/UDwall.png",
-		"Block": "images/block.png",
-		"Food": "images/Food.png",
-		"SuperFood": "images/SuperFood.png"
+		"Empty": "images/empty.png",
+		"RoundWall": "images/roundWall.png",
+		"InterWall": "images/interWall.png",
+		"Food": "images/food.png",
+		"SuperFood": "images/superFood.png"
 		
 		}
 	},
