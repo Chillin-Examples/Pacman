@@ -18,7 +18,7 @@ from extensions import *
 from handlers import gui_handler, logic_handler, map_handler
 
 
-class GameHandler(RealtimeGameHandler):   
+class GameManager(RealtimeGameHandler):   
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
         if None in command.__dict__.values():
