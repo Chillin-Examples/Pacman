@@ -48,21 +48,21 @@ class MapHandler:
         pacman = Pacman()
         pacman.id = 1
         pacman.position = Position(x=pacman_config["position"][0], y=pacman_config["position"][1])
-        pacman.direction = pacman_config["direction"]
+        pacman.direction = EDirection[pacman_config["direction"]]
         pacman.health = 1
         pacman.giant_form_remaining_time = 0
         world.pacman = pacman
 
         # ghosts
         world.ghosts = []
-        ghost_id = 1
+        ghost_id = 0
         for ghost_config in players_config["ghosts"]:
+            ghost_id += 1
             new_ghost = Ghost()
             new_ghost.id = ghost_id
-            new_ghost.position = Position(x=ghost_config['position'][0], y=ghost_config['position'][1])
-            new_ghost.direction = ghost_config["direction"]
+            new_ghost.position = Position(x=ghost_config["position"][0], y=ghost_config["position"][1])
+            new_ghost.direction = EDirection[ghost_config["direction"]]
             world.ghosts.append(new_ghost)
-            ghost_id += 1
 
 
     def load_map(self, config):
@@ -80,4 +80,5 @@ class MapHandler:
         self._fill_board(world, board)
         self._fill_constants(world, constants_config)
         self._fill_players(world, players_config)
+
         return world
