@@ -37,7 +37,7 @@ class LogicHandler ():
 
     def clear_commands(self):
         for side in self._sides:
-            self.commands = {side: {} for side in self._sides}
+            self._last_cycle_commands = {'Pacman': [], 'Ghost': []}
 
 
     def process(self, current_cycle):
@@ -46,10 +46,14 @@ class LogicHandler ():
         gui_events = []
         for side in self._sides:
             gui_events.append(self.world.apply_command(side, self._last_cycle_commands[side]))
-
-       
-        # self.clear_commands()        
+        self._move_pacman(gui_events)
+        self.clear_commands()        
         return gui_events
+    
+    def _move_pacman(self,gui_events):
+        for i in gui_events:
+            if i.type == Pacman.Move:
+                self.world.pacman.x = i.extra_properties["new_pos"]
 
 
     def get_client_world(self, side_name):
