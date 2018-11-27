@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ks.models import Position
 from ks.commands import ECommandDirection
-from gui_event import *
+# from gui_event import *
 
 
 class LogicHandler ():
@@ -9,7 +9,7 @@ class LogicHandler ():
     def __init__ (self, world, sides):
         self._sides = sides
         self.world = world
-        self.gui_event = GuiEvent(0)
+        # self.gui_event = GuiEvent(0)
 
     def initialize(self):
 
@@ -45,6 +45,7 @@ class LogicHandler ():
         if self.world.pacman.health == 0:
             return
         
+        # pacman Command
         for id in self.commands["Pacman"]:
             command = self.commands["Pacman"][id]
             if command.name() == ChangePacmanDirection.name():
@@ -58,7 +59,7 @@ class LogicHandler ():
         
         
         # self.world.apply_command(None, None)
-        return guievent
+        # return guievent
 
 
     def get_client_world(self, side_name):

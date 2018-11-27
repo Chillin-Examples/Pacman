@@ -25,6 +25,8 @@ class GameManager(RealtimeGameHandler):
             print("None in command: %s - %s" % (side_name, command_type))
             return
         print('command: %s(%i) %s' % (side_name, command.id, command_type))
+        print("On recieeeve")
+        print(command.id)
         store_command(side_name,command)
         # Store ?
 

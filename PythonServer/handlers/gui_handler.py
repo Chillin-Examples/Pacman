@@ -63,5 +63,6 @@ class GuiHandler():
                                       scale_type=ScaleType.ScaleToWidth,
                                       scale_value=150)
     def update(self, events):
-        for event in events:
-            if event
+        # for event in events:
+        #     if event
+        pass
