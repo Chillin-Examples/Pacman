@@ -59,16 +59,13 @@ class GuiHandler():
 
     def draw_players(self, height, width, board):
 
-        self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
+        self.pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=150)
 
-        for ghost in self._world.ghosts:
-                self._canvas.create_image('Ghost', ghost.position.x, ghost.position.y,
-                                    scale_type=ScaleType.ScaleToWidth,
-                                    scale_value=150)
 
-
-    def update(self, events):
+    # def update(self, events):
+    def update(self):
+        self._canvas.edit_image(self.pacman_img_ref, 600, 800)
         pass
         
