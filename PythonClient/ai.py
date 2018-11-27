@@ -20,3 +20,10 @@ class AI(RealtimeAI):
 
     def decide(self):
         print('decide')
+        print(self.world.board[1][1])
+        # if self.world.board[1][1] == ECell.Empty:
+        
+        self.send_command(ChangePacmanDirection(direction=EDirection.Right, id))
+            # self.world.board[1][1] = ECell.Wall
+        
+        #     return
