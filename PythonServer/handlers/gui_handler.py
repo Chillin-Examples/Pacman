@@ -19,6 +19,7 @@ class GuiHandler():
         self._sides = sides
         self._canvas = canvas
 
+
     def config(self):
 
         # self.scale_factor = (self.canvas.width - self.config['statuses_width']) / (self.world.width * self.config['cell_size'])
@@ -26,6 +27,7 @@ class GuiHandler():
         # self.cell_size = math.ceil(self.config['cell_size'] * self.scale_factor)
         # self.font_size = self.cell_size // 2
         print("gameconfig")
+
 
     def draw_board(self, height, width, board):
 
@@ -46,23 +48,27 @@ class GuiHandler():
                                               scale_value=150)
 
                 elif cell == ECell.Food:
-                    self._canvas.create_image('Food', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                    img_ref = self._canvas.create_image('Food', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=150)
+
 
                 elif cell == ECell.SuperFood:
                     self._canvas.create_image('SuperFood', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=150)
 
+
+    def draw_players(self, height, width, board):
+
         self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
-                                  scale_type=ScaleType.ScaleToWidth,
-                                  scale_value=150)
+                                scale_type=ScaleType.ScaleToWidth,
+                                scale_value=150)
+
+        for ghost in self._world.ghosts:
+                self._canvas.create_image('Ghost', ghost.position.x, ghost.position.y,
+                                    scale_type=ScaleType.ScaleToWidth,
+                                    scale_value=150)
 
 
-        for i in self._world.ghosts:
-            self._canvas.create_image('Ghost', i.position.x, i.position.y,
-                                      scale_type=ScaleType.ScaleToWidth,
-                                      scale_value=150)
     def update(self, events):
-        # for event in events:
-        #     if event
         pass
+        
