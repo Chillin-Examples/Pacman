@@ -21,14 +21,13 @@ from handlers import gui_handler, logic_handler, map_handler
 class GameManager(RealtimeGameHandler):   
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
+        print(command_type)
+        print(agent_name)
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
-        print('command: %s(%i) %s' % (side_name, command.id, command_type))
-        print("On recieeeve")
-        print(command.id)
-        store_command(side_name,command)
-        # Store ?
+        # print('command: %s(%i) %s' % (side_name, command.id, command_type))
+        self.logic_handler.store_command(side_name,command)
 
 
     def on_initialize(self):
@@ -48,9 +47,9 @@ class GameManager(RealtimeGameHandler):
 
 
     def on_process_cycle(self):
-        print('cycle %i' % (self.current_cycle, )) 
+        print('cycle %i' % (self.current_cycle, ))
+
         self.logic_handler.process(self.current_cycle)
-        # self.logic_handler.world.apply_command(None, None)
 
 
     def on_update_clients(self):

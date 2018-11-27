@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from ks.models import Position
 from ks.commands import ECommandDirection
+from extensions import world
 # from gui_event import *
 
 
@@ -9,6 +10,8 @@ class LogicHandler ():
     def __init__ (self, world, sides):
         self._sides = sides
         self.world = world
+        # for bezan ino
+        self._last_cycle_commands = {'Pacman': [], 'Ghost': []}
         # self.gui_event = GuiEvent(0)
 
     def initialize(self):
@@ -20,18 +23,19 @@ class LogicHandler ():
             ECommandDirection.Left.name: Position(x=-1, y=0)
         }
 
-        self.commands = {side: {} for side in self._sides}
+        
 
 
     def store_command(self, side_name, command):
         # too aply command change directiono seda mizanim ?
-        # behtar nis inja age id e command -  bood store nakone?
         # gui event ye list bashe va har seri tahe cycle faghat liste pak she dige ? be last gui event kri nadarim ?
-        # move pacman farghsh ba change pacman direction ?
-        # az koja mifahme type hamun enum e ?
-
-        self.commands[side_name][command.id] = command
-        return commands
+        
+        if command.id < 0 or command.id >= (len(self.world.pacman), len(self.world.ghosts)):
+            print('Invalid id in command: %s %i' % (side_name, command.id))
+            return
+        
+        self._last_cycle_commands[side_name] = command
+        print('command: %s(%i) %s' % (side_name, command.id, command_type))
 
 
     def clear_commands(self):
@@ -41,24 +45,16 @@ class LogicHandler ():
 
     def process(self, current_cycle):
         # test code
-        
-        if self.world.pacman.health == 0:
-            return
-        
-        # pacman Command
-        for id in self.commands["Pacman"]:
-            command = self.commands["Pacman"][id]
-            if command.name() == ChangePacmanDirection.name():
-                new_position = Pos(position=pacman.position) + self.move_dirs[command.direction.name]
-
-            if self.world.board[new_position.y][new_position.x] != ECell.Wall:
-                # if there was a ghost there
-                world.pacman.position = new_position
-                
-        self.clear_commands()        
-        
-        
-        # self.world.apply_command(None, None)
+        # for side_name in self._sides
+        #     self.world.apply_command(side_name, command)
+        print("processssx   ")
+        for i in self._last_cycle_commands["Pacman"]:
+            print(i)
+            gui_event = self.world.apply_command("Pacman", i)
+            print("aaaaaaaaaaaa")
+            print(gui_event)
+            print("\n")
+        # self.clear_commands()        
         # return guievent
 
 
