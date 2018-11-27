@@ -21,12 +21,10 @@ from handlers import gui_handler, logic_handler, map_handler
 class GameManager(RealtimeGameHandler):   
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
-        print(command_type)
-        print(agent_name)
+        
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
-        # print('command: %s(%i) %s' % (side_name, command.id, command_type))
         self.logic_handler.store_command(side_name,command)
 
 
@@ -41,7 +39,7 @@ class GameManager(RealtimeGameHandler):
 
     def on_initialize_gui(self):
         print('initialize gui')
-        
+
         self.gui_handler = gui_handler.GuiHandler(self.logic_handler.world, self.sides, self.canvas)
         self.gui_handler.draw_board(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
 

@@ -4,7 +4,7 @@
 import json
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection, Position
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 
 
 class MapHandler:
@@ -46,7 +46,8 @@ class MapHandler:
         pacman_config = players_config["pacman"]
         pacman = Pacman()
         pacman.id = 1
-        pacman.position = Position(x=pacman_config["position"][0], y=pacman_config["position"][1])
+        pacman.x = pacman_config["position"][0]
+        pacman.y = pacman_config["position"][1]
         pacman.direction = EDirection[pacman_config["direction"]]
         pacman.health = pacman_config["health"]
         pacman.giant_form_remaining_time = 0
@@ -59,7 +60,8 @@ class MapHandler:
             ghost_id += 1
             new_ghost = Ghost()
             new_ghost.id = ghost_id
-            new_ghost.position = Position(x=ghost_config["position"][0], y=ghost_config["position"][1])
+            new_ghost.x = ghost_config["position"][0]
+            new_ghost.y = ghost_config["position"][1]
             new_ghost.direction = EDirection[ghost_config["direction"]]
             world.ghosts.append(new_ghost)
 

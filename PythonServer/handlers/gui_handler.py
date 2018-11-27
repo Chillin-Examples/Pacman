@@ -53,13 +53,13 @@ class GuiHandler():
                     self._canvas.create_image('SuperFood', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=150)
 
-        self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
+        self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y,
                                   scale_type=ScaleType.ScaleToWidth,
                                   scale_value=150)
 
 
         for i in self._world.ghosts:
-            self._canvas.create_image('Ghost', i.position.x, i.position.y,
+            self._canvas.create_image('Ghost', i.x, i.y,
                                       scale_type=ScaleType.ScaleToWidth,
                                       scale_value=150)
     def update(self, events):

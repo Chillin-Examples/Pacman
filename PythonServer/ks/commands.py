@@ -22,22 +22,16 @@ class ChangePacmanDirection(object):
 		return 'ChangePacmanDirection'
 
 
-	def __init__(self, id=None, direction=None):
-		self.initialize(id, direction)
+	def __init__(self, direction=None):
+		self.initialize(direction)
 	
 
-	def initialize(self, id=None, direction=None):
-		self.id = id
+	def initialize(self, direction=None):
 		self.direction = direction
 	
 
 	def serialize(self):
 		s = b''
-		
-		# serialize self.id
-		s += b'\x00' if self.id is None else b'\x01'
-		if self.id is not None:
-			s += struct.pack('i', self.id)
 		
 		# serialize self.direction
 		s += b'\x00' if self.direction is None else b'\x01'
@@ -48,22 +42,13 @@ class ChangePacmanDirection(object):
 	
 
 	def deserialize(self, s, offset=0):
-		# deserialize self.id
+		# deserialize self.direction
 		tmp0 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
 		if tmp0:
-			self.id = struct.unpack('i', s[offset:offset + 4])[0]
-			offset += 4
-		else:
-			self.id = None
-		
-		# deserialize self.direction
-		tmp1 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp1:
-			tmp2 = struct.unpack('b', s[offset:offset + 1])[0]
+			tmp1 = struct.unpack('b', s[offset:offset + 1])[0]
 			offset += 1
-			self.direction = ECommandDirection(tmp2)
+			self.direction = ECommandDirection(tmp1)
 		else:
 			self.direction = None
 		
@@ -104,21 +89,21 @@ class ChangeGhostDirection(object):
 
 	def deserialize(self, s, offset=0):
 		# deserialize self.id
-		tmp3 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp2 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp3:
+		if tmp2:
 			self.id = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.id = None
 		
 		# deserialize self.direction
-		tmp4 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp3 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp4:
-			tmp5 = struct.unpack('b', s[offset:offset + 1])[0]
+		if tmp3:
+			tmp4 = struct.unpack('b', s[offset:offset + 1])[0]
 			offset += 1
-			self.direction = ECommandDirection(tmp5)
+			self.direction = ECommandDirection(tmp4)
 		else:
 			self.direction = None
 		
