@@ -34,6 +34,7 @@ class GameManager(RealtimeGameHandler):
         
         world = map_handler.MapHandler(self.sides).load_map(self.config)
         self.logic_handler = logic_handler.LogicHandler(world, self.sides)
+        self.logic_handler.initialize()
         # status config
 
 
@@ -57,5 +58,5 @@ class GameManager(RealtimeGameHandler):
 
     def on_update_gui(self):
         print('update gui')
-        # self.gui_handler.update(gui_event)
+        # self.gui_handler.update(self.logic_handler.process.gui_event_list)
         self.canvas.apply_actions()
