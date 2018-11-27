@@ -30,6 +30,7 @@ class GuiHandler():
 
 
     def draw_board(self, height, width, board):
+        print('draw board')
 
         for y in range(height):
             for x in range(width):
@@ -58,6 +59,7 @@ class GuiHandler():
 
 
     def draw_players(self, height, width, board):
+        print('draw players')
 
         self.pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
                                 scale_type=ScaleType.ScaleToWidth,
@@ -66,6 +68,11 @@ class GuiHandler():
 
     # def update(self, events):
     def update(self):
-        self._canvas.edit_image(self.pacman_img_ref, 600, 800)
+        print('update gui_handler')
+
+        # for event in events:
+        #     if event.type == 0:
+        #         self._canvas.edit_image(self.pacman_img_ref, event["new_pos"].x, vent["new_pos"].y)
+
         pass
         
