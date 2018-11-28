@@ -7,7 +7,6 @@ from gui_events import GuiEvent, GuiEventType
 
 def apply_command(self, side_name, command):
 
-    print(command)
     if command.name() == ChangePacmanDirection.name():
         self.pacman.direction = command.direction
         
@@ -16,31 +15,46 @@ def apply_command(self, side_name, command):
         pacman_position = (x,y)
         new_position = self._calculate_new_pos(command, pacman_position)
 
+        # Check move conditions
         if self._can_move(new_position):
-            print("can_move")
+            print("can move")
             return GuiEvent(GuiEventType.MovePacman, pacman_position, new_position)
 
         else:
-            print("Cannot move")
+            print("cannot move")
             return GuiEvent(GuiEventType.ChangePacmanDirection, pacman_position, pacman_position)
 
-    if command.name() == ChangeGhostDirection.name():
-        self.ghosts[command.id].direction = command.direction
+    # if command.name() == ChangeGhostDirection.name():
+    #     self.ghosts[command.id].direction = command.direction
+        
+    #     x = self.ghosts[command.id].x
+    #     y = self.pacman[command.id].y
+    #     ghost_position = (x,y)
+    #     new_position = self._calculate_new_pos(command, ghost_position)
+
+        # if self._check_ghost_move_conditions(new_position):
+        #     print("can move")
+        #     return GuiEvent(GuiEventType.MoveGhost, ghost_position, new_position)
+
+        # else:
+        #     print("cannot move")
+        #     return GuiEvent(GuiEventType.ChangeGhostDirection, ghost_position, ghost_position)
 
 
-def _calculate_new_pos(self, command, pacman_position):
+
+def _calculate_new_pos(self, command, pre_pos):
     
     if command.direction.name == ECommandDirection.Right.name:
-        return (pacman_position[0]+150, pacman_position[1])
+        return (pre_pos[0]+150, pre_pos[1])
 
     elif command.direction == ECommandDirection.Left:
-        return (pacman_position[0]-150, pacman_position[1])
+        return (pre_pos[0]-150, pre_pos[1])
 
     elif command.direction == ECommandDirection.Up:
-        return (pacman_position[0], pacman_position[1]+150)
+        return (pre_pos[0], pre_pos[1]+150)
 
     elif command.direction == ECommandDirection.Down:
-        return (pacman_position[0], pacman_position[1]-150)
+        return (pre_pos[0], pre_pos[1]-150)
 
 
 def _can_move(self, new_position):
