@@ -24,8 +24,8 @@ def apply_command(self, side_name, command):
             print("Cannot move")
             return GuiEvent(GuiEventType.ChangePacmanDirection, pacman_position, pacman_position)
 
-    if command.name() == ChangeGhostDirection.name():
-        self.ghosts[command.id].direction = command.direction
+    # if command.name() == ChangeGhostDirection.name():
+    #     self.ghosts[command.id].direction = command.direction
 
 
 def _calculate_new_pos(self, command, pacman_position):
