@@ -25,39 +25,39 @@ class GameManager(RealtimeGameHandler):
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
-        self.logic_handler.store_command(side_name,command)
+        self._logic_handler.store_command(side_name,command)
 
 
     def on_initialize(self):
         print('initialize')
         
         world = map_handler.MapHandler(self.sides).load_map(self.config)
-        self.logic_handler = logic_handler.LogicHandler(world, self.sides)
-        self.logic_handler.initialize()
+        self._logic_handler = logic_handler.LogicHandler(world, self.sides)
+        self._logic_handler.initialize()
         # status config
 
 
     def on_initialize_gui(self):
         print('initialize gui')
 
-        self.gui_handler = gui_handler.GuiHandler(self.logic_handler.world, self.sides, self.canvas)
-        self.gui_handler.initialize(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
-        
+        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
+        self.gui_handler.initialize(self._logic_handler.world.height, self._logic_handler.world.width , self._logic_handler.world.board)
+
 
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
 
-        self.logic_handler.process(self.current_cycle)
+        self._logic_handler.process(self.current_cycle)
 
 
     def on_update_clients(self):
         print('update clients')
         
-        self.send_snapshot(self.logic_handler.world)
+        self.send_snapshot(self._logic_handler.world)
 
 
     def on_update_gui(self):
         print('update gui')
         
-        self.gui_handler.update(self.logic_handler.last_gui_events)
+        self.gui_handler.update(self._logic_handler.last_gui_events)
         self.canvas.apply_actions()
