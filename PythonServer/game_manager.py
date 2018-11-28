@@ -42,6 +42,8 @@ class GameManager(RealtimeGameHandler):
 
         self.gui_handler = gui_handler.GuiHandler(self.logic_handler.world, self.sides, self.canvas)
         self.gui_handler.draw_board(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
+        print "beiiiiin"
+        self.gui_handler.draw_players(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
 
 
     def on_process_cycle(self):
@@ -57,5 +59,5 @@ class GameManager(RealtimeGameHandler):
 
     def on_update_gui(self):
         print('update gui')
-        # self.gui_handler.update(self.logic_handler.process.gui_event_list)
+        # self.gui_handler.update()
         self.canvas.apply_actions()

@@ -19,6 +19,7 @@ class GuiHandler():
         self._sides = sides
         self._canvas = canvas
 
+
     def config(self):
 
         # self.scale_factor = (self.canvas.width - self.config['statuses_width']) / (self.world.width * self.config['cell_size'])
@@ -27,7 +28,9 @@ class GuiHandler():
         # self.font_size = self.cell_size // 2
         print("gameconfig")
 
+
     def draw_board(self, height, width, board):
+        print('draw board')
 
         for y in range(height):
             for x in range(width):
@@ -46,23 +49,42 @@ class GuiHandler():
                                               scale_value=150)
 
                 elif cell == ECell.Food:
-                    self._canvas.create_image('Food', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
+                    img_ref = self._canvas.create_image('Food', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=150)
+
 
                 elif cell == ECell.SuperFood:
                     self._canvas.create_image('SuperFood', x * 150, y * 150, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=150)
 
-        self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y,
-                                  scale_type=ScaleType.ScaleToWidth,
-                                  scale_value=150)
+
+        # self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y,
+        #                           scale_type=ScaleType.ScaleToWidth,
+        #                           scale_value=150)
 
 
-        for i in self._world.ghosts:
-            self._canvas.create_image('Ghost', i.x, i.y,
-                                      scale_type=ScaleType.ScaleToWidth,
-                                      scale_value=150)
+    def draw_players(self, height, width, board):
+        print('draw players')
+
+        self.pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
+                                scale_type=ScaleType.ScaleToWidth,
+                                scale_value=150)
+
+
+    # def update(self, events):
+    def update(self):
+        print('update gui_handler')
+
+
+        # for i in self._world.ghosts:
+        #     self._canvas.create_image('Ghost', i.x, i.y,
+        #                               scale_type=ScaleType.ScaleToWidth,
+        #                               scale_value=150)
     def update(self, events):
+
         # for event in events:
-        #     if event
+        #     if event.type == 0:
+        #         self._canvas.edit_image(self.pacman_img_ref, event["new_pos"].x, vent["new_pos"].y)
+
         pass
+        
