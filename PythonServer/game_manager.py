@@ -42,7 +42,6 @@ class GameManager(RealtimeGameHandler):
 
         self.gui_handler = gui_handler.GuiHandler(self.logic_handler.world, self.sides, self.canvas)
         self.gui_handler.draw_board(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
-        print "beiiiiin"
         self.gui_handler.draw_players(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
 
 
@@ -54,6 +53,7 @@ class GameManager(RealtimeGameHandler):
 
     def on_update_clients(self):
         print('update clients')
+        
         self.send_snapshot(self.logic_handler.world)
 
 

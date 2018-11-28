@@ -30,6 +30,7 @@ class LogicHandler ():
 
 
     def clear_commands(self):
+
         for side in self._sides:
             self._last_cycle_commands = {'Pacman': [], 'Ghost': []}
 
@@ -37,15 +38,13 @@ class LogicHandler ():
     def process(self, current_cycle):
        
         gui_events_list = []
-        print("ghabl")
         print(self._last_cycle_commands["Pacman"])
-        print("baad")
         # for side in self._sides:
         #     gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
         gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
         self._move_objects(gui_events_list)
         self.clear_commands()  
-        self.last_gui_events = gui_events_list     
+        self.last_gui_events = gui_events_list
 
 
     def _move_objects(self,gui_events):

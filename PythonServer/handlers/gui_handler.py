@@ -22,12 +22,12 @@ class GuiHandler():
 
 
     def config(self):
-
+        print("gameconfig")
+        
         # self.scale_factor = (self.canvas.width - self.config['statuses_width']) / (self.world.width * self.config['cell_size'])
         # self.scale_percent = math.ceil(self.scale_factor * 100)
         # self.cell_size = math.ceil(self.config['cell_size'] * self.scale_factor)
         # self.font_size = self.cell_size // 2
-        print("gameconfig")
 
 
     def draw_board(self, height, width, board):
@@ -59,11 +59,6 @@ class GuiHandler():
                                               scale_value=150)
 
 
-        # self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y,
-        #                           scale_type=ScaleType.ScaleToWidth,
-        #                           scale_value=150)
-
-
     def draw_players(self, height, width, board):
         print('draw players')
 
@@ -78,6 +73,3 @@ class GuiHandler():
             print(event.type)
             if event.type == GuiEventType.MovePacman:
                 self._canvas.edit_image(self.pacman_img_ref, event.extra_properties["new_pos"][0], event.extra_properties["new_pos"][1])
-
-        pass
-        
