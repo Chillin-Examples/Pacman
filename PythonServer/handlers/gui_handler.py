@@ -23,7 +23,7 @@ class GuiHandler():
 
     def config(self):
         print("gameconfig")
-        
+
         # self.scale_factor = (self.canvas.width - self.config['statuses_width']) / (self.world.width * self.config['cell_size'])
         # self.scale_percent = math.ceil(self.scale_factor * 100)
         # self.cell_size = math.ceil(self.config['cell_size'] * self.scale_factor)
@@ -70,6 +70,6 @@ class GuiHandler():
     def update(self, events):
 
         for event in events:
-            print(event.type)
+            # print(event.type)
             if event.type == GuiEventType.MovePacman:
                 self._canvas.edit_image(self.pacman_img_ref, event.extra_properties["new_pos"][0], event.extra_properties["new_pos"][1])

@@ -48,7 +48,7 @@ class GameManager(RealtimeGameHandler):
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
 
-        self.logic_handler.process(self.current_cycle)
+        self._gui_events = self.logic_handler.process(self.current_cycle)
 
 
     def on_update_clients(self):
@@ -59,6 +59,6 @@ class GameManager(RealtimeGameHandler):
 
     def on_update_gui(self):
         print('update gui')
-        
-        self.gui_handler.update(self.logic_handler.last_gui_events)
+
+        self.gui_handler.update(self._gui_events)
         self.canvas.apply_actions()
