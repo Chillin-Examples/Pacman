@@ -81,10 +81,6 @@ class GuiHandler():
     def update(self, events):
 
         for event in events:
-<<<<<<< HEAD
-            # print(event.type)
-=======
->>>>>>> 257c5351f7ca6e328072c9f7a40f14f35aa24cc4
             if event.type == GuiEventType.MovePacman:
                 pacman_dir = self.pacman_angle[event.extra_properties["direction"]]
                 self._canvas.edit_image(self.pacman_img_ref, event.extra_properties["new_pos"][0], event.extra_properties["new_pos"][1], angle=pacman_dir)
