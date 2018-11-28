@@ -41,9 +41,8 @@ class GameManager(RealtimeGameHandler):
         print('initialize gui')
 
         self.gui_handler = gui_handler.GuiHandler(self.logic_handler.world, self.sides, self.canvas)
-        self.gui_handler.draw_board(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
-        self.gui_handler.draw_players(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
-
+        self.gui_handler.initialize(self.logic_handler.world.height, self.logic_handler.world.width , self.logic_handler.world.board)
+        
 
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))

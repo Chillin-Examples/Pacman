@@ -20,6 +20,11 @@ class GuiHandler():
         self._sides = sides
         self._canvas = canvas
 
+    def initialize(self, height, width, board):
+
+        self.draw_board(height, width, board)
+        self.draw_players(height, width, board)
+
 
     def config(self):
         print("gameconfig")
