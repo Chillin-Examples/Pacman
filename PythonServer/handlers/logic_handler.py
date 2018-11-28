@@ -43,7 +43,13 @@ class LogicHandler ():
        
         gui_events = []
         gui_events.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
-        gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
+
+        if self._move_objects(self._last_cycle_commands["Pacman"][None])!= None:
+            gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
+
+        print("****************************************\n")
+        for i in gui_events:
+            print(i.__dict__)
         self.clear_commands()
         return gui_events
 
@@ -58,10 +64,10 @@ class LogicHandler ():
         if self._can_move(new_position):
             print("can move")
             # jaye pacman ro too world man avaz nakonam ?
-            # self.world.pacman.x = gui_event.extra_properties["new_pos"][0]
-            #     self.world.pacman.y = gui_event.extra_properties["new_pos"][1]
-            #     print("successfully moved to :")
-            #     print((self.world.pacman.x, self.world.pacman.y))
+            self.world.pacman.x = new_position[0]
+            self.world.pacman.y = new_position[1]
+            print("successfully moved to :")
+            print((self.world.pacman.x, self.world.pacman.y))
             return GuiEvent(GuiEventType.MovePacman, pacman_position, new_position, self.world.pacman.direction.name)
 
         else:
@@ -86,7 +92,7 @@ class LogicHandler ():
 
 
     def _can_move(self, new_position):
-        
+        # inke hesab kone hatman khoone he baghalesh bashe chi ?
         if self.world.board[(new_position[1]/150)][(new_position[0]/150)] == ECell.Wall:
             return False
         
