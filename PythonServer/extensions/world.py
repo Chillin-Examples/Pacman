@@ -9,7 +9,8 @@ def apply_command(self, side_name, command):
 
     # if self.world.pacman.health == 0:
     #     return False
-
+    print("tooo apply")
+    print(command)
     if command.name() == ChangePacmanDirection.name():
         self.pacman.direction = command.direction
         

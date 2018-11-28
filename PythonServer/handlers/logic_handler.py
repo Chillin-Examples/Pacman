@@ -43,27 +43,24 @@ class LogicHandler ():
 
     def process(self, current_cycle):
 
-        print(self._last_cycle_commands)
-        gui_events = []
+       
+        gui_events_list = []
+
+        # APPLY COMMAND FOR PACMAN AND GHOSTS
         for side in self._sides:
-            gui_events.append(self.world.apply_command(side, self._last_cycle_commands[side]))
-        self._move_pacman(gui_events)
-        print(self.world.pacman.x)
+            gui_events_list.append(self.world.apply_command(side, self._last_cycle_commands[side]))
+
+        self._move_objects(gui_events_list)
         self.clear_commands()        
-        return gui_events
+        return gui_events_list
     
-    def _move_pacman(self,gui_events):
-        for i in gui_events:
-            print("eybabaaa")
-            print(i.type)
-            if i.type == GuiEventType.MovePacman:
-                print("hereee")
-                print(i.extra_properties["new_pos"])
-                self.world.pacman.x = i.extra_properties["new_pos"]
+    def _move_objects(self,gui_events):
 
-
-    def get_client_world(self, side_name):
-        return world
+        for gui_event in gui_events:
+            if gui_event.type == GuiEventType.MovePacman:
+                print("successfully moved")
+                self.world.pacman.x = gui_event.extra_properties["new_pos"][0]
+                self.world.pacman.y = gui_event.extra_properties["new_pos"][1]
 
 
     def check_end_game(self):

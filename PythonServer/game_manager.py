@@ -54,7 +54,7 @@ class GameManager(RealtimeGameHandler):
 
     def on_update_clients(self):
         print('update clients')
-        self.send_snapshot(self.logic_handler.world, "Pacman")
+        self.send_snapshot(self.logic_handler.world)
 
 
     def on_update_gui(self):
