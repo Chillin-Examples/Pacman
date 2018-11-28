@@ -18,11 +18,11 @@ def apply_command(self, side_name, command):
         # Check move conditions
         if self._can_move(new_position):
             print("can move")
-            return GuiEvent(GuiEventType.MovePacman, pacman_position, new_position)
+            return GuiEvent(GuiEventType.MovePacman, pacman_position, new_position, self.pacman.direction.name)
 
         else:
             print("cannot move")
-            return GuiEvent(GuiEventType.ChangePacmanDirection, pacman_position, pacman_position)
+            return GuiEvent(GuiEventType.ChangePacmanDirection, pacman_position, pacman_position, self.pacman.direction.name)
     # ghost 
     # if command.name() == ChangeGhostDirection.name():
     #     self.ghosts[command.id].direction = command.direction

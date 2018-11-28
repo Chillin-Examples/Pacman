@@ -14,6 +14,6 @@ class GuiEventType(Enum):
 
 class GuiEvent(object):
 
-    def __init__(self, type, previous_pos, new_pos):
+    def __init__(self, type, previous_pos, new_pos, direction):
         self.type = type
-        self.extra_properties = {"previous_pos":previous_pos, "new_pos":new_pos}
+        self.extra_properties = {"previous_pos":previous_pos, "new_pos":new_pos, "direction": direction}
