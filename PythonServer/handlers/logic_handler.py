@@ -38,7 +38,6 @@ class LogicHandler ():
     def process(self, current_cycle):
        
         gui_events_list = []
-        print(self._last_cycle_commands["Pacman"])
         # for side in self._sides:
         #     gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
         gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
@@ -57,9 +56,7 @@ class LogicHandler ():
             if gui_event.type == GuiEventType.MovePacman:
                 self.world.pacman.x = gui_event.extra_properties["new_pos"][0]
                 self.world.pacman.y = gui_event.extra_properties["new_pos"][1]
-                print("successfully moved to :")
-                print((self.world.pacman.x, self.world.pacman.y))
-
+                
 
     def check_end_game(self):
         pass
