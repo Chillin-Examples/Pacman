@@ -26,14 +26,13 @@ class LogicHandler ():
 
     def store_command(self, side_name, command):
        
-        # if side_name == "Ghost":
-        #     if command.id < 0 or command.id >= (len(self.world.pacman), len(self.world.ghosts)):
-        #         print('Invalid id in command: %s %i' % (side_name, command.id))
-        #         return
+        if side_name == "Ghost":
+            if command.id < 0 or command.id >= ( len(self.world.ghosts)):
+                print('Invalid id in command: %s %i' % (side_name, command.id))
+                return
 
         self._last_cycle_commands[side_name] = command
         print(command.__dict__)
-        # print('command: %s(%i) %s' % (side_name, command.id, command_type))
 
 
     def clear_commands(self):
@@ -47,16 +46,20 @@ class LogicHandler ():
         gui_events_list = []
 
         # APPLY COMMAND FOR PACMAN AND GHOSTS
-        for side in self._sides:
-            gui_events_list.append(self.world.apply_command(side, self._last_cycle_commands[side]))
-
+        # for side in self._sides:
+        #     gui_events_list.append(self.world.apply_command(side, self._last_cycle_commands[side]))
+        
+        gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
         self._move_objects(gui_events_list)
-        self.clear_commands()        
+        # clear commands of the current cycle
+        self.clear_commands()       
         return gui_events_list
     
     def _move_objects(self,gui_events):
 
         for gui_event in gui_events:
+            if gui_event == None:
+                print("ghost not implemented")
             if gui_event.type == GuiEventType.MovePacman:
                 print("successfully moved")
                 self.world.pacman.x = gui_event.extra_properties["new_pos"][0]
