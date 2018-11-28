@@ -66,7 +66,7 @@ class GuiHandler():
     def draw_players(self, height, width, board):
         print('draw players')
 
-        self.pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.position.x, self._world.pacman.position.y,
+        self.pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=150)
 
