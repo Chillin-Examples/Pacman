@@ -20,4 +20,9 @@ class AI(RealtimeAI):
 
     def decide(self):
         print('decide')
-        self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
+        if self.my_side == 'Pacman':
+            self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
+
+        if self.my_side == 'Ghost':
+            self.send_command(ChangeGhostDirection(direction=ECommandDirection.Left, id=1))
+
