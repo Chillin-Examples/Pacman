@@ -26,7 +26,6 @@ class LogicHandler ():
         #         return
 
         self._last_cycle_commands[side_name] = command
-        print(command.__dict__)
 
 
     def clear_commands(self):
@@ -56,7 +55,7 @@ class LogicHandler ():
             if gui_event.type == GuiEventType.MovePacman:
                 self.world.pacman.x = gui_event.extra_properties["new_pos"][0]
                 self.world.pacman.y = gui_event.extra_properties["new_pos"][1]
-                
+
 
     def check_end_game(self):
         pass

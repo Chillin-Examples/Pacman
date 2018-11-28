@@ -20,7 +20,7 @@ class GuiHandler():
         self._sides = sides
         self._canvas = canvas
 
-    def initialize(self, height, width, board):
+    def initialize(self, height, width, board, config):
 
         self.pacman_angle = {
             EDirection.Up.name:        -90,
@@ -29,23 +29,20 @@ class GuiHandler():
             EDirection.Left.name:      180,
         }
 
-        self.config()
+        self.config(config)
         self.draw_board(height, width, board)
         self.draw_players(height, width, board)
 
 
-    def config(self):
-        print("gameconfig")
+    def config(self, config):
         
-        # self.scale_factor = (self.canvas.width - self.config['statuses_width']) / (self.world.width * self.config['cell_size'])
-        # self.scale_percent = math.ceil(self.scale_factor * 100)
-        # self.cell_size = math.ceil(self.config['cell_size'] * self.scale_factor)
-        # self.font_size = self.cell_size // 2
-        self.cell_size = 150
+        self.scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
+        self.scale_percent = math.ceil(self.scale_factor * 100)
+        self.cell_size = math.ceil(config['cell_size'] * self.scale_factor)
+        self.font_size = self.cell_size // 2
 
 
     def draw_board(self, height, width, board):
-        print('draw board')
 
         for y in range(height):
             for x in range(width):
@@ -74,7 +71,6 @@ class GuiHandler():
 
 
     def draw_players(self, height, width, board):
-        print('draw players')
 
         self.pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y, center_origin=True,
                                 scale_type=ScaleType.ScaleToWidth,
