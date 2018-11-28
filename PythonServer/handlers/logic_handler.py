@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from ks.commands import ECommandDirection
 from extensions import world
+from gui_events import *
 # from gui_event import *
 
 
@@ -47,12 +48,17 @@ class LogicHandler ():
         for side in self._sides:
             gui_events.append(self.world.apply_command(side, self._last_cycle_commands[side]))
         self._move_pacman(gui_events)
+        print(self.world.pacman.x)
         self.clear_commands()        
         return gui_events
     
     def _move_pacman(self,gui_events):
         for i in gui_events:
-            if i.type == Pacman.Move:
+            print("eybabaaa")
+            print(i.type)
+            if i.type == GuiEventType.MovePacman:
+                print("hereee")
+                print(i.extra_properties["new_pos"])
                 self.world.pacman.x = i.extra_properties["new_pos"]
 
 

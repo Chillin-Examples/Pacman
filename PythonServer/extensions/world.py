@@ -2,7 +2,7 @@
 
 # project imports
 from ks.commands import ECommandDirection, ChangePacmanDirection
-from ks.models import World
+from ks.models import World, ECell
 from gui_events import GuiEvent, GuiEventType
 
 def apply_command(self, side_name, command):
@@ -17,29 +17,35 @@ def apply_command(self, side_name, command):
         y = self.pacman.y
         
         pacman_position = (x,y)
-        print(pacman_position)
-        new_position = pacman_position + self._calculate_new_pos(command, x, y)
-       
+        new_position = self._calculate_new_pos(command, pacman_position)
+
+        print(new_position)
         if self._can_move(new_position):
+            print("can_move")
             return GuiEvent(GuiEventType.MovePacman, pacman_position, new_position)
 
         else:
+            print("else")
             return GuiEvent(GuiEventType.ChangePacmanDirection, pacman_position, pacman_position)
 
-def _calculate_new_pos(self, command, x, y):
-    print(x)
-    if command.direction == ECommandDirection.Right:
-        return (150,0)
+def _calculate_new_pos(self, command, pacman_position):
+    
+
+    if command.direction.name == ECommandDirection.Right.name:
+        return (pacman_position[0]+150, pacman_position[1])
+
     elif command.direction == ECommandDirection.Left:
-            return (x-150, y)
+        return (pacman_position[0]-150, pacman_position[1])
+
     elif command.direction == ECommandDirection.Up:
-            return (x, y+150)
+        return (pacman_position[0], pacman_position[1]+150)
+
     elif command.direction == ECommandDirection.Down:
-            return (x, y-150)
+        return (pacman_position[0], pacman_position[1]-150)
 
 def _can_move(self, new_position):
     
-    if self.board[new_position.y][new_position.x] == ECell.Wall:
+    if self.board[(new_position[1]/150)][(new_position[0]/150)] == ECell.Wall:
         return False
     # if ghost      
     else:
