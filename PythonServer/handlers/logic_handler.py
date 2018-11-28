@@ -12,16 +12,12 @@ class LogicHandler ():
         self.world = world
         # for bezan ino
         self._last_cycle_commands = {'Pacman': [], 'Ghost': []}
-        # self.gui_event = GuiEvent(0)
+        self.last_gui_events = []
+        
 
     def initialize(self):
         pass
-        # self.move_dirs = {
-        #     ECommandDirection.Up.name: Position(x=0, y=-1),
-        #     ECommandDirection.Right.name: Position(x=1, y=0),
-        #     ECommandDirection.Down.name: Position(x=0, y=1),
-        #     ECommandDirection.Left.name: Position(x=-1, y=0)
-        # }
+        s
 
 
     def store_command(self, side_name, command):
@@ -53,8 +49,9 @@ class LogicHandler ():
         gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
         self._move_objects(gui_events_list)
         # clear commands of the current cycle
-        self.clear_commands()       
-        return gui_events_list
+        self.clear_commands()  
+        self.last_gui_events = gui_events_list     
+        # return gui_events_list
     
     def _move_objects(self,gui_events):
 
