@@ -8,6 +8,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 
 # project imports
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+from gui_events import GuiEventType
 
 
 # TODO: Define static variables
@@ -71,20 +72,12 @@ class GuiHandler():
                                 scale_value=150)
 
 
-    # def update(self, events):
-    def update(self):
-        print('update gui_handler')
-
-
-        # for i in self._world.ghosts:
-        #     self._canvas.create_image('Ghost', i.x, i.y,
-        #                               scale_type=ScaleType.ScaleToWidth,
-        #                               scale_value=150)
     def update(self, events):
 
-        # for event in events:
-        #     if event.type == 0:
-        #         self._canvas.edit_image(self.pacman_img_ref, event["new_pos"].x, vent["new_pos"].y)
+        for event in events:
+            print(event.type)
+            if event.type == GuiEventType.MovePacman:
+                self._canvas.edit_image(self.pacman_img_ref, event.extra_properties["new_pos"][0], event.extra_properties["new_pos"][1])
 
         pass
         
