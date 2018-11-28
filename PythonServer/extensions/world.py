@@ -7,7 +7,6 @@ from gui_events import GuiEvent, GuiEventType
 
 def apply_command(self, side_name, command):
 
-    
     print(command)
     if command.name() == ChangePacmanDirection.name():
         self.pacman.direction = command.direction
@@ -28,6 +27,7 @@ def apply_command(self, side_name, command):
     if command.name() == ChangeGhostDirection.name():
         self.ghosts[command.id].direction = command.direction
 
+
 def _calculate_new_pos(self, command, pacman_position):
     
     if command.direction.name == ECommandDirection.Right.name:
@@ -41,6 +41,7 @@ def _calculate_new_pos(self, command, pacman_position):
 
     elif command.direction == ECommandDirection.Down:
         return (pacman_position[0], pacman_position[1]-150)
+
 
 def _can_move(self, new_position):
     

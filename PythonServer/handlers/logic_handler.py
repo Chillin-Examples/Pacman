@@ -48,7 +48,8 @@ class LogicHandler ():
         # APPLY COMMAND FOR PACMAN AND GHOSTS
         # for side in self._sides:
         #     gui_events_list.append(self.world.apply_command(side, self._last_cycle_commands[side]))
-        
+        print("commandyae pacman")
+        print(self._last_cycle_commands["Pacman"])
         gui_events_list.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"]))
         self._move_objects(gui_events_list)
         # clear commands of the current cycle
