@@ -28,7 +28,7 @@
         
         "pacman": 
             {
-                "position": [150,150],
+                "position": [1,1],
                 "direction": "Right",
                 "health": 1
             }
