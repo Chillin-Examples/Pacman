@@ -48,6 +48,9 @@ class LogicHandler ():
             gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
 
         self.clear_commands()
+        for f in gui_events:
+            print "TOOOOOOOOOOOOOOOOOOOOOOOOOOO CYCLEEEEEEEEEEEEEEEEEE"
+            print f.extra_properties["new_pos"][0]
         return gui_events
 
 
@@ -60,7 +63,7 @@ class LogicHandler ():
 
         if self._can_move(new_position):
             print("can move")
-            # jaye pacman ro too world man avaz nakonam ?
+
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
             return GuiEvent(GuiEventType.MovePacman, pacman_position, new_position, self.world.pacman.direction.name)

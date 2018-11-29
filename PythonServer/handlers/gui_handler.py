@@ -8,6 +8,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 
 # project imports
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+from ks.commands import ECommandDirection
 from gui_events import GuiEventType
 
 
@@ -22,11 +23,17 @@ class GuiHandler():
 
     def initialize(self, height, width, board, config):
 
-        self.pacman_angle = {
+        self.pacman_move_angle = {
             EDirection.Up.name:        90,
             EDirection.Right.name:     0,
             EDirection.Down.name:      -90,
             EDirection.Left.name:      180,
+        }
+        self.pacman_dir_angle = {
+            ECommandDirection.Up.name:        90,
+            ECommandDirection.Right.name:     0,
+            ECommandDirection.Down.name:      -90,
+            ECommandDirection.Left.name:      180,
         }
 
         self._config(config)
@@ -60,8 +67,6 @@ class GuiHandler():
                 elif cell == ECell.Empty:
                     self._canvas.create_image('Empty', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
-                    print "AVVAlin kahli"
-                    print x * self._cell_size
 
                 elif cell == ECell.Food:
                     img_ref = self._canvas.create_image('Food', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
@@ -75,10 +80,7 @@ class GuiHandler():
     def _draw_players(self, height, width, board):
 
         pacman_dir = self.pacman_angle[EDirection.Right.name]
-        print "PACMAAAAN"
-        print self._world.pacman.x*150
-        print self._world.pacman.y
-        self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x * self._cell_size , self._world.pacman.y * self._cell_size, center_origin=True,
+        self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x * self._cell_size + self._cell_size/2, self._world.pacman.y * self._cell_size + self._cell_size/2, center_origin=True,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=self._cell_size)
 
@@ -86,8 +88,12 @@ class GuiHandler():
     def update(self, events):
 
         for event in events:
-            print event.extra_properties["new_pos"][1]
-        for event in events:
+            # move
             if event.type == GuiEventType.MovePacman:
-                pacman_dir = self.pacman_angle[event.extra_properties["direction"]]
+                pacman_dir = self.pacman_move_angle[event.extra_properties["direction"]]
                 self._canvas.edit_image(self._pacman_img_ref, event.extra_properties["new_pos"][0] * self._cell_size + self._cell_size / 2, event.extra_properties["new_pos"][1] * self._cell_size + self._cell_size / 2, angle=pacman_dir)
+            # change direction
+            if event.type == GuiEventType.ChangePacmanDirection:
+                pacman_dir = self.pacman_dir_angle[event.extra_properties["direction"]]
+                self._canvas.edit_image(self._pacman_img_ref, event.extra_properties["previous_pos"][0] * self._cell_size + self._cell_size / 2, event.extra_properties["previous_pos"][1] * self._cell_size + self._cell_size / 2, angle=pacman_dir)
+
