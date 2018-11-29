@@ -74,21 +74,21 @@ class LogicHandler ():
     def _calculate_new_pos(self, command, pre_pos):
         
         if command.direction.name == ECommandDirection.Right.name:
-            return (pre_pos[0]+150, pre_pos[1])
+            return (pre_pos[0]+1, pre_pos[1])
 
         elif command.direction.name == ECommandDirection.Left.name:
-            return (pre_pos[0]-150, pre_pos[1])
+            return (pre_pos[0]-1, pre_pos[1])
 
         elif command.direction.name == ECommandDirection.Up.name:
-            return (pre_pos[0], pre_pos[1]-150)
+            return (pre_pos[0], pre_pos[1]-1)
 
         elif command.direction.name == ECommandDirection.Down.name:
-            return (pre_pos[0], pre_pos[1]+150)
+            return (pre_pos[0], pre_pos[1]+1)
 
 
     def _can_move(self, new_pos):
         # inke hesab kone hatman khoone he baghalesh bashe chi ?
-        if self.world.board[(new_pos[1]/150)][(new_pos[0]/150)] == ECell.Wall:
+        if self.world.board[(new_pos[1])][(new_pos[0])] == ECell.Wall:
             return False
         
         else:
