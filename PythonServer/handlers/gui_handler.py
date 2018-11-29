@@ -12,7 +12,6 @@ from ks.commands import ECommandDirection
 from gui_events import GuiEventType
 
 
-# TODO: Define static variables
 class GuiHandler():
 
     def __init__(self, world, sides, canvas):
@@ -88,13 +87,8 @@ class GuiHandler():
 
     def update(self, events):
 
-        #TODO: if was not move but also we have to change direction and rotate pic
-        # for event in events:
-        #     print event.extra_properties["new_pos"][1]
         for event in events:
-
             if event != None:
-
                 # move
                 if event.type == GuiEventType.MovePacman:
                     pacman_dir = self.pacman_move_angle[event.extra_properties["direction"]]

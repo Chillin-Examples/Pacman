@@ -15,8 +15,4 @@ def apply_command(self, side_name, command):
         self.pacman.direction = command.direction
         return GuiEvent(GuiEventType.ChangePacmanDirection, pacman_position, pacman_position, self.pacman.direction.name)
 
-    # if command.name() == ChangeGhostDirection.name():
-    #     self.ghosts[command.id].direction = command.direction
-
-
 World.apply_command = apply_command

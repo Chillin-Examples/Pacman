@@ -19,20 +19,14 @@ class LogicHandler ():
 
 
     def store_command(self, side_name, command):
-       
-        # if side_name == "Ghost":
-        #     if command.id < 0 or command.id >= ( len(self.world.ghosts)):
-        #         print('Invalid id in command: %s %i' % (side_name, command.id))
-        #         return
 
+        if side_name == "Ghost":
+            if command.id < 0 or command.id >= ( len(self.world.ghosts)):
+                print('Invalid id in command: %s %i' % (side_name, command.id))
+                return
+                
         self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
-        # print("command on reciev ")
-        # if side_name == "Pacman":
-        #     print(self._last_cycle_commands[side_name])
-        
-        # elif side_name == "Ghost":
-        #     print(self._last_cycle_commands[side_name][command.id])
-        
+
 
     def clear_commands(self):
 
