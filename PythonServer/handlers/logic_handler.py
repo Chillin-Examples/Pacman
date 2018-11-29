@@ -99,6 +99,11 @@ class LogicHandler ():
         else:
             return True
 
+
+    def get_client_world(self):
+        return self.world
+
+
     def check_end_game(self):
         pass
         #should return tuple<string, dict<string,dict<string, duct<string,string>>>

@@ -4,7 +4,7 @@
 from ks.models import Pacman
 
 
-def change_direction(world, command):
+def change_direction(self, world, command):
     return True
 
 

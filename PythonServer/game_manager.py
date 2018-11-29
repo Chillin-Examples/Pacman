@@ -40,7 +40,7 @@ class GameManager(RealtimeGameHandler):
     def on_initialize_gui(self):
         print('initialize gui')
 
-        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.sides, self.canvas)
+        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.get_client_world(), self.sides, self.canvas)
         self.gui_handler.initialize(self._logic_handler.world.height, self._logic_handler.world.width , self._logic_handler.world.board, self.config)
 
 
@@ -53,7 +53,7 @@ class GameManager(RealtimeGameHandler):
     def on_update_clients(self):
         print('update clients')
         
-        self.send_snapshot(self._logic_handler.world)
+        self.send_snapshot(self._logic_handler.get_client_world())
 
 
     def on_update_gui(self):
