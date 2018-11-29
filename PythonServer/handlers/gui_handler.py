@@ -29,12 +29,12 @@ class GuiHandler():
             EDirection.Left.name:      180,
         }
 
-        self.config(config)
-        self.draw_board(height, width, board)
-        self.draw_players(height, width, board)
+        self._config(config)
+        self._draw_board(height, width, board)
+        self._draw_players(height, width, board)
 
 
-    def config(self, config):
+    def _config(self, config):
         
         self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
         self._scale_percent = math.ceil(self._scale_factor * 100)
@@ -42,8 +42,7 @@ class GuiHandler():
         self._font_size = self._cell_size // 2
 
 
-
-    def draw_board(self, height, width, board):
+    def _draw_board(self, height, width, board):
 
         for y in range(height):
             for x in range(width):
@@ -71,7 +70,7 @@ class GuiHandler():
                                               scale_value=self._cell_size)
 
 
-    def draw_players(self, height, width, board):
+    def _draw_players(self, height, width, board):
 
         self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y, center_origin=True,
                                 scale_type=ScaleType.ScaleToWidth,
