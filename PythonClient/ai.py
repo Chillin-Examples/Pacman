@@ -21,8 +21,9 @@ class AI(RealtimeAI):
     def decide(self):
         print('decide')
         if self.my_side == 'Pacman':
+            # self.send_command(ChangePacmanDirection(direction=ECommandDirection.Up))
             self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
 
         if self.my_side == 'Ghost':
+            self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=0))
             self.send_command(ChangeGhostDirection(direction=ECommandDirection.Left, id=1))
-
