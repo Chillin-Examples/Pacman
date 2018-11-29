@@ -43,10 +43,15 @@ class LogicHandler ():
        
         gui_events = []
         gui_events.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
-
-        if self._move_objects(self._last_cycle_commands["Pacman"][None])!= None:
-            gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
-
+        print self.world.pacman.x
+        print self.world.pacman.y
+        # if self._move_objects(self._last_cycle_commands["Pacman"][None])!= None:
+        gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
+        print("*******************")
+        for i in gui_events:
+            if i != None:
+                print(i.__dict__)
+        print("*******************\n")
         self.clear_commands()
         return gui_events
 
