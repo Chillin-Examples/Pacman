@@ -8,10 +8,11 @@ from ks.models import World, ECell
 class LogicHandler ():
 
     def __init__ (self, world, sides):
+
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        
+
 
     def initialize(self):
         pass
@@ -33,7 +34,6 @@ class LogicHandler ():
         #     print(self._last_cycle_commands[side_name][command.id])
         
 
-
     def clear_commands(self):
 
         self._last_cycle_commands = {side: {} for side in self._sides}
@@ -43,19 +43,15 @@ class LogicHandler ():
        
         gui_events = []
         gui_events.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
-        print self.world.pacman.x
-        print self.world.pacman.y
-        # if self._move_objects(self._last_cycle_commands["Pacman"][None])!= None:
         gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
+        
         print("*******************")
         for i in gui_events:
             if i != None:
                 print(i.__dict__)
         print("*******************\n")
+
         self.clear_commands()
-        for f in gui_events:
-            print "TOOOOOOOOOOOOOOOOOOOOOOOOOOO CYCLEEEEEEEEEEEEEEEEEE"
-            print f.extra_properties["new_pos"][0]
         return gui_events
 
 
@@ -75,7 +71,6 @@ class LogicHandler ():
 
         else:
             print("cannot move")
-            # okeye ?
             return
 
 
@@ -95,7 +90,7 @@ class LogicHandler ():
 
 
     def _can_move(self, new_pos):
-        # inke hesab kone hatman khoone he baghalesh bashe chi ?
+
         if self.world.board[(new_pos[1])][(new_pos[0])] == ECell.Wall:
             return False
         
@@ -104,6 +99,7 @@ class LogicHandler ():
 
 
     def get_client_world(self):
+
         return self.world
 
 
