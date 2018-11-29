@@ -59,7 +59,9 @@ class LogicHandler ():
         x = self.world.pacman.x
         y = self.world.pacman.y
         pacman_position = (x, y)
+        print(pacman_position)
         new_position = self._calculate_new_pos(command, pacman_position)
+        print(new_position)
 
         if self._can_move(new_position):
             print("can move")
@@ -81,14 +83,15 @@ class LogicHandler ():
         if command.direction.name == ECommandDirection.Right.name:
             return (pre_pos[0]+150, pre_pos[1])
 
-        elif command.direction == ECommandDirection.Left:
+        elif command.direction.name == ECommandDirection.Left.name:
             return (pre_pos[0]-150, pre_pos[1])
 
-        elif command.direction == ECommandDirection.Up:
-            return (pre_pos[0], pre_pos[1]+150)
-
-        elif command.direction == ECommandDirection.Down:
+        elif command.direction.name == ECommandDirection.Up.name:
+            print("up command")
             return (pre_pos[0], pre_pos[1]-150)
+
+        elif command.direction.name == ECommandDirection.Down.name:
+            return (pre_pos[0], pre_pos[1]+150)
 
 
     def _can_move(self, new_pos):
