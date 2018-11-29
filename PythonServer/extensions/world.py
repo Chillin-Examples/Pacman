@@ -7,7 +7,6 @@ from gui_events import GuiEvent, GuiEventType
 
 
 def apply_command(self, side_name, command):
-    print("commmande apply")
 
     if command.name() == ChangePacmanDirection.name():
         x = self.pacman.x
