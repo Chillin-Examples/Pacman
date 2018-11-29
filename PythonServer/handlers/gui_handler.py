@@ -21,7 +21,8 @@ class GuiHandler():
         self._sides = sides
         self._canvas = canvas
 
-    def initialize(self, height, width, board, config):
+
+    def initialize(self, config):
 
         self.pacman_move_angle = {
             EDirection.Up.name:        90,
@@ -37,8 +38,8 @@ class GuiHandler():
         }
 
         self._config(config)
-        self._draw_board(height, width, board)
-        self._draw_players(height, width, board)
+        self._draw_board()
+        self._draw_players()
 
 
     def _config(self, config):
@@ -50,13 +51,12 @@ class GuiHandler():
         self._cell_size = 150
 
 
-    def _draw_board(self, height, width, board):
+    def _draw_board(self):
 
-        for y in range(height):
-            for x in range(width):
-                cell = board[y][x]
-
-                if cell == ECell.Wall and (y == height - 1 or y == 0 or x == width - 1 or x == 0):
+        for y in range(self._world.height):
+            for x in range(self._world.width):
+                cell = self._world.board[y][x]
+                if cell == ECell.Wall and (y == self._world.height - 1 or y == 0 or x == self._world.width - 1 or x == 0):
                     self._canvas.create_image('RoundWall', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
@@ -77,7 +77,7 @@ class GuiHandler():
                                               scale_value=self._cell_size)
 
 
-    def _draw_players(self, height, width, board):
+    def _draw_players(self):
 
         pacman_dir = self.pacman_angle[EDirection.Right.name]
         self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x * self._cell_size + self._cell_size/2, self._world.pacman.y * self._cell_size + self._cell_size/2, center_origin=True,
@@ -87,6 +87,7 @@ class GuiHandler():
 
     def update(self, events):
 
+        #TODO: if was not move but also we have to change direction and rotate pic
         for event in events:
             # move
             if event.type == GuiEventType.MovePacman:
