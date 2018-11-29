@@ -61,9 +61,9 @@ class MapHandler:
             world.ghosts.append(new_ghost)
 
 
-    def load_map(self, config):
+    def load_map(self, mappath):
 
-        with open((config['map']), "r") as map_file:
+        with open((mappath), "r") as map_file:
             map_config = json.loads(map_file.read())
         board = map_config['board']
         constants_config = map_config['constants']

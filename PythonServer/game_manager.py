@@ -31,7 +31,7 @@ class GameManager(RealtimeGameHandler):
     def on_initialize(self):
         print('initialize')
         
-        world = map_handler.MapHandler(self.sides).load_map(self.config)
+        world = map_handler.MapHandler(self.sides).load_map(self.config['map'])
         self._logic_handler = logic_handler.LogicHandler(world, self.sides)
         self._logic_handler.initialize()
 

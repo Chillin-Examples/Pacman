@@ -91,9 +91,9 @@ class LogicHandler ():
             return (pre_pos[0], pre_pos[1]-150)
 
 
-    def _can_move(self, new_position):
+    def _can_move(self, new_pos):
         # inke hesab kone hatman khoone he baghalesh bashe chi ?
-        if self.world.board[(new_position[1]/150)][(new_position[0]/150)] == ECell.Wall:
+        if self.world.board[(new_pos[1]/150)][(new_pos[0]/150)] == ECell.Wall:
             return False
         
         else:
