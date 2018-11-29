@@ -20,7 +20,8 @@ class GuiHandler():
         self._sides = sides
         self._canvas = canvas
 
-    def initialize(self, height, width, board, config):
+
+    def initialize(self, config):
 
         self.pacman_angle = {
             EDirection.Up.name:        -90,
@@ -30,25 +31,24 @@ class GuiHandler():
         }
 
         self._config(config)
-        self._draw_board(height, width, board)
-        self._draw_players(height, width, board)
+        self._draw_board()
+        self._draw_players()
 
 
     def _config(self, config):
         
-        self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
-        self._scale_percent = math.ceil(self._scale_factor * 100)
-        self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
-        self._font_size = self._cell_size // 2
+        # self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
+        # self._scale_percent = math.ceil(self._scale_factor * 100)
+        # self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
+        # self._font_size = self._cell_size // 2
+        self._cell_size = 150
 
+    def _draw_board(self):
 
-    def _draw_board(self, height, width, board):
-
-        for y in range(height):
-            for x in range(width):
-                cell = board[y][x]
-
-                if cell == ECell.Wall and (y == height - 1 or y == 0 or x == width - 1 or x == 0):
+        for y in range(self._world.height):
+            for x in range(self._world.width):
+                cell = self._world.board[y][x]
+                if cell == ECell.Wall and (y == self._world.height - 1 or y == 0 or x == self._world.width - 1 or x == 0):
                     self._canvas.create_image('RoundWall', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
@@ -70,7 +70,7 @@ class GuiHandler():
                                               scale_value=self._cell_size)
 
 
-    def _draw_players(self, height, width, board):
+    def _draw_players(self):
 
         self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x, self._world.pacman.y, center_origin=True,
                                 scale_type=ScaleType.ScaleToWidth,
@@ -79,6 +79,7 @@ class GuiHandler():
 
     def update(self, events):
 
+        #TODO: if was not move but also we have to change direction and rotate pic
         for event in events:
             if event.type == GuiEventType.MovePacman:
                 pacman_dir = self.pacman_angle[event.extra_properties["direction"]]
