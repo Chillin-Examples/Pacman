@@ -76,7 +76,7 @@ class GuiHandler():
     def _draw_players(self):
 
         pacman_angle = self._angle[self._world.pacman.direction.name]
-        canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y, center_origin=False)
+        canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y)
         self._pacman_img_ref = self._canvas.create_image('Pacman',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                 angle=pacman_angle,
                                 scale_type=ScaleType.ScaleToWidth,
