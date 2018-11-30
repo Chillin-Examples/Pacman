@@ -14,6 +14,7 @@ def apply_command(self, side_name, command):
         pacman_position = (x,y)
         self.pacman.direction = command.direction
         return [GuiEvent(GuiEventType.ChangePacmanDirection, pos=pacman_position, direction=self.pacman.direction.name)]
+
     else:
         return []
 

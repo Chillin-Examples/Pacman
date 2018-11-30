@@ -36,12 +36,19 @@ class LogicHandler ():
     def process(self, current_cycle):
 
         gui_events = []
+
+        # for side in self._sides:
+        #     for command_id in self._last_cycle_commands[side]:
+
+        #         gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
+        #         gui_events.extend(self._move_objects(side_name))
+
         gui_events.extend(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
         gui_events.extend(self._move_objects("Pacman"))
 
         for i in gui_events:
             print(i.__dict__)
-        
+
         self.clear_commands()
         return gui_events
 

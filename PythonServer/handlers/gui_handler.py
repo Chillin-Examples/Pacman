@@ -81,19 +81,19 @@ class GuiHandler():
     def update(self, events):
 
         for event in events:
-            if event != None:
-                
-                # move
-                if event.type == GuiEventType.MovePacman:
 
-                    pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1], center_origin=True)
-                    self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
+            # Move
+            if event.type == GuiEventType.MovePacman:
 
-                # change direction
-                if event.type == GuiEventType.ChangePacmanDirection:
+                pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
+                self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
 
-                    pacman_dir = self._angle[event.payload["direction"]]
-                    self._canvas.edit_image(self._pacman_img_ref, None, None, angle=pacman_dir)
+            # Change direction
+            if event.type == GuiEventType.ChangePacmanDirection:
+
+                pacman_dir = self._angle[event.payload["direction"]]
+                pacman_pos = self._get_canvas_position(self._world.pacman.x, self._world.pacman.y)    
+                self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'], angle=pacman_dir)
 
 
     def _get_canvas_position(self, x, y, center_origin=False):
