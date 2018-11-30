@@ -82,13 +82,13 @@ class GuiHandler():
 
         for event in events:
 
-            # move
+            # Move
             if event.type == GuiEventType.MovePacman:
 
                 pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
 
-            # change direction
+            # Change direction
             if event.type == GuiEventType.ChangePacmanDirection:
 
                 pacman_dir = self._angle[event.payload["direction"]]
