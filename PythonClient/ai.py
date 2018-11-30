@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# python imports
+import random
+
 # chillin imports
 from chillin_client import RealtimeAI
 
@@ -20,9 +23,16 @@ class AI(RealtimeAI):
 
     def decide(self):
         print('decide')
+        
         if self.my_side == 'Pacman':
-            # self.send_command(ChangePacmanDirection(direction=ECommandDirection.Up))
-            self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
+            # self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
+            direction = random.choice([
+                ECommandDirection.Up,
+                ECommandDirection.Right,
+                ECommandDirection.Down,
+                ECommandDirection.Left
+            ])
+            self.send_command(ChangePacmanDirection(direction=direction))
 
         if self.my_side == 'Ghost':
             self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=0))
