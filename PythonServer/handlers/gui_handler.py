@@ -42,7 +42,7 @@ class GuiHandler():
 
 
     def _config(self, config):
-        
+
         # self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
         # self._scale_percent = math.ceil(self._scale_factor * 100)
         # self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)

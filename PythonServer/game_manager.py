@@ -18,10 +18,10 @@ from extensions import *
 from handlers import gui_handler, logic_handler, map_handler
 
 
-class GameManager(RealtimeGameHandler):   
+class GameManager(RealtimeGameHandler):
 
     def on_recv_command(self, side_name, agent_name, command_type, command):
-        
+
         if None in command.__dict__.values():
             print("None in command: %s - %s" % (side_name, command_type))
             return
@@ -30,7 +30,7 @@ class GameManager(RealtimeGameHandler):
 
     def on_initialize(self):
         print('initialize')
-        
+
         world = map_handler.MapHandler(self.sides).load_map(self.config['map'])
         self._logic_handler = logic_handler.LogicHandler(world, self.sides)
         self._logic_handler.initialize()
@@ -46,6 +46,7 @@ class GameManager(RealtimeGameHandler):
 
 
     def on_process_cycle(self):
+        print " "
         print('cycle %i' % (self.current_cycle, ))
 
         self._gui_events = self._logic_handler.process(self.current_cycle)
@@ -53,7 +54,7 @@ class GameManager(RealtimeGameHandler):
 
     def on_update_clients(self):
         print('update clients')
-        
+
         self.send_snapshot(self._logic_handler.get_client_world())
 
 

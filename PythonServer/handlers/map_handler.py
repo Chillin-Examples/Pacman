@@ -15,7 +15,7 @@ class MapHandler:
 
     def  _fill_board(self, world, map_board):
         world.board = [[ECell.Empty for _ in range(world.width)] for _ in range(world.height)]   
-        
+
         for y in range(world.height):
             for x in range(world.width):
                 if map_board[y][x] == 'w':
