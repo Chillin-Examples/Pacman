@@ -24,16 +24,19 @@
 		"save_replay": true,
 		"replay_dir": "replays",
 		"replay_filename": null,
-		"width": 1650,
-		"height": 1650,
+		"width": 1800,
+		"height": 1000,
 		"images": {
-		"Pacman": "images/pacman.png",
-		"Ghost": "images/ghost.png",
-		"Empty": "images/empty.png",
-		"RoundWall": "images/roundWall.png",
-		"InterWall": "images/interWall.png",
-		"Food": "images/food.png",
-		"SuperFood": "images/superFood.png"
+
+			"Pacman": "images/pacman.png",
+			"Ghost": "images/ghost.png",
+
+			"Empty": "images/empty.png",
+			"RoundWall": "images/roundWall.png",
+			"InterWall": "images/interWall.png",
+
+			"Food": "images/food.png",
+			"SuperFood": "images/superFood.png"
 		
 		}
 	},
