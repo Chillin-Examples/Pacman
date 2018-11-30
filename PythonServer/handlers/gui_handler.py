@@ -38,17 +38,26 @@ class GuiHandler():
 
     def _config(self, config):
 
-        # self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
-        # self._scale_percent = math.ceil(self._scale_factor * 100)
-        # self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
-        # self._font_size = self._cell_size // 2
-        self._cell_size = 150
+        if not config['show_statuses']:
+            config['statuses_width'] = 0
+
+        self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
+        self._scale_percent = math.ceil(self._scale_factor * 100)
+        self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
+        self._font_size = self._cell_size // 2
+        print "*************************************************************"
+        print self._canvas.width 
+        print config['statuses_width']
+        print self._world.width
+        print config['cell_size']
+        print self._scale_factor
 
 
     def _draw_board(self):
 
         for y in range(self._world.height):
             for x in range(self._world.width):
+
                 cell = self._world.board[y][x]
                 if cell == ECell.Wall and (y == self._world.height - 1 or y == 0 or x == self._world.width - 1 or x == 0):
                     self._canvas.create_image('RoundWall', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
