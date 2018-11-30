@@ -63,7 +63,7 @@ class LogicHandler ():
 
                 self.world.pacman.x = new_position[0]
                 self.world.pacman.y = new_position[1]
-                return [GuiEvent(GuiEventType.MovePacman, new_pos=new_position, direction=self.world.pacman.direction.name)]
+                return [GuiEvent(GuiEventType.MovePacman, new_pos=new_position)]
 
             else:
                 print("cannot move")
