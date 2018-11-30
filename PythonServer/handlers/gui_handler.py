@@ -91,10 +91,10 @@ class GuiHandler():
             if event != None:
                 # move
                 if event.type == GuiEventType.MovePacman:
-                    pacman_dir = self.pacman_move_angle[event.extra_properties["direction"]]
-                    self._canvas.edit_image(self._pacman_img_ref, event.extra_properties["new_pos"][0] * self._cell_size + self._cell_size / 2, event.extra_properties["new_pos"][1] * self._cell_size + self._cell_size / 2, angle=pacman_dir)
+                    pacman_dir = self.pacman_move_angle[event.payload["direction"]]
+                    self._canvas.edit_image(self._pacman_img_ref, event.payload["new_pos"][0] * self._cell_size + self._cell_size / 2, event.payload["new_pos"][1] * self._cell_size + self._cell_size / 2, angle=pacman_dir)
                 # change direction
                 if event.type == GuiEventType.ChangePacmanDirection:
 
-                    pacman_dir = self.pacman_dir_angle[event.extra_properties["direction"]]     
-                    self._canvas.edit_image(self._pacman_img_ref, event.extra_properties["previous_pos"][0] * self._cell_size + self._cell_size / 2, event.extra_properties["previous_pos"][1] * self._cell_size + self._cell_size / 2, angle=pacman_dir)
+                    pacman_dir = self.pacman_dir_angle[event.payload["direction"]]     
+                    self._canvas.edit_image(self._pacman_img_ref, event.payload["pos"][0] * self._cell_size + self._cell_size / 2, event.payload["pos"][1] * self._cell_size + self._cell_size / 2, angle=pacman_dir)

@@ -14,6 +14,6 @@ class GuiEventType(Enum):
 
 class GuiEvent(object):
 
-    def __init__(self, type, previous_pos, new_pos, direction):
+    def __init__(self, type, **kwargs):
         self.type = type
-        self.extra_properties = {"previous_pos":previous_pos, "new_pos":new_pos, "direction": direction}
+        self.payload = kwargs
