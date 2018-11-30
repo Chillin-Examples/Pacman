@@ -24,7 +24,7 @@ class LogicHandler ():
             if command.id < 0 or command.id >= ( len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-                
+
         self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
 
 
@@ -34,23 +34,17 @@ class LogicHandler ():
 
 
     def process(self, current_cycle):
-       
+
         gui_events = []
         gui_events.append(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
         gui_events.append(self._move_objects(self._last_cycle_commands["Pacman"][None]))
-        
-        print("*******************")
-        for i in gui_events:
-            if i != None:
-                print(i.__dict__)
-        print("*******************\n")
 
         self.clear_commands()
         return gui_events
 
 
     def _move_objects(self, command):
-        
+
         x = self.world.pacman.x
         y = self.world.pacman.y
         pacman_position = (x, y)
@@ -69,7 +63,7 @@ class LogicHandler ():
 
 
     def _calculate_new_pos(self, command, pre_pos):
-        
+
         if command.direction.name == ECommandDirection.Right.name:
             return (pre_pos[0]+1, pre_pos[1])
 
@@ -87,7 +81,7 @@ class LogicHandler ():
 
         if self.world.board[(new_pos[1])][(new_pos[0])] == ECell.Wall:
             return False
-        
+
         else:
             return True
 
