@@ -50,31 +50,34 @@ class GuiHandler():
             for x in range(self._world.width):
 
                 cell = self._world.board[y][x]
+                canvas_pos = self._get_canvas_position(x=x, y=y, center_origin=False)
+
                 if cell == ECell.Wall and (y == self._world.height - 1 or y == 0 or x == self._world.width - 1 or x == 0):
-                    self._canvas.create_image('RoundWall', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
+                    self._canvas.create_image('RoundWall', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
                 elif cell == ECell.Wall:
-                    self._canvas.create_image('InterWall', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
+                    self._canvas.create_image('InterWall', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
                 elif cell == ECell.Empty:
-                    self._canvas.create_image('Empty', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
+                    self._canvas.create_image('Empty', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
                 elif cell == ECell.Food:
-                    img_ref = self._canvas.create_image('Food', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
+                    img_ref = self._canvas.create_image('Food', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
                 elif cell == ECell.SuperFood:
-                    self._canvas.create_image('SuperFood', x * self._cell_size, y * self._cell_size, scale_type=ScaleType.ScaleToWidth,
+                    self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
 
 
     def _draw_players(self):
 
         pacman_angle = self._angle[self._world.pacman.direction.name]
-        self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x * self._cell_size + self._cell_size/2, self._world.pacman.y * self._cell_size + self._cell_size/2, center_origin=True,
+        canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y, center_origin=False)
+        self._pacman_img_ref = self._canvas.create_image('Pacman',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                 angle=pacman_angle,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=self._cell_size)
