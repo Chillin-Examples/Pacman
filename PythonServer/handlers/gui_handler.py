@@ -86,10 +86,21 @@ class GuiHandler():
                 # move
                 if event.type == GuiEventType.MovePacman:
 
-                    self._canvas.edit_image(self._pacman_img_ref, event.extra_properties["new_pos"][0] * self._cell_size + self._cell_size // 2, event.extra_properties["new_pos"][1] * self._cell_size + self._cell_size // 2)
+                    pacman_pos = self._get_canvas_position(event.extra_properties["new_pos"][0], event.extra_properties["new_pos"][1])
+                    self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
 
                 # change direction
                 if event.type == GuiEventType.ChangePacmanDirection:
 
-                    pacman_dir = self._angle[event.extra_properties["direction"]]    
-                    self._canvas.edit_image(self._pacman_img_ref, event.extra_properties["previous_pos"][0] * self._cell_size + self._cell_size // 2, event.extra_properties["previous_pos"][1] * self._cell_size + self._cell_size // 2, angle=pacman_dir)
+                    pacman_dir = self._angle[event.extra_properties["direction"]]
+                    pacman_pos = self._get_canvas_position(event.extra_properties["new_pos"][0], event.extra_properties["new_pos"][1])    
+                    self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'], angle=pacman_dir)
+
+
+    def _get_canvas_position(self, x, y, center_origin=False):
+
+        addition = self.cell_size // 2 if center_origin else 0
+        return {
+            'x': x * self.cell_size + addition,
+            'y': y * self.cell_size + addition
+        }
