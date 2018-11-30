@@ -25,14 +25,14 @@ class AI(RealtimeAI):
         print('decide')
         
         if self.my_side == 'Pacman':
-            # self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
-            direction = random.choice([
-                ECommandDirection.Up,
-                ECommandDirection.Right,
-                ECommandDirection.Down,
-                ECommandDirection.Left
-            ])
-            self.send_command(ChangePacmanDirection(direction=direction))
+            self.send_command(ChangePacmanDirection(direction=ECommandDirection.Right))
+            # direction = random.choice([
+            #     ECommandDirection.Up,
+            #     ECommandDirection.Right,
+            #     ECommandDirection.Down,
+            #     ECommandDirection.Left
+            # ])
+            # self.send_command(ChangePacmanDirection(direction=direction))
 
         if self.my_side == 'Ghost':
             self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=0))

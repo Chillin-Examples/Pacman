@@ -38,19 +38,10 @@ class GuiHandler():
 
     def _config(self, config):
 
-        if not config['show_statuses']:
-            config['statuses_width'] = 0
-
         self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
         self._scale_percent = math.ceil(self._scale_factor * 100)
         self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
         self._font_size = self._cell_size // 2
-        print "*************************************************************"
-        print self._canvas.width 
-        print config['statuses_width']
-        print self._world.width
-        print config['cell_size']
-        print self._scale_factor
 
 
     def _draw_board(self):
