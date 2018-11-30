@@ -17,11 +17,11 @@
 
         "ghosts": [
             {
-                "position": [150, 450],
-                "direction": "Right"
+                "position": [1, 10],
+                "direction": "Up"
             },
             {
-                "position": [1350, 1050],
+                "position": [6, 4],
                 "direction": "Left"
             }
         ],
