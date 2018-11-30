@@ -37,14 +37,14 @@ class LogicHandler ():
 
         gui_events = []
 
-        # for side in self._sides:
-        #     for command_id in self._last_cycle_commands[side]:
+        for side_name in self._sides:
+            for command_id in self._last_cycle_commands[side_name]:
 
-        #         gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
-        #         gui_events.extend(self._move_objects(side_name))
+                gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
+                gui_events.extend(self._move_objects(side_name))
 
-        gui_events.extend(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
-        gui_events.extend(self._move_objects("Pacman"))
+        # gui_events.extend(self.world.apply_command("Pacman", self._last_cycle_commands["Pacman"][None]))
+        # gui_events.extend(self._move_objects("Pacman"))
 
         for i in gui_events:
             print(i.__dict__)
@@ -71,6 +71,10 @@ class LogicHandler ():
             else:
                 print("cannot move")
                 return []
+
+        elif side_name == "Ghost":
+
+            return []
 
 
     def _calculate_new_pos(self, direction, pre_pos):
