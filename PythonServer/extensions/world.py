@@ -9,11 +9,8 @@ from gui_events import GuiEvent, GuiEventType
 def apply_command(self, side_name, command):
 
     if command.name() == ChangePacmanDirection.name():
-        x = self.pacman.x
-        y = self.pacman.y
-        pacman_position = (x,y)
-        self.pacman.direction = command.direction
-        return [GuiEvent(GuiEventType.ChangePacmanDirection, pos=pacman_position, direction=self.pacman.direction.name)]
+        self.pacman.change_direction(command)
+        return [GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction)]
 
     else:
         return []

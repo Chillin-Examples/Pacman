@@ -25,10 +25,10 @@ class GuiHandler():
     def initialize(self, config):
 
         self._angle = {
-            EDirection.Up.name:        90,
-            EDirection.Right.name:     0,
-            EDirection.Down.name:      -90,
-            EDirection.Left.name:      180,
+            EDirection.Up.name:    90,
+            EDirection.Right.name: 0,
+            EDirection.Down.name:  -90,
+            EDirection.Left.name:  180,
         }
        
         self._config(config)
@@ -82,7 +82,9 @@ class GuiHandler():
 
     def _draw_players(self):
 
+        pacman_angle = self._angle[self._world.pacman.direction.name]
         self._pacman_img_ref = self._canvas.create_image('Pacman', self._world.pacman.x * self._cell_size + self._cell_size/2, self._world.pacman.y * self._cell_size + self._cell_size/2, center_origin=True,
+                                angle=pacman_angle,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=self._cell_size)
 
@@ -94,17 +96,17 @@ class GuiHandler():
             # Move
             if event.type == GuiEventType.MovePacman:
 
-                pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1], center_origin=True)
+                pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
 
             # Change direction
             if event.type == GuiEventType.ChangePacmanDirection:
 
-                pacman_dir = self._angle[event.payload["direction"]]
-                self._canvas.edit_image(self._pacman_img_ref, None, None, angle=pacman_dir)
+                pacman_angle = self._angle[event.payload["direction"].name]
+                self._canvas.edit_image(self._pacman_img_ref, None, None, angle=pacman_angle)
 
 
-    def _get_canvas_position(self, x, y, center_origin=False):
+    def _get_canvas_position(self, x, y, center_origin=True):
 
         addition = self._cell_size // 2 if center_origin else 0
         return {
