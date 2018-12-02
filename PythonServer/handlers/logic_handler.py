@@ -41,37 +41,52 @@ class LogicHandler ():
             for command_id in self._last_cycle_commands[side_name]:
 
                 gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
-                gui_events.extend(self._move_objects(side_name))
-
-        for i in gui_events:
-            print(i.__dict__)
+                
+        gui_events.extend(self._move_pacman())
+        gui_events.extend(self._move_ghosts())
 
         self.clear_commands()
         return gui_events
 
 
-    def _move_objects(self, side_name):
+    def _move_pacman(self):
 
-        if side_name == "Pacman":
-            x = self.world.pacman.x
-            y = self.world.pacman.y
-            pacman_position = (x, y)
-            new_position = self._calculate_new_pos(self.world.pacman.direction.name, pacman_position)
+        x = self.world.pacman.x
+        y = self.world.pacman.y
+        pacman_position = (x, y)
+        new_position = self._calculate_new_pos(self.world.pacman.direction.name, pacman_position)
+
+        if self._can_move(new_position):
+            print("pacman can move")
+
+            self.world.pacman.x = new_position[0]
+            self.world.pacman.y = new_position[1]
+            return [GuiEvent(GuiEventType.MovePacman, new_pos=new_position)]
+
+        else:
+            print("pacman cannot move")
+            return []
+
+
+    def _move_ghosts(self):
+
+        for ghost in self.world.ghosts:
+    
+            x = ghost.x
+            y = ghost.y
+            ghost_position = (x, y)
+            new_position = self._calculate_new_pos(ghost.direction.name, ghost_position)
 
             if self._can_move(new_position):
-                print("can move")
+                print("ghost can move")
 
-                self.world.pacman.x = new_position[0]
-                self.world.pacman.y = new_position[1]
-                return [GuiEvent(GuiEventType.MovePacman, new_pos=new_position)]
+                ghost.x = new_position[0]
+                ghost.y = new_position[1]
+                return [GuiEvent(GuiEventType.MoveGhost, new_pos=new_position)]
 
             else:
-                print("cannot move")
+                print("ghost cannot move")
                 return []
-
-        elif side_name == "Ghost":
-
-            return []
 
 
     def _calculate_new_pos(self, direction, pre_pos):
@@ -89,9 +104,9 @@ class LogicHandler ():
             return (pre_pos[0], pre_pos[1]+1)
 
 
-    def _can_move(self, new_pos):
+    def _can_move(self, position):
 
-        if self.world.board[(new_pos[1])][(new_pos[0])] == ECell.Wall:
+        if self.world.board[(position[1])][(position[0])] == ECell.Wall:
             return False
 
         else:

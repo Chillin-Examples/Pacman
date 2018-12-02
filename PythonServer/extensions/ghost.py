@@ -4,8 +4,7 @@
 from ks.models import Ghost
 
 
-def change_direction(self, world, command):
-    return True
-
+def change_direction(self, command):
+    self.direction = command.direction
 
 Ghost.change_direction = change_direction
