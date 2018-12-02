@@ -92,7 +92,9 @@ class GuiHandler():
 
                 pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
-
+            
+            if event.type == GuiEventType.MoveGhost:
+                print(event.payload)
             # Change direction
             if event.type == GuiEventType.ChangePacmanDirection:
 

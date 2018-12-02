@@ -68,6 +68,8 @@ class LogicHandler ():
 
     def _move_ghosts(self):
 
+        ghost_move_events = []
+
         for ghost in self.world.ghosts:
             x = ghost.x
             y = ghost.y
@@ -79,11 +81,13 @@ class LogicHandler ():
 
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
-                return [GuiEvent(GuiEventType.MoveGhost, new_pos=new_position)]
+                ghost_move_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
 
             else:
                 print("ghost cannot move")
-                return []
+                ghost_move_events.extend([])
+
+        return ghost_move_events
 
 
     def _calculate_new_pos(self, direction, pre_pos):
