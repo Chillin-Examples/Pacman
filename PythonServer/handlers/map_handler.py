@@ -4,7 +4,7 @@
 import json
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection, Position
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 
 
 class MapHandler:
@@ -14,23 +14,21 @@ class MapHandler:
 
 
     def  _fill_board(self, world, map_board):
-
         world.board = [[ECell.Empty for _ in range(world.width)] for _ in range(world.height)]   
-        
+
         for y in range(world.height):
-                for x in range(world.width):
-                    if map_board[y][x] == 'w':
-                        world.board[y][x] = ECell.Wall
-                    elif map_board[y][x] == 'e':
-                        world.board[y][x] = ECell.Empty
-                    elif map_board[y][x] == 'f':
-                        world.board[y][x] = ECell.Food
-                    elif map_board[y][x] == 's':
-                        world.board[y][x] = ECell.SuperFood
+            for x in range(world.width):
+                if map_board[y][x] == 'w':
+                    world.board[y][x] = ECell.Wall
+                elif map_board[y][x] == 'e':
+                    world.board[y][x] = ECell.Empty
+                elif map_board[y][x] == 'f':
+                    world.board[y][x] = ECell.Food
+                elif map_board[y][x] == 's':
+                    world.board[y][x] = ECell.SuperFood
 
 
     def _fill_constants(self, world, constants_config):
-
         world.constants = Constants()
         world.constants.food_score = constants_config["food_score"]
         world.constants.super_food_score = constants_config["super_food_score"]
@@ -45,8 +43,8 @@ class MapHandler:
         # pacman
         pacman_config = players_config["pacman"]
         pacman = Pacman()
-        pacman.id = 1
-        pacman.position = Position(x=pacman_config["position"][0], y=pacman_config["position"][1])
+        pacman.x = pacman_config["position"][0]
+        pacman.y = pacman_config["position"][1]
         pacman.direction = EDirection[pacman_config["direction"]]
         pacman.health = pacman_config["health"]
         pacman.giant_form_remaining_time = 0
@@ -54,19 +52,19 @@ class MapHandler:
 
         # ghosts
         world.ghosts = []
-        ghost_id = 0
-        for ghost_config in players_config["ghosts"]:
-            ghost_id += 1
+        for ghost_id, ghost_config in enumerate(players_config["ghosts"]):
             new_ghost = Ghost()
             new_ghost.id = ghost_id
-            new_ghost.position = Position(x=ghost_config["position"][0], y=ghost_config["position"][1])
+            new_ghost.x = ghost_config["position"][0]
+            new_ghost.y = ghost_config["position"][1]
             new_ghost.direction = EDirection[ghost_config["direction"]]
             world.ghosts.append(new_ghost)
 
 
-    def load_map(self, config):
+    def load_map(self, map_path):
 
-        map_config = json.loads(open((config['map']), "r").read())
+        with open((map_path), "r") as map_file:
+            map_config = json.loads(map_file.read())
         board = map_config['board']
         constants_config = map_config['constants']
         players_config = map_config['players']

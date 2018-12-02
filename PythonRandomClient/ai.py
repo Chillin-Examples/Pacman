@@ -7,7 +7,7 @@ import random
 from chillin_client import RealtimeAI
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection, Position
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
 
 
@@ -32,6 +32,7 @@ class AI(RealtimeAI):
                 ECommandDirection.Left
             ])
             self.send_command(ChangePacmanDirection(direction=direction))
+
         elif self.my_side == 'Ghost':
             ghost_id = 0
             direction = random.choice([

@@ -9,7 +9,7 @@ _def = enum <byte>
 
 
 [ChangePacmanDirection]
-_def = class 
+_def = class
 direction = ECommandDirection
 
 
