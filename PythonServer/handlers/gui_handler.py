@@ -30,6 +30,8 @@ class GuiHandler():
             EDirection.Down.name:  -90,
             EDirection.Left.name:  180,
         }
+
+        self._ghosts_ref = []
        
         self._config(config)
         self._draw_board()
@@ -75,32 +77,69 @@ class GuiHandler():
 
     def _draw_players(self):
 
+        # draw pacman
         pacman_angle = self._angle[self._world.pacman.direction.name]
         canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y)
         self._pacman_img_ref = self._canvas.create_image('Pacman',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                 angle=pacman_angle,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=self._cell_size)
+                
+        #draw ghosts
+        for ghost in self._world.ghosts:
 
+            for ghost in self._world.ghosts:
+                canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
+                ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                        scale_type=ScaleType.ScaleToWidth,
+                                        scale_value=self._cell_size)
+                ghost_ref = {
+                    'id': ghost.id,
+                    'ghost_ref': ghost_img_ref
+                }
+                self._ghosts_ref.append(ghost_ref)
 
+            
     def update(self, events):
 
         for event in events:
 
-            # Move
+            # Move pacman
             if event.type == GuiEventType.MovePacman:
 
                 pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
-            
-            if event.type == GuiEventType.MoveGhost:
-                print(event.payload)
-            # Change direction
+
+            # Change pacman direction
             if event.type == GuiEventType.ChangePacmanDirection:
 
                 pacman_angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(self._pacman_img_ref, None, None, angle=pacman_angle)
 
+            # Move ghosts
+            if event.type == GuiEventType.MoveGhost:
+
+                for i in self._ghosts_ref:
+                    if i['id'] == event.payload["id"]:
+                        ghost_ref = i['ghost_ref']
+                        break
+
+                ghost_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
+                self._canvas.edit_image(ghost_ref, ghost_pos['x'], ghost_pos['y'])
+            
+            # Change ghost direction
+            if event.type == GuiEventType.ChangeGhostDirection:
+
+                for i in self._ghosts_ref:
+                    if i['id'] == event.payload["id"]:
+                        ghost_ref = i['ghost_ref']
+                        break
+                        
+                ghost_angle = self._angle[event.payload["direction"].name]
+                self._canvas.edit_image(ghost_ref, None, None, angle=ghost_angle)
+            
+
+                
 
     def _get_canvas_position(self, x, y, center_origin=True):
 
