@@ -29,7 +29,6 @@ class LogicHandler ():
 
 
     def clear_commands(self):
-
         self._last_cycle_commands = {side: {} for side in self._sides}
 
 
@@ -39,7 +38,6 @@ class LogicHandler ():
 
         for side_name in self._sides:
             for command_id in self._last_cycle_commands[side_name]:
-
                 gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
                 
         gui_events.extend(self._move_pacman())
@@ -71,7 +69,6 @@ class LogicHandler ():
     def _move_ghosts(self):
 
         for ghost in self.world.ghosts:
-    
             x = ghost.x
             y = ghost.y
             ghost_position = (x, y)
