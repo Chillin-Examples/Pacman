@@ -35,7 +35,6 @@ class LogicHandler ():
     def process(self, current_cycle):
 
         gui_events = []
-
         for side_name in self._sides:
             for command_id in self._last_cycle_commands[side_name]:
                 gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
@@ -46,9 +45,6 @@ class LogicHandler ():
 
         for i in gui_events:
             print(i.__dict__)
-    
-        print(self.world.scores["Pacman"])
-        print(self.world.pacman.x, self.world.pacman.y)
         self.clear_commands()
         return gui_events
 
@@ -79,7 +75,7 @@ class LogicHandler ():
 
     def _move_ghosts(self):
 
-        ghost_move_events = []
+        gui_events = []
 
         for ghost in self.world.ghosts:
             ghost_position = self._get_position("Ghost", ghost.id)
@@ -87,16 +83,15 @@ class LogicHandler ():
 
             if self._can_move(new_position):
                 print("ghost can move")
-
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
-                ghost_move_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
+                gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
 
             else:
                 print("ghost cannot move")
-                ghost_move_events.extend([])
+                gui_events.extend([])
 
-        return ghost_move_events
+        return gui_events
 
 
     def _calculate_new_pos(self, direction, pre_pos):
@@ -115,12 +110,10 @@ class LogicHandler ():
 
 
     def _can_move(self, position):
-
         return self.world.board[(position[1])][(position[0])] != ECell.Wall
 
 
     def _can_be_eaten(self, position):
-
         return self.world.board[(position[1])][(position[0])] == ECell.Food
 
 
@@ -141,23 +134,25 @@ class LogicHandler ():
 
 
     def get_client_world(self):
-
         return self.world
 
 
     def check_end_game(self, current_cycle):
-
         gui_events = []
         end_game = False
+
         if current_cycle >= self.world.constants.max_cycles - 1:
             end_game = True
+
         # TODO:Check winner
         # Check if ghost can kill pacman
         for ghost in self.world.ghosts:
             end_game = True
-            print("pacman was eaten by ghost: ",ghost.id)
             ghost_position = self._get_position("Ghost", ghost.id)
+
             if ghost_position == self._get_position("Pacman", None):
+                print("pacman was eaten by ghost: ",ghost.id)
                 self.world.scores["Ghost"] += self.world.constants.pacman_death_score
                 gui_events.append(GuiEvent(GuiEventType.KillPacman))
+
         return gui_events
