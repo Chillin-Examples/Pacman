@@ -88,7 +88,6 @@ class GuiHandler():
         #draw ghosts
         for ghost in self._world.ghosts:
 
-            for ghost in self._world.ghosts:
                 canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
                 ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                         scale_type=ScaleType.ScaleToWidth,
