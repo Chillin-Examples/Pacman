@@ -55,9 +55,7 @@ class LogicHandler ():
     def _move_pacman(self):
 
         gui_events = []
-        x = self.world.pacman.x
-        y = self.world.pacman.y
-        pacman_position = (x, y)
+        pacman_position = self._get_position("Pacman", None)
         new_position = self._calculate_new_pos(self.world.pacman.direction.name, pacman_position)
 
         if self._can_move(new_position):
@@ -65,7 +63,7 @@ class LogicHandler ():
 
             if self._can_be_eaten(new_position):
                 print("can be eaten")
-                self._eat_food(new_position, "Pacman")
+                self._eat_food(new_position)
                 gui_events.append(GuiEvent(GuiEventType.EatFood, position=new_position))
 
             self.world.pacman.x = new_position[0]
@@ -83,9 +81,7 @@ class LogicHandler ():
         ghost_move_events = []
 
         for ghost in self.world.ghosts:
-            x = ghost.x
-            y = ghost.y
-            ghost_position = (x, y)
+            ghost_position = self._get_position("Ghost", ghost.id)
             new_position = self._calculate_new_pos(ghost.direction.name, ghost_position)
 
             if self._can_move(new_position):
@@ -127,11 +123,20 @@ class LogicHandler ():
         return self.world.board[(position[1])][(position[0])] == ECell.Food
 
 
-    def _eat_food(self, position, side_name):
-            # Add score
-            self.world.scores[side_name] += self.world.constants.food_score
-            # Change Food to Empty
-            self.world.board[(position[1])][(position[0])] == ECell.Empty
+    def _eat_food(self, position):
+        # Add score to pacman
+        self.world.scores["Pacman"] += self.world.constants.food_score
+        # Change Food to Empty
+        self.world.board[(position[1])][(position[0])] == ECell.Empty
+
+
+    def _get_position(self, side_name, id):
+
+        if side_name == "Pacman":
+            return (self.world.pacman.x, self.world.pacman.y)
+
+        elif side_name == "Ghost":
+            return (self.world.ghosts[id].x, self.world.ghosts[id].y)
 
 
     def get_client_world(self):
