@@ -57,6 +57,9 @@ class LogicHandler ():
         if self._can_move(new_position):
             print("pacman can move")
 
+            # Check eat food
+                # self._food_checker(new_position)
+
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
             return [GuiEvent(GuiEventType.MovePacman, new_pos=new_position)]
@@ -108,6 +111,12 @@ class LogicHandler ():
     def _can_move(self, position):
 
         return self.world.board[(position[1])][(position[0])] == ECell.Wall
+
+
+    def _food_checker(self, position):
+
+        if self.world.board[(position[1])][(position[0])] == ECell.Food:
+            self.world.board[(position[1])][(position[0])] == ECell.Empty
 
 
     def get_client_world(self):

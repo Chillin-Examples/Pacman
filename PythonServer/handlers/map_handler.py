@@ -73,6 +73,8 @@ class MapHandler:
         world.width = len(board[0])
         world.height = len(board)
 
+        # Initialize scores
+        world.scores = {side: 0 for side in self._sides}
         # board initialization
         self._fill_board(world, board)
         self._fill_constants(world, constants_config)
