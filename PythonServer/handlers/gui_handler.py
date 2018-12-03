@@ -31,8 +31,8 @@ class GuiHandler():
             EDirection.Left.name:  180,
         }
 
-        self._ghosts_ref = []
-       
+        self.ghosts_ref = {}
+
         self._config(config)
         self._draw_board()
         self._draw_players()
@@ -84,7 +84,7 @@ class GuiHandler():
                                 angle=pacman_angle,
                                 scale_type=ScaleType.ScaleToWidth,
                                 scale_value=self._cell_size)
-                
+
         #draw ghosts
         for ghost in self._world.ghosts:
 
@@ -92,13 +92,10 @@ class GuiHandler():
                 ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
-                ghost_ref = {
-                    'id': ghost.id,
-                    'ghost_ref': ghost_img_ref
-                }
-                self._ghosts_ref.append(ghost_ref)
 
-            
+                self.ghosts_ref[ghost.id] = ghost_img_ref
+
+
     def update(self, events):
 
         for event in events:
@@ -118,27 +115,17 @@ class GuiHandler():
             # Move ghosts
             if event.type == GuiEventType.MoveGhost:
 
-                for i in self._ghosts_ref:
-                    if i['id'] == event.payload["id"]:
-                        ghost_ref = i['ghost_ref']
-                        break
-
+                ghost_ref = self.ghosts_ref[event.payload["id"]]
                 ghost_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(ghost_ref, ghost_pos['x'], ghost_pos['y'])
-            
+
             # Change ghost direction
             if event.type == GuiEventType.ChangeGhostDirection:
 
-                for i in self._ghosts_ref:
-                    if i['id'] == event.payload["id"]:
-                        ghost_ref = i['ghost_ref']
-                        break
-                        
+                ghost_ref = self.ghosts_ref[event.payload["id"]]        
                 ghost_angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(ghost_ref, None, None, angle=ghost_angle)
-            
 
-                
 
     def _get_canvas_position(self, x, y, center_origin=True):
 
