@@ -43,12 +43,18 @@ class LogicHandler ():
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
 
+        for i in gui_events:
+            print(i.__dict__)
+    
+        print(self.world.scores["Pacman"])
+        print(self.world.pacman.x, self.world.pacman.y)
         self.clear_commands()
         return gui_events
 
 
     def _move_pacman(self):
 
+        gui_events = []
         x = self.world.pacman.x
         y = self.world.pacman.y
         pacman_position = (x, y)
@@ -57,12 +63,15 @@ class LogicHandler ():
         if self._can_move(new_position):
             print("pacman can move")
 
-            # Check eat food
-                # self._food_checker(new_position)
+            if self._can_be_eaten(new_position):
+                print("can be eaten")
+                self._eat_food(new_position, "Pacman")
+                gui_events.append(GuiEvent(GuiEventType.EatFood, position=new_position))
 
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
-            return [GuiEvent(GuiEventType.MovePacman, new_pos=new_position)]
+            gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=new_position))
+            return gui_events
 
         else:
             print("pacman cannot move")
@@ -110,12 +119,18 @@ class LogicHandler ():
 
     def _can_move(self, position):
 
-        return self.world.board[(position[1])][(position[0])] == ECell.Wall
+        return self.world.board[(position[1])][(position[0])] != ECell.Wall
 
 
-    def _food_checker(self, position):
+    def _can_be_eaten(self, position):
 
-        if self.world.board[(position[1])][(position[0])] == ECell.Food:
+        return self.world.board[(position[1])][(position[0])] == ECell.Food
+
+
+    def _eat_food(self, position, side_name):
+            # Add score
+            self.world.scores[side_name] += self.world.constants.food_score
+            # Change Food to Empty
             self.world.board[(position[1])][(position[0])] == ECell.Empty
 
 
