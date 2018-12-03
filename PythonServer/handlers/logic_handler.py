@@ -42,6 +42,7 @@ class LogicHandler ():
                 
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
+        gui_events.extend(self.check_end_game(current_cycle))
 
         for i in gui_events:
             print(i.__dict__)
@@ -144,6 +145,19 @@ class LogicHandler ():
         return self.world
 
 
-    def check_end_game(self):
-        pass
-        #should return tuple<string, dict<string,dict<string, duct<string,string>>>
+    def check_end_game(self, current_cycle):
+
+        gui_events = []
+        end_game = False
+        if current_cycle >= self.world.constants.max_cycles - 1:
+            end_game = True
+        # TODO:Check winner
+        # Check if ghost can kill pacman
+        for ghost in self.world.ghosts:
+            end_game = True
+            print("pacman was eaten by ghost: ",ghost.id)
+            ghost_position = self._get_position("Ghost", ghost.id)
+            if ghost_position == self._get_position("Pacman", None):
+                self.world.scores["Ghost"] += self.world.constants.pacman_death_score
+                gui_events.append(GuiEvent(GuiEventType.KillPacman))
+        return gui_events
