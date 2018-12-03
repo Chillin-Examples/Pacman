@@ -10,6 +10,7 @@ class GuiEventType(Enum):
     MoveGhost = 1
     ChangePacmanDirection = 2
     ChangeGhostDirection = 3
+    EatFood = 4
 
 
 class GuiEvent(object):
