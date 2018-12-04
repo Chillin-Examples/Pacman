@@ -32,6 +32,7 @@ class GuiHandler():
         }
 
         self.ghosts_ref = {}
+        self.food_ref = {}
 
         self._config(config)
         self._draw_board()
@@ -40,13 +41,19 @@ class GuiHandler():
 
     def _config(self, config):
 
-        self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
+        self._status_size = config['statuses_width']
+        self._scale_factor = (self._canvas.width - self._status_size) / (self._world.width * config['cell_size'])
         self._scale_percent = math.ceil(self._scale_factor * 100)
         self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
         self._font_size = self._cell_size // 2
 
 
     def _draw_board(self):
+
+        # Draw background
+        self._background_ref = self._canvas.create_image('Empty', 0, 0)
+        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
+        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
 
         for y in range(self._world.height):
             for x in range(self._world.width):
@@ -67,8 +74,9 @@ class GuiHandler():
                                               scale_value=self._cell_size)
 
                 elif cell == ECell.Food:
-                    img_ref = self._canvas.create_image('Food', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
+                    food_img_ref = self._canvas.create_image('Food', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
+                    self.food_ref[(canvas_pos["x"] // self._cell_size,canvas_pos["y"] // self._cell_size)] = food_img_ref
 
                 elif cell == ECell.SuperFood:
                     self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
@@ -87,9 +95,10 @@ class GuiHandler():
 
         #draw ghosts
         for ghost in self._world.ghosts:
-
-                canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
-                ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+            ghost_angle = self._angle[self._world.ghost.direction.name]
+            canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
+            ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                        angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
 
@@ -119,12 +128,23 @@ class GuiHandler():
                 ghost_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(ghost_ref, ghost_pos['x'], ghost_pos['y'])
 
-            # Change ghost direction
+            # Change ghosts direction
             if event.type == GuiEventType.ChangeGhostDirection:
 
                 ghost_ref = self.ghosts_ref[event.payload["id"]]        
                 ghost_angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(ghost_ref, None, None, angle=ghost_angle)
+
+            # Remove food
+            if event.type == GuiEventType.EatFood:
+                
+                # Remove 
+                food_ref =  self.food_ref[event.payload["position"][0], event.payload["position"][1]]
+                self._canvas.delete_element(food_ref)
+                # # Make cell empty
+                # canvas_pos = self._get_canvas_position(event.payload["position"][0],event.payload["position"][1], False)
+                # self._canvas.create_image('Empty', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
+                #                               scale_value=self._cell_size)
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
