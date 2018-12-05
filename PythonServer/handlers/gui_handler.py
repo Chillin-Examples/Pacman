@@ -40,7 +40,7 @@ class GuiHandler():
 
     def _config(self, config):
 
-        self._scale_factor = (self._canvas.width - self._status_size) / (self._world.width * config['cell_size'])
+        self._scale_factor = (self._canvas.width - config['statuses_width']) / (self._world.width * config['cell_size'])
         self._scale_percent = math.ceil(self._scale_factor * 100)
         self._cell_size = math.ceil(config['cell_size'] * self._scale_factor)
         self._font_size = self._cell_size // 2
@@ -87,14 +87,14 @@ class GuiHandler():
 
         #draw ghosts
         for ghost in self._world.ghosts:
-            ghost_angle = self._angle[self._world.ghost.direction.name]
+            ghost_angle = self._angle[ghost.direction.name]
             canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
             ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                         angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
 
-                self.ghosts_ref[ghost.id] = ghost_img_ref
+            self.ghosts_ref[ghost.id] = ghost_img_ref
 
 
     def update(self, events):
