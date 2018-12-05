@@ -8,8 +8,8 @@
         "weeewwweeew",
         "weefffffeew",
         "weeeeeeeeew",
-        "wwwfffffeew",
-        "weeeeeeesew",
+        "wewfffffeew",
+        "weweeeeesew",
         "wwwwwwwwwww"
     ],
 
@@ -18,7 +18,7 @@
         "ghosts": [
             {
                 "position": [1, 9],
-                "direction": "Left"
+                "direction": "Down"
             },
             {
                 "position": [6, 4],

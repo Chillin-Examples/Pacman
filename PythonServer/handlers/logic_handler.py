@@ -139,7 +139,7 @@ class LogicHandler ():
     def _check_kill_pacman(self, ghost):
 
         if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
-            print("pacman was eaten by ghost: ",ghost.id)
+            print("tooooo kill pacman ")
             self.world.scores["Ghost"] += self.world.constants.pacman_death_score
             self.world.pacman.health -= 1
 
