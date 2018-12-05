@@ -42,7 +42,7 @@ class LogicHandler ():
                 
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
-
+        print(self.world.pacman.x, self.world.pacman.y)
         self.clear_commands()
         return gui_events
 
@@ -107,7 +107,7 @@ class LogicHandler ():
 
     def _can_move(self, position):
 
-        return self.world.board[(position[1])][(position[0])] == ECell.Wall
+        return self.world.board[(position[1])][(position[0])] != ECell.Wall
 
 
     def get_client_world(self):
