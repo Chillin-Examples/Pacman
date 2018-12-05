@@ -43,10 +43,6 @@ class LogicHandler ():
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
 
-        for i in gui_events:
-            print(i.__dict__)
-    
-        print(self.world.scores["Pacman"])
         print(self.world.pacman.x, self.world.pacman.y)
         self.clear_commands()
         return gui_events
@@ -93,7 +89,6 @@ class LogicHandler ():
 
             else:
                 print("ghost cannot move")
-                ghost_move_events.extend([])
 
         return ghost_move_events
 
@@ -140,7 +135,6 @@ class LogicHandler ():
 
 
     def get_client_world(self):
-
         return self.world
 
 
