@@ -52,9 +52,9 @@ def _pacman_can_change_direction(self, position):
     return self.board[(position[1])][(position[0])] != ECell.Wall
 
 
-def _ghost_can_change_direction(self, position,ghost_position, command):
+def _ghost_can_change_direction(self, new_position, ghost_position, command):
 
-    if self.board[(position[1])][(position[0])] == ECell.Wall:
+    if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
         print("its a wall")
         return False
 
@@ -76,10 +76,13 @@ def _convert_dir_to_pos(self,direction):
 
     if direction == EDirection.Up.name:
         return(0, -1)
+
     elif direction == EDirection.Down.name:
         return(0, +1)
+
     elif direction == EDirection.Right.name:
         return(+1, 0)
+
     elif direction == EDirection.Left.name:
         return(-1, 0)
 
@@ -89,14 +92,14 @@ def _check_dead_end(self, ghost_position, dir_to_go):
     exception = self._convert_dir_to_pos(dir_to_go)
     cells_around = [(-1, 0),(1, 0), (0, 1), (0, -1)]
     cells_around.remove(exception)
-
+    # check if there is a dead end
     for i in cells_around:
         if self.board[(ghost_position[1]+i[1])][(ghost_position[0]+i[0])] != ECell.Wall:
             return False
     return True
 
 
-# Can be a dictionary also
+# TODO: Can be a dictionary also
 def _calculate_forbidden_direction(self, direction):
 
     if direction == EDirection.Up.name:
