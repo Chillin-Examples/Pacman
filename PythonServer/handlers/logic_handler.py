@@ -85,7 +85,6 @@ class LogicHandler ():
 
             else:
                 print("ghost cannot move")
-                ghost_move_events.extend([])
 
         return ghost_move_events
 
