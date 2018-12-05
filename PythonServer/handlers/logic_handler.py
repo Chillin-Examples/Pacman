@@ -107,7 +107,7 @@ class LogicHandler ():
 
     def _can_move(self, position):
 
-        return self.world.board[(position[1])][(position[0])] == ECell.Wall
+        return self.world.board[(position[1])][(position[0])] != ECell.Wall
 
 
     def get_client_world(self):
