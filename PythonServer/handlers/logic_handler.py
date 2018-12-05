@@ -42,7 +42,7 @@ class LogicHandler ():
                 
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
-
+        print(self.world.pacman.x, self.world.pacman.y)
         self.clear_commands()
         return gui_events
 
