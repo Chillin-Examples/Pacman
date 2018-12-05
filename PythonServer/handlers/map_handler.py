@@ -46,6 +46,9 @@ class MapHandler:
         pacman.x = pacman_config["position"][0]
         pacman.y = pacman_config["position"][1]
         pacman.direction = EDirection[pacman_config["direction"]]
+        pacman.init_x = pacman_config["position"][0]
+        pacman.init_y = pacman_config["position"][1]
+        pacman.init_direction = EDirection[pacman_config["direction"]]
         pacman.health = pacman_config["health"]
         pacman.giant_form_remaining_time = 0
         world.pacman = pacman
@@ -58,6 +61,9 @@ class MapHandler:
             new_ghost.x = ghost_config["position"][0]
             new_ghost.y = ghost_config["position"][1]
             new_ghost.direction = EDirection[ghost_config["direction"]]
+            new_ghost.init_x = ghost_config["position"][0]
+            new_ghost.init_y = ghost_config["position"][1]
+            new_ghost.init_direction = EDirection[ghost_config["direction"]]
             world.ghosts.append(new_ghost)
 
 
