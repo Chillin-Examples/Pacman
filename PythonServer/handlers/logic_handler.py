@@ -2,7 +2,7 @@
 from ks.commands import ECommandDirection
 from extensions import world
 from gui_events import *
-from ks.models import World, ECell
+from ks.models import World, ECell, EDirection
 
 
 class LogicHandler ():
@@ -15,7 +15,13 @@ class LogicHandler ():
 
 
     def initialize(self):
-        
+
+        self._convert_dir_to_pos = {
+        EDirection.Up.name:(0, -1),
+        EDirection.Down.name: (0, +1),
+        EDirection.Right.name: (+1, 0),
+        EDirection.Left.name: (-1, 0)
+    }
 
 
     def store_command(self, side_name, command):
@@ -57,7 +63,8 @@ class LogicHandler ():
 
         gui_events = []
         pacman_position = self._get_position("Pacman", None)
-        new_position = self._calculate_new_pos(self.world.pacman.direction.name, pacman_position)
+        new_position = (self._convert_dir_to_pos[self.world.pacman.direction.name][0]+pacman_position[0],
+                         self._convert_dir_to_pos[self.world.pacman.direction.name][1]+pacman_position[1])
 
         if self._can_move(new_position):
             print("pacman can move")
@@ -80,7 +87,8 @@ class LogicHandler ():
             ghost_position = self._get_position("Ghost", ghost.id)
             print(ghost_position)
             print("jaye ghost")
-            new_position = self._calculate_new_pos(ghost.direction.name, ghost_position)
+            new_position = (self._convert_dir_to_pos[ghost.direction.name][0]+ghost_position[0],
+                         self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
 
             if self._can_move(new_position):
                 print("ghost can move")
@@ -97,21 +105,6 @@ class LogicHandler ():
             print(i.__dict__)
 
         return gui_events
-
-
-    def _calculate_new_pos(self, direction, pre_pos):
-    
-        if direction == ECommandDirection.Right.name:
-            return (pre_pos[0]+1, pre_pos[1])
-
-        elif direction == ECommandDirection.Left.name:
-            return (pre_pos[0]-1, pre_pos[1])
-
-        elif direction == ECommandDirection.Up.name:
-            return (pre_pos[0], pre_pos[1]-1)
-
-        elif direction == ECommandDirection.Down.name:
-            return (pre_pos[0], pre_pos[1]+1)
 
 
     def _can_move(self, position):
