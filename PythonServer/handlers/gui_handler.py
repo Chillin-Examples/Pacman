@@ -52,8 +52,8 @@ class GuiHandler():
 
         # Draw background
         self._background_ref = self._canvas.create_image('Empty', 0, 0)
-        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
-        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
+        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=self._world.width * self._scale_factor * self._cell_size)
+        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=self._world.height * self._scale_factor * self._cell_size)
 
         for y in range(self._world.height):
             for x in range(self._world.width):
