@@ -31,12 +31,8 @@ class GuiHandler():
             EDirection.Left.name:  180,
         }
 
-        self.ghosts_ref = {}
-        self.food_ref = {}
-        # Merge conflict
         self._ghosts_ref = {}
         self._food_ref = {}
-
 
         self._config(config)
         self._draw_board()
@@ -56,11 +52,6 @@ class GuiHandler():
 
         # Draw background
         self._background_ref = self._canvas.create_image('Empty', 0, 0)
-# <<<<<<< HEAD
-# Conflict
-#         self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
-#         self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
-# =======
         self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=self._world.width * self._scale_factor * self._cell_size)
         self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=self._world.height * self._scale_factor * self._cell_size)
 
@@ -110,7 +101,7 @@ class GuiHandler():
                                         angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
-
+                                        
             self._ghosts_ref[ghost.id] = ghost_img_ref
 
 
@@ -118,56 +109,23 @@ class GuiHandler():
 
         for event in events:
 
-            # Move pacman
-            if event.type == GuiEventType.MovePacman:
+            # Move
+            if event.type in [GuiEventType.MovePacman, GuiEventType.MoveGhost]:
+                ref = self._pacman_img_ref if event.type == GuiEventType.MovePacman else self._ghosts_ref[event.payload["id"]]
+                pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
+                self._canvas.edit_image(ref, pos['x'], pos['y'])
 
-                pacman_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
-                self._canvas.edit_image(self._pacman_img_ref, pacman_pos['x'], pacman_pos['y'])
-
-            # Change pacman direction
-            if event.type == GuiEventType.ChangePacmanDirection:
-
-                pacman_angle = self._angle[event.payload["direction"].name]
-                self._canvas.edit_image(self._pacman_img_ref, None, None, angle=pacman_angle)
-
-            # Move ghosts
-            if event.type == GuiEventType.MoveGhost:
-
-                ghost_ref = self.ghosts_ref[event.payload["id"]]
-                ghost_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
-                self._canvas.edit_image(ghost_ref, ghost_pos['x'], ghost_pos['y'])
-
-            # Change ghosts direction
-            if event.type == GuiEventType.ChangeGhostDirection:
-
-                ghost_ref = self.ghosts_ref[event.payload["id"]]        
-                ghost_angle = self._angle[event.payload["direction"].name]
-                self._canvas.edit_image(ghost_ref, None, None, angle=ghost_angle)
-
-# Merge conflict
-#             # Move
-#             if event.type in [GuiEventType.MovePacman, GuiEventType.MoveGhost]:
-#                 ref = self._pacman_img_ref if event.type == GuiEventType.MovePacman else self._ghosts_ref[event.payload["id"]]
-#                 pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
-#                 self._canvas.edit_image(ref, pos['x'], pos['y'])
-
-#             # Change direction
-#             if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
-#                 ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
-#                 angle = self._angle[event.payload["direction"].name]
-#                 self._canvas.edit_image(ref, None, None, angle=angle)
-# >>>>>>> features/30-move-ghosts
+            # Change direction
+            if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
+                ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
+                angle = self._angle[event.payload["direction"].name]
+                self._canvas.edit_image(ref, None, None, angle=angle)
 
             # Remove food
             if event.type == GuiEventType.EatFood:
 
                 food_ref =  self._food_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
-                #conflict
-                # # Make cell empty
-                # canvas_pos = self._get_canvas_position(event.payload["position"][0],event.payload["position"][1], False)
-                # self._canvas.create_image('Empty', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
-                #                               scale_value=self._cell_size)
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
