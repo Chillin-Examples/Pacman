@@ -43,7 +43,7 @@ class LogicHandler ():
         gui_events.extend(self._move_ghosts())
 
         # EAT FOOD
-        pacman_position = self.world.pacman._get_position("Pacman", None)
+        pacman_position = self._get_position("Pacman", None)
         if self._can_be_eaten(pacman_position):
             print("can be eaten")
             self._eat_food(pacman_position)
