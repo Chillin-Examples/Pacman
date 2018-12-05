@@ -9,9 +9,8 @@ from gui_events import GuiEvent, GuiEventType
 def apply_command(self, side_name, command):
     
     if command.name() == ChangePacmanDirection.name():
-        x = self.pacman.x
-        y = self.pacman.y
-        pacman_position = (x, y)
+
+        pacman_position = self._get_position("Pacman", None)
         new_position = self._calculate_new_pos(command.direction.name, pacman_position)
 
         if self._pacman_can_change_direction(new_position):
@@ -21,9 +20,8 @@ def apply_command(self, side_name, command):
             return []
 
     elif command.name() == ChangeGhostDirection.name():
-        x = self.ghosts[command.id].x
-        y = self.ghosts[command.id].y
-        ghost_position = ((x, y))
+
+        ghost_position = self._get_position("Ghost", command.id)
         new_position = self._calculate_new_pos(command.direction.name, ghost_position)
 
         if self._ghost_can_change_direction(new_position,ghost_position, command):
@@ -112,6 +110,15 @@ def _calculate_forbidden_direction(self, direction):
         return EDirection.Right.name
 
 
+ def _get_position(self, side_name, id):
+
+    if side_name == "Pacman":
+        return (self.world.pacman.x, self.world.pacman.y)
+
+    elif side_name == "Ghost":
+        return (self.world.ghosts[id].x, self.world.ghosts[id].y)
+
+
 World.apply_command = apply_command
 World._pacman_can_change_direction = _pacman_can_change_direction
 World._calculate_new_pos = _calculate_new_pos
@@ -119,3 +126,4 @@ World._ghost_can_change_direction = _ghost_can_change_direction
 World._calculate_forbidden_direction = _calculate_forbidden_direction
 World._convert_dir_to_pos = _convert_dir_to_pos
 World._check_dead_end = _check_dead_end
+World._get_position = _get_position
