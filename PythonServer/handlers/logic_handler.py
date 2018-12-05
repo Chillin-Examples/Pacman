@@ -42,6 +42,13 @@ class LogicHandler ():
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
 
+        # EAT FOOD
+        pacman_position = self.world.pacman._get_position("Pacman", None)
+        if self._can_be_eaten(pacman_position):
+            print("can be eaten")
+            self._eat_food(pacman_position)
+            gui_events.append(GuiEvent(GuiEventType.EatFood, position=pacman_position))
+
         self.clear_commands()
         return gui_events
 
@@ -54,11 +61,6 @@ class LogicHandler ():
 
         if self._can_move(new_position):
             print("pacman can move")
-
-            if self._can_be_eaten(new_position):
-                print("can be eaten")
-                self._eat_food(new_position)
-                gui_events.append(GuiEvent(GuiEventType.EatFood, position=new_position))
 
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
