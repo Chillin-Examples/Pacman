@@ -76,7 +76,7 @@ class GuiHandler():
                 elif cell == ECell.Food:
                     food_img_ref = self._canvas.create_image('Food', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
-                    self._food_ref[(canvas_pos["x"] // self._cell_size,canvas_pos["y"] // self._cell_size)] = food_img_ref
+                    self._food_ref[x, y] = food_img_ref
 
                 elif cell == ECell.SuperFood:
                     self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
