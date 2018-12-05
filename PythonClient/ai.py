@@ -35,5 +35,5 @@ class AI(RealtimeAI):
             # self.send_command(ChangePacmanDirection(direction=direction))
 
         if self.my_side == 'Ghost':
-            self.send_command(ChangeGhostDirection(direction=ECommandDirection.Up, id=0))
+            self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=0))
             self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=1))

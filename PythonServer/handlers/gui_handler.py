@@ -33,6 +33,10 @@ class GuiHandler():
 
         self.ghosts_ref = {}
         self.food_ref = {}
+        # Merge conflict
+        self._ghosts_ref = {}
+        self._food_ref = {}
+
 
         self._config(config)
         self._draw_board()
@@ -52,8 +56,13 @@ class GuiHandler():
 
         # Draw background
         self._background_ref = self._canvas.create_image('Empty', 0, 0)
-        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
-        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
+# <<<<<<< HEAD
+# Conflict
+#         self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
+#         self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=(self._world.width+1) * self._scale_factor * self._cell_size)
+# =======
+        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleX, scale_value=self._world.width * self._scale_factor * self._cell_size)
+        self._canvas.edit_image(self._background_ref, scale_type=ScaleType.ScaleY, scale_value=self._world.height * self._scale_factor * self._cell_size)
 
         for y in range(self._world.height):
             for x in range(self._world.width):
@@ -76,7 +85,7 @@ class GuiHandler():
                 elif cell == ECell.Food:
                     food_img_ref = self._canvas.create_image('Food', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
-                    self.food_ref[(canvas_pos["x"] // self._cell_size,canvas_pos["y"] // self._cell_size)] = food_img_ref
+                    self._food_ref[x, y] = food_img_ref
 
                 elif cell == ECell.SuperFood:
                     self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
@@ -95,13 +104,14 @@ class GuiHandler():
 
         #draw ghosts
         for ghost in self._world.ghosts:
-
-                canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
-                ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+            ghost_angle = self._angle[ghost.direction.name]
+            canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
+            ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                        angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
 
-                self.ghosts_ref[ghost.id] = ghost_img_ref
+            self._ghosts_ref[ghost.id] = ghost_img_ref
 
 
     def update(self, events):
@@ -134,12 +144,26 @@ class GuiHandler():
                 ghost_angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(ghost_ref, None, None, angle=ghost_angle)
 
+# Merge conflict
+#             # Move
+#             if event.type in [GuiEventType.MovePacman, GuiEventType.MoveGhost]:
+#                 ref = self._pacman_img_ref if event.type == GuiEventType.MovePacman else self._ghosts_ref[event.payload["id"]]
+#                 pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
+#                 self._canvas.edit_image(ref, pos['x'], pos['y'])
+
+#             # Change direction
+#             if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
+#                 ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
+#                 angle = self._angle[event.payload["direction"].name]
+#                 self._canvas.edit_image(ref, None, None, angle=angle)
+# >>>>>>> features/30-move-ghosts
+
             # Remove food
             if event.type == GuiEventType.EatFood:
-                
-                # Remove 
-                food_ref =  self.food_ref[event.payload["position"][0], event.payload["position"][1]]
+
+                food_ref =  self._food_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
+                #conflict
                 # # Make cell empty
                 # canvas_pos = self._get_canvas_position(event.payload["position"][0],event.payload["position"][1], False)
                 # self._canvas.create_image('Empty', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
