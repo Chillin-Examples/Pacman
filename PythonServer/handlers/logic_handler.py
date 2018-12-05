@@ -12,10 +12,13 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-
+        self._num_of_seeds = 0
 
     def initialize(self):
-        pass
+        for y in range(self.world.width):
+            for x in range(self.world.height):
+                if self.world.board[y][x] == ECell.Food:
+                    self._num_of_seeds += 1
 
 
     def store_command(self, side_name, command):
@@ -121,6 +124,8 @@ class LogicHandler ():
         self.world.scores["Pacman"] += self.world.constants.food_score
         # Change Food to Empty
         self.world.board[(position[1])][(position[0])] = ECell.Empty
+        # Decrease the number of seeds
+        self._num_of_seeds -= 1
 
 
     def _get_position(self, side_name, id):
@@ -145,4 +150,31 @@ class LogicHandler ():
 
 
     def check_end_game(self, current_cycle):
-        pass
+        gui_events = []
+        end_game = False
+        winner = None
+        details = None
+        if current_cycle >= self.world.constants.max_cycles - 1:
+            end_game = True
+
+        if self.world.pacman.health == 0:
+            end_game = True
+        
+        if self._num_of_seeds == 0:
+            end_game = True
+
+        if end_game:
+            
+            if self.world.scores['Pacman'] > self.world.scores['Ghost']:
+                winner = 'Pacman'
+            elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
+                winner = 'Ghost'
+            details={
+            'Scores': {
+                'Pacman': str(self.world.scores['Pacman']),
+                'Ghost': str(self.world.scores['Ghost'])
+            }}
+        print("*************************")
+        print(end_game)
+        return winner, details
+        

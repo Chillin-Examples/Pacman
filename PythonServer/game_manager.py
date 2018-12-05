@@ -50,7 +50,9 @@ class GameManager(RealtimeGameHandler):
         print('cycle %i' % (self.current_cycle, ))
 
         self._gui_events = self._logic_handler.process(self.current_cycle)
-
+        winner, details = self._logic_handler.check_end_game(self.current_cycle)
+        if winner != None and details != None:
+            self.end_game(winner_sidename=winner, details=details)
 
     def on_update_clients(self):
         print('update clients')
