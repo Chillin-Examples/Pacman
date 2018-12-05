@@ -39,12 +39,19 @@ class LogicHandler ():
 
 
     def process(self, current_cycle):
-
+        for ghost in self.world.ghosts:
+            ghost_position = self._get_position("Ghost", ghost.id)
+            print(ghost_position)
+            print("********")
         gui_events = []
+        if self._check_hit():
+            self._kill_pacman()
+            return [GuiEvent(GuiEventType.DecreaseHealth, health=self.world.pacman.health)]
+
         for side_name in self._sides:
             for command_id in self._last_cycle_commands[side_name]:
                 gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
-                
+
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
 
@@ -57,6 +64,33 @@ class LogicHandler ():
 
         self.clear_commands()
         return gui_events
+
+
+    def _check_hit(self):
+
+        self.opponent_direction={
+            EDirection.Up.name: EDirection.Down.name,
+            EDirection.Down.name: EDirection.Up.name,
+            EDirection.Right.name: EDirection.Left.name,
+            EDirection.Left.name: EDirection.Right.name
+        }
+
+        for ghost in self.world.ghosts:
+            if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
+                return True
+
+        for ghost in self.world.ghosts:
+            if ghost.direction == self.opponent_direction[self.world.pacman.direction.name] and check_adjacency(ghost):
+                return True
+
+
+    def check_adjacency(self, ghost):
+        if ghost.x == self.world.pacman.x and (ghost.y==self.world.pacman.y+1 or ghost.y==self.world.pacman.y-1):
+            return True
+        elif ghost.y == self.world.pacman.y and (ghost.x==self.world.pacman.x+1 or ghost.x==self.world.pacman.x-1):
+            return True
+        else:
+            return False
 
 
     def _move_pacman(self):
@@ -85,8 +119,6 @@ class LogicHandler ():
 
         for ghost in self.world.ghosts:
             ghost_position = self._get_position("Ghost", ghost.id)
-            print(ghost_position)
-            print("jaye ghost")
             new_position = (self._convert_dir_to_pos[ghost.direction.name][0]+ghost_position[0],
                          self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
 
@@ -95,9 +127,7 @@ class LogicHandler ():
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
                 gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
-                # kill pacman
-                gui_events.extend(self._check_kill_pacman(ghost))
-                
+
             else:
                 print("ghost cannot move")
         print("gui events of move")
@@ -135,16 +165,11 @@ class LogicHandler ():
         return self.world
 
 
-    def _check_kill_pacman(self, ghost):
+    def _kill_pacman(self):
 
-        if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
-            print("tooooo kill pacman ")
-            self.world.scores["Ghost"] += self.world.constants.pacman_death_score
-            self.world.pacman.health -= 1
-            self._recover_agents()
-            return [GuiEvent(GuiEventType.DecreaseHealth, health=self.world.pacman.health)]
-        else:
-            return []
+        self.world.scores["Ghost"] += self.world.constants.pacman_death_score
+        self.world.pacman.health -= 1
+        self._recover_agents()
 
 
     def _recover_agents(self):
