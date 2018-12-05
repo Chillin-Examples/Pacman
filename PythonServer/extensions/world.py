@@ -11,7 +11,8 @@ def apply_command(self, side_name, command):
     if command.name() == ChangePacmanDirection.name():
 
         pacman_position = self._get_position("Pacman", None)
-        new_position = self._calculate_new_pos(command.direction.name, pacman_position)
+        new_position = (self._convert_dir_to_pos[command.direction.name][0]+pacman_position[0],
+                         self._convert_dir_to_pos[command.direction.name][1]+pacman_position[1])
 
         if self._pacman_can_change_direction(new_position):
             self.pacman.change_direction(command)
@@ -22,7 +23,8 @@ def apply_command(self, side_name, command):
     elif command.name() == ChangeGhostDirection.name():
 
         ghost_position = self._get_position("Ghost", command.id)
-        new_position = self._calculate_new_pos(command.direction.name, ghost_position)
+        new_positions = (self._convert_dir_to_pos[command.direction.name][0]+ghost_position[0],
+                         self._convert_dir_to_pos[command.direction.name][1]+ghost_position[1])
 
         if self._ghost_can_change_direction(new_position,ghost_position, command):
             self.ghosts[command.id].change_direction(command)
