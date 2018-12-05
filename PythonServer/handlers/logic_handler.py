@@ -15,7 +15,7 @@ class LogicHandler ():
 
 
     def initialize(self):
-        pass
+        
 
 
     def store_command(self, side_name, command):
@@ -78,6 +78,8 @@ class LogicHandler ():
 
         for ghost in self.world.ghosts:
             ghost_position = self._get_position("Ghost", ghost.id)
+            print(ghost_position)
+            print("jaye ghost")
             new_position = self._calculate_new_pos(ghost.direction.name, ghost_position)
 
             if self._can_move(new_position):
@@ -85,10 +87,14 @@ class LogicHandler ():
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
                 gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
-                self._check_kill_pacman(ghost)
+                # kill pacman
+                gui_events.extend(self._check_kill_pacman(ghost))
                 
             else:
                 print("ghost cannot move")
+        print("gui events of move")
+        for i in gui_events:
+            print(i.__dict__)
 
         return gui_events
 
@@ -143,12 +149,20 @@ class LogicHandler ():
             self.world.scores["Ghost"] += self.world.constants.pacman_death_score
             self.world.pacman.health -= 1
             self._recover_agents()
+            return [GuiEvent(GuiEventType.DecreaseHealth, health=self.world.pacman.health)]
+        else:
+            return []
 
 
-    def _recover_agents():
-        self.world.pacman.x = self.world.pacman_config["position"][0]
-        self.world.pacman.y = pacman_config["position"][1]
-        self.world.pacman.direction = EDirection[pacman_config["direction"]]
-    
+    def _recover_agents(self):
+        self.world.pacman.x = self.world.pacman.init_x
+        self.world.pacman.y = self.world.pacman.init_y
+        self.world.pacman.direction = self.world.pacman.init_direction
+
+        for ghost in self.world.ghosts:
+            ghost.x = ghost.init_x
+            ghost.y = ghost.init_y
+            ghost.direction = ghost.init_direction
+
     def check_end_game(self, current_cycle):
         pass

@@ -8,6 +8,12 @@ from gui_events import GuiEvent, GuiEventType
 
 def apply_command(self, side_name, command):
     
+    self._convert_dir_to_pos = {
+        EDirection.Up.name:(0, -1),
+        EDirection.Down.name: (0, +1),
+        EDirection.Right.name: (+1, 0),
+        EDirection.Left.name: (-1, 0)
+    }
     if command.name() == ChangePacmanDirection.name():
 
         pacman_position = self._get_position("Pacman", None)
@@ -23,7 +29,7 @@ def apply_command(self, side_name, command):
     elif command.name() == ChangeGhostDirection.name():
 
         ghost_position = self._get_position("Ghost", command.id)
-        new_positions = (self._convert_dir_to_pos[command.direction.name][0]+ghost_position[0],
+        new_position = (self._convert_dir_to_pos[command.direction.name][0]+ghost_position[0],
                          self._convert_dir_to_pos[command.direction.name][1]+ghost_position[1])
 
         if self._ghost_can_change_direction(new_position,ghost_position, command):
@@ -65,13 +71,6 @@ def _ghost_can_change_direction(self, new_position, ghost_position, command):
 
 
 def _check_dead_end(self, ghost_position, dir_to_go):
-    
-    self._convert_dir_to_pos = {
-        EDirection.Up.name:(0, -1),
-        EDirection.Down.name: (0, +1),
-        EDirection.Right.name: (+1, 0),
-        EDirection.Left.name: (-1, 0)
-    }
 
     exception = self._convert_dir_to_pos[dir_to_go]
     cells_around = [(-1, 0),(1, 0), (0, 1), (0, -1)]

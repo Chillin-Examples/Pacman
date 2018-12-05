@@ -11,7 +11,7 @@ class GuiEventType(Enum):
     ChangePacmanDirection = 2
     ChangeGhostDirection = 3
     EatFood = 4
-    KillPacman = 5
+    DecreaseHealth = 5
 
 
 class GuiEvent(object):
