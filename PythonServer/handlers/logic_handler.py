@@ -142,7 +142,13 @@ class LogicHandler ():
             print("tooooo kill pacman ")
             self.world.scores["Ghost"] += self.world.constants.pacman_death_score
             self.world.pacman.health -= 1
+            self._recover_agents()
 
 
+    def _recover_agents():
+        self.world.pacman.x = self.world.pacman_config["position"][0]
+        self.world.pacman.y = pacman_config["position"][1]
+        self.world.pacman.direction = EDirection[pacman_config["direction"]]
+    
     def check_end_game(self, current_cycle):
         pass

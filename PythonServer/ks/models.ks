@@ -35,6 +35,9 @@ y = int
 direction = EDirection
 health = int
 giant_form_remaining_time = int
+init_x = int
+init_y = int
+init_direction = EDirection
 
 
 [Ghost]
@@ -43,6 +46,9 @@ x = int
 y = int
 id = int
 direction = EDirection
+init_x = int
+init_y = int
+init_direction = EDirection
 
 
 [World]

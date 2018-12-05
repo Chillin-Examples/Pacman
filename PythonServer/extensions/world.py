@@ -33,21 +33,6 @@ def apply_command(self, side_name, command):
             return []
 
 
-def _calculate_new_pos(self, direction, pre_pos):
-
-    if direction == ECommandDirection.Right.name:
-        return (pre_pos[0]+1, pre_pos[1])
-
-    elif direction == ECommandDirection.Left.name:
-        return (pre_pos[0]-1, pre_pos[1])
-
-    elif direction == ECommandDirection.Up.name:
-        return (pre_pos[0], pre_pos[1]-1)
-
-    elif direction == ECommandDirection.Down.name:
-        return (pre_pos[0], pre_pos[1]+1)
-
-
 def _pacman_can_change_direction(self, position):
     return self.board[(position[1])][(position[0])] != ECell.Wall
 
@@ -109,7 +94,6 @@ def _get_position(self, side_name, id):
 
 World.apply_command = apply_command
 World._pacman_can_change_direction = _pacman_can_change_direction
-World._calculate_new_pos = _calculate_new_pos
 World._ghost_can_change_direction = _ghost_can_change_direction
 World._check_dead_end = _check_dead_end
 World._get_position = _get_position
