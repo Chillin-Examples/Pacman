@@ -52,11 +52,18 @@ def _pacman_can_change_direction(self, position):
 
 def _ghost_can_change_direction(self, new_position, ghost_position, command):
 
+    self._calculate_forbidden_direction = {
+        EDirection.Up.name: EDirection.Down.name,
+        EDirection.Down.name: EDirection.Up.name,
+        EDirection.Right.name: EDirection.Left.name,
+        EDirection.Left.name: EDirection.Right.name
+    }
+
     if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
         print("its a wall")
         return False
 
-    forbidden_direction = self._calculate_forbidden_direction(command.direction.name)
+    forbidden_direction = self._calculate_forbidden_direction[command.direction.name]
     if self.ghosts[command.id].direction.name != forbidden_direction:
         print("legal")
         return True
@@ -70,24 +77,16 @@ def _ghost_can_change_direction(self, new_position, ghost_position, command):
             return False
 
 
-def _convert_dir_to_pos(self,direction):
-
-    if direction == EDirection.Up.name:
-        return(0, -1)
-
-    elif direction == EDirection.Down.name:
-        return(0, +1)
-
-    elif direction == EDirection.Right.name:
-        return(+1, 0)
-
-    elif direction == EDirection.Left.name:
-        return(-1, 0)
-
-
 def _check_dead_end(self, ghost_position, dir_to_go):
+    
+    self._convert_dir_to_pos = {
+        EDirection.Up.name:(0, -1),
+        EDirection.Down.name: (0, +1),
+        EDirection.Right.name: (+1, 0),
+        EDirection.Left.name: (-1, 0)
+    }
 
-    exception = self._convert_dir_to_pos(dir_to_go)
+    exception = self._convert_dir_to_pos[dir_to_go]
     cells_around = [(-1, 0),(1, 0), (0, 1), (0, -1)]
     cells_around.remove(exception)
     # check if there is a dead end
@@ -97,33 +96,18 @@ def _check_dead_end(self, ghost_position, dir_to_go):
     return True
 
 
-# TODO: Can be a dictionary also
-def _calculate_forbidden_direction(self, direction):
-
-    if direction == EDirection.Up.name:
-        return EDirection.Down.name
-    elif direction == EDirection.Down.name:
-        return EDirection.Up.name
-    elif direction == EDirection.Right.name:
-        return EDirection.Left.name
-    elif direction == EDirection.Left.name:
-        return EDirection.Right.name
-
-
- def _get_position(self, side_name, id):
+def _get_position(self, side_name, id):
 
     if side_name == "Pacman":
-        return (self.world.pacman.x, self.world.pacman.y)
+        return (self.pacman.x, self.pacman.y)
 
     elif side_name == "Ghost":
-        return (self.world.ghosts[id].x, self.world.ghosts[id].y)
+        return (self.ghosts[id].x, self.ghosts[id].y)
 
 
 World.apply_command = apply_command
 World._pacman_can_change_direction = _pacman_can_change_direction
 World._calculate_new_pos = _calculate_new_pos
 World._ghost_can_change_direction = _ghost_can_change_direction
-World._calculate_forbidden_direction = _calculate_forbidden_direction
-World._convert_dir_to_pos = _convert_dir_to_pos
 World._check_dead_end = _check_dead_end
 World._get_position = _get_position
