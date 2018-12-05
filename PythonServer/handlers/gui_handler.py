@@ -87,13 +87,14 @@ class GuiHandler():
 
         #draw ghosts
         for ghost in self._world.ghosts:
-
-                canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
-                ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+            ghost_angle = self._angle[ghost.direction.name]
+            canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
+            ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                        angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
 
-                self.ghosts_ref[ghost.id] = ghost_img_ref
+            self.ghosts_ref[ghost.id] = ghost_img_ref
 
 
     def update(self, events):
@@ -119,7 +120,7 @@ class GuiHandler():
                 ghost_pos = self._get_canvas_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
                 self._canvas.edit_image(ghost_ref, ghost_pos['x'], ghost_pos['y'])
 
-            # Change ghost direction
+            # Change ghosts direction
             if event.type == GuiEventType.ChangeGhostDirection:
 
                 ghost_ref = self.ghosts_ref[event.payload["id"]]        
