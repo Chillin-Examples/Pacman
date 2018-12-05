@@ -122,7 +122,7 @@ class LogicHandler ():
         # Add score to pacman
         self.world.scores["Pacman"] += self.world.constants.food_score
         # Change Food to Empty
-        self.world.board[(position[1])][(position[0])] == ECell.Empty
+        self.world.board[(position[1])][(position[0])] = ECell.Empty
 
 
     def _get_position(self, side_name, id):
