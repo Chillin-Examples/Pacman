@@ -46,16 +46,9 @@ class GameManager(RealtimeGameHandler):
 
 
     def on_process_cycle(self):
-        print " "
         print('cycle %i' % (self.current_cycle, ))
 
         self._gui_events = self._logic_handler.process(self.current_cycle)
-
-        print("++++++++++++++++++++++++++++++++++++++++")
-     
-        for i in self._gui_events:
-            print(i.__dict__)
-        print("++++++++++++++++++++++++++++++++++++++++")
 
 
     def on_update_clients(self):

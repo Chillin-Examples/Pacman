@@ -128,7 +128,7 @@ class GuiHandler():
                 self._canvas.delete_element(food_ref)
             
             # kill-pacman
-            if event.type == GuiEventType.DecreaseHealth:
+            if event.type == GuiEventType.UpdateHealth:
                 # Reset pacman position
                 ref = self._pacman_img_ref
                 pos = self._get_canvas_position(self._world.pacman.init_x, self._world.pacman.init_y)
