@@ -41,7 +41,7 @@ class LogicHandler ():
 
 
     def process(self, current_cycle):
-
+        print(self.world.pacman.health)
         gui_events = []
         if self._check_hit():
             print("kill")
@@ -67,7 +67,7 @@ class LogicHandler ():
         return gui_events
 
 
-    def _check_hit(self):
+    def _check_toward_move(self, pacman, ghost):
 
         self.opponent_direction={
             EDirection.Up.name: EDirection.Down.name,
@@ -75,17 +75,33 @@ class LogicHandler ():
             EDirection.Right.name: EDirection.Left.name,
             EDirection.Left.name: EDirection.Right.name
         }
+        if ghost.direction.name == self.opponent_direction[pacman.direction.name]:
+            if ghost.direction.name == EDirection.Up.name and ghost.y > pacman.y:
+                return True
+            if ghost.direction.name == EDirection.Down.name and ghost.y < pacman.y:
+                return True
+            if ghost.direction.name == EDirection.Right.name and ghost.x < pacman.x:
+                return True
+            if ghost.direction.name == EDirection.Left.name and ghost.x > pacman.x:
+                return True
 
+
+    def _check_hit(self):
+
+        # Check same cell 
         for ghost in self.world.ghosts:
             if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
                 return True
 
+        # Check moving toward each other
         for ghost in self.world.ghosts:
-            if ghost.direction == self.opponent_direction[self.world.pacman.direction.name] and check_adjacency(ghost):
+            if self._check_toward_move(self.world.pacman, ghost) and self._check_adjacency(ghost):
                 return True
+            else:
+                return False
 
 
-    def check_adjacency(self, ghost):
+    def _check_adjacency(self, ghost):
         if ghost.x == self.world.pacman.x and (ghost.y==self.world.pacman.y+1 or ghost.y==self.world.pacman.y-1):
             return True
         elif ghost.y == self.world.pacman.y and (ghost.x==self.world.pacman.x+1 or ghost.x==self.world.pacman.x-1):
@@ -177,14 +193,14 @@ class LogicHandler ():
         self.world.pacman.y = self.world.pacman.init_y
         self.world.pacman.direction = self.world.pacman.init_direction
         # self._get_position("Pacman", None)
-
         gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=(self.world.pacman.x, self.world.pacman.y)))
+
         for ghost in self.world.ghosts:
             ghost.x = ghost.init_x
             ghost.y = ghost.init_y
             ghost.direction = ghost.init_direction
             gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=(ghost.x, ghost.y), id=ghost.id))
-
+        gui_events.append(GuiEvent(GuiEventType.DecreaseHealth))
         return gui_events
 
     def check_end_game(self, current_cycle):
