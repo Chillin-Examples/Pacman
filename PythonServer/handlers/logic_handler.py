@@ -30,9 +30,7 @@ class LogicHandler ():
             if command.id < 0 or command.id >= ( len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-        if side_name == "Pacman":
-            print("pacman command")
-            print(command.__dict__)
+
         self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
 
 
@@ -41,22 +39,23 @@ class LogicHandler ():
 
 
     def process(self, current_cycle):
-        print(self.world.pacman.health)
+
         gui_events = []
+
+        # Kill pacman
         if self._check_hit():
-            print("kill")
             return(self._kill_pacman())
-            # return [GuiEvent(GuiEventType.MoveGhost, new_pos=(self.world.ghosts[0].x, self.world.ghosts[0].y),id=1)]
 
-
+        # Change direction
         for side_name in self._sides:
             for command_id in self._last_cycle_commands[side_name]:
                 gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
 
+        # Move
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
 
-        # EAT FOOD
+        # Eat food
         pacman_position = self._get_position("Pacman", None)
         if self._can_be_eaten(pacman_position):
             print("can be eaten")
@@ -75,6 +74,7 @@ class LogicHandler ():
             EDirection.Right.name: EDirection.Left.name,
             EDirection.Left.name: EDirection.Right.name
         }
+
         if ghost.direction.name == self.opponent_direction[pacman.direction.name]:
             if ghost.direction.name == EDirection.Up.name and ghost.y > pacman.y:
                 return True
@@ -160,6 +160,7 @@ class LogicHandler ():
 
 
     def _eat_food(self, position):
+
         # Add score to pacman
         self.world.scores["Pacman"] += self.world.constants.food_score
         # Change Food to Empty
@@ -189,19 +190,23 @@ class LogicHandler ():
     def _recover_agents(self):
         gui_events = []
 
+        # Pacman reset
         self.world.pacman.x = self.world.pacman.init_x
         self.world.pacman.y = self.world.pacman.init_y
         self.world.pacman.direction = self.world.pacman.init_direction
-        # self._get_position("Pacman", None)
-        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=(self.world.pacman.x, self.world.pacman.y)))
+        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self._get_position("Pacman", None)))
 
+        # Ghosts rest
         for ghost in self.world.ghosts:
             ghost.x = ghost.init_x
             ghost.y = ghost.init_y
             ghost.direction = ghost.init_direction
             gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=(ghost.x, ghost.y), id=ghost.id))
+        # Add health
         gui_events.append(GuiEvent(GuiEventType.DecreaseHealth))
+    
         return gui_events
+
 
     def check_end_game(self, current_cycle):
         pass
