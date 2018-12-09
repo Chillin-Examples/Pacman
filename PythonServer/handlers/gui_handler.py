@@ -32,7 +32,7 @@ class GuiHandler():
         }
 
         self._ghosts_ref = {}
-        self._food_ref = {}
+        self._foods_ref = {}
 
         self._config(config)
         self._draw_board()
@@ -76,7 +76,7 @@ class GuiHandler():
                 elif cell == ECell.Food:
                     food_img_ref = self._canvas.create_image('Food', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
-                    self._food_ref[x, y] = food_img_ref
+                    self._foods_ref[x, y] = food_img_ref
 
                 elif cell == ECell.SuperFood:
                     self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
@@ -124,8 +124,21 @@ class GuiHandler():
             # Remove food
             if event.type == GuiEventType.EatFood:
 
-                food_ref =  self._food_ref[event.payload["position"][0], event.payload["position"][1]]
+                food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
+            
+            # kill-pacman
+            if event.type == GuiEventType.UpdateHealth:
+                # Reset pacman position
+                ref = self._pacman_img_ref
+                pos = self._get_canvas_position(self._world.pacman.init_x, self._world.pacman.init_y)
+                self._canvas.edit_image(ref, pos['x'], pos['y'])
+                # Reset ghosts position
+                for ghost in self._world.ghosts:
+                    ref = self._ghosts_ref[ghost.id]
+                    pos = self._get_canvas_position(ghost.init_x, ghost.init_y)
+                    self._canvas.edit_image(ref, pos['x'], pos['y'])
+
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
