@@ -25,7 +25,8 @@ class AI(RealtimeAI):
         print('decide')
         
         if self.my_side == 'Pacman':
-            self.send_command(ChangePacmanDirection(direction=ECommandDirection.Left))
+            print("injaa")
+            self.send_command(ChangePacmanDirection(direction=ECommandDirection.Up))
             # direction = random.choice([
             #     ECommandDirection.Up,
             #     ECommandDirection.Right,

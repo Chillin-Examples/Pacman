@@ -17,9 +17,11 @@ def apply_command(self, side_name, command):
     if command.name() == ChangePacmanDirection.name():
 
         pacman_position = self._get_position("Pacman", None)
+        # print(pacman_position)
+        # print(self._convert_dir_to_pos[command.direction.name])
         new_position = (self._convert_dir_to_pos[command.direction.name][0]+pacman_position[0],
                          self._convert_dir_to_pos[command.direction.name][1]+pacman_position[1])
-
+        # print(new_position)
         if self._pacman_can_change_direction(new_position):
             self.pacman.change_direction(command)
             return [GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction)]
