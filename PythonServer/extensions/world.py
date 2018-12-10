@@ -5,15 +5,15 @@ from ks.commands import ECommandDirection, ChangePacmanDirection, ChangeGhostDir
 from ks.models import World, ECell, EDirection
 from gui_events import GuiEvent, GuiEventType
 
-
-def apply_command(self, side_name, command):
-    
-    self._convert_dir_to_pos = {
+_convert_dir_to_pos = {
         EDirection.Up.name:(0, -1),
         EDirection.Down.name: (0, +1),
         EDirection.Right.name: (+1, 0),
         EDirection.Left.name: (-1, 0)
     }
+def apply_command(self, side_name, command):
+    
+    
 
     if command.name() == ChangePacmanDirection.name():
 
@@ -103,4 +103,4 @@ World._ghost_can_change_direction = _ghost_can_change_direction
 World._check_dead_end = _check_dead_end
 World._get_position = _get_position
 World._get_new_position = _get_new_position
-# World._convert_dir_to_pos = _convert_dir_to_pos
+World._convert_dir_to_pos = _convert_dir_to_pos
