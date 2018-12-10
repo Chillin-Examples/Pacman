@@ -14,6 +14,7 @@ def apply_command(self, side_name, command):
         EDirection.Right.name: (+1, 0),
         EDirection.Left.name: (-1, 0)
     }
+
     if command.name() == ChangePacmanDirection.name():
 
         pacman_position = self._get_position("Pacman", None)
@@ -30,7 +31,7 @@ def apply_command(self, side_name, command):
         ghost_position = self._get_position("Ghost", command.id)
         new_position = self._get_new_position(ghost_position, command.direction.name)
 
-        if self._ghost_can_change_direction(new_position,ghost_position, command):
+        if self._ghost_can_change_direction(new_position, ghost_position, command):
             self.ghosts[command.id].change_direction(command)
             return [GuiEvent(GuiEventType.ChangeGhostDirection, id=command.id, direction=self.ghosts[command.id].direction)]
         else:
@@ -71,7 +72,7 @@ def _ghost_can_change_direction(self, new_position, ghost_position, command):
 def _check_dead_end(self, ghost_position, dir_to_go):
 
     exception = self._convert_dir_to_pos[dir_to_go]
-    cells_around = [(-1, 0),(1, 0), (0, 1), (0, -1)]
+    cells_around = [(-1, 0), (1, 0), (0, 1), (0, -1)]
     cells_around.remove(exception)
     # check if there is a dead end
     for i in cells_around:
