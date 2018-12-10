@@ -17,11 +17,8 @@ def apply_command(self, side_name, command):
     if command.name() == ChangePacmanDirection.name():
 
         pacman_position = self._get_position("Pacman", None)
-        # print(pacman_position)
-        # print(self._convert_dir_to_pos[command.direction.name])
-        new_position = (self._convert_dir_to_pos[command.direction.name][0]+pacman_position[0],
-                         self._convert_dir_to_pos[command.direction.name][1]+pacman_position[1])
-        # print(new_position)
+        new_position = self._get_new_position(pacman_position, command.direction.name)
+
         if self._pacman_can_change_direction(new_position):
             self.pacman.change_direction(command)
             return [GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction)]
@@ -31,8 +28,7 @@ def apply_command(self, side_name, command):
     elif command.name() == ChangeGhostDirection.name():
 
         ghost_position = self._get_position("Ghost", command.id)
-        new_position = (self._convert_dir_to_pos[command.direction.name][0]+ghost_position[0],
-                         self._convert_dir_to_pos[command.direction.name][1]+ghost_position[1])
+        new_position = self._get_new_position(ghost_position, command.direction.name)
 
         if self._ghost_can_change_direction(new_position,ghost_position, command):
             self.ghosts[command.id].change_direction(command)
@@ -84,6 +80,13 @@ def _check_dead_end(self, ghost_position, dir_to_go):
     return True
 
 
+def _get_new_position(self, position, direction):
+
+    return(
+        self._convert_dir_to_pos[direction][0]+position[0],
+        self._convert_dir_to_pos[direction][1]+position[1])
+
+
 def _get_position(self, side_name, id):
 
     if side_name == "Pacman":
@@ -98,3 +101,5 @@ World._pacman_can_change_direction = _pacman_can_change_direction
 World._ghost_can_change_direction = _ghost_can_change_direction
 World._check_dead_end = _check_dead_end
 World._get_position = _get_position
+World._get_new_position = _get_new_position
+# World._convert_dir_to_pos = _convert_dir_to_pos
