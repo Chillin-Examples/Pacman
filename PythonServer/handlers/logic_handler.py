@@ -32,7 +32,7 @@ class LogicHandler ():
             EDirection.Left.name: (-1, 0)
         }
 
-        self.opponent_direction = {
+        self._opponent_direction = {
             EDirection.Up.name: EDirection.Down.name,
             EDirection.Down.name: EDirection.Up.name,
             EDirection.Right.name: EDirection.Left.name,
@@ -87,7 +87,7 @@ class LogicHandler ():
 
     def _check_toward_move(self, pacman, ghost):
 
-        if ghost.direction.name == self.opponent_direction[pacman.direction.name]:
+        if ghost.direction.name == self._opponent_direction[pacman.direction.name]:
             if ghost.direction.name == EDirection.Up.name and ghost.y < pacman.y:
                 return True
             if ghost.direction.name == EDirection.Down.name and ghost.y > pacman.y:
