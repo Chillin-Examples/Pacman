@@ -5,15 +5,9 @@ from ks.commands import ECommandDirection, ChangePacmanDirection, ChangeGhostDir
 from ks.models import World, ECell, EDirection
 from gui_events import GuiEvent, GuiEventType
 
-_convert_dir_to_pos = {
-        EDirection.Up.name:(0, -1),
-        EDirection.Down.name: (0, +1),
-        EDirection.Right.name: (+1, 0),
-        EDirection.Left.name: (-1, 0)
-    }
+
 def apply_command(self, side_name, command):
-    
-    
+
 
     if command.name() == ChangePacmanDirection.name():
 
@@ -44,12 +38,6 @@ def _pacman_can_change_direction(self, position):
 
 def _ghost_can_change_direction(self, new_position, current_position, command):
 
-    self._calculate_forbidden_direction = {
-        EDirection.Up.name: EDirection.Down.name,
-        EDirection.Down.name: EDirection.Up.name,
-        EDirection.Right.name: EDirection.Left.name,
-        EDirection.Left.name: EDirection.Right.name
-    }
 
     if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
         # It's a wall
@@ -96,6 +84,20 @@ def _get_position(self, side_name, id):
     elif side_name == "Ghost":
         return (self.ghosts[id].x, self.ghosts[id].y)
 
+_convert_dir_to_pos = {
+        EDirection.Up.name:(0, -1),
+        EDirection.Down.name: (0, +1),
+        EDirection.Right.name: (+1, 0),
+        EDirection.Left.name: (-1, 0)
+    }
+
+_calculate_forbidden_direction = {
+        EDirection.Up.name: EDirection.Down.name,
+        EDirection.Down.name: EDirection.Up.name,
+        EDirection.Right.name: EDirection.Left.name,
+        EDirection.Left.name: EDirection.Right.name
+    }
+
 
 World.apply_command = apply_command
 World._pacman_can_change_direction = _pacman_can_change_direction
@@ -104,3 +106,4 @@ World._check_dead_end = _check_dead_end
 World._get_position = _get_position
 World._get_new_position = _get_new_position
 World._convert_dir_to_pos = _convert_dir_to_pos
+World._calculate_forbidden_direction = _calculate_forbidden_direction

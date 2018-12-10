@@ -48,10 +48,13 @@ class GameManager(RealtimeGameHandler):
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
 
-        if self._logic_handler._is_pacman_dead:
-            self._gui_events = self._logic_handler.recover_agents()
-
-        self._gui_events = self._logic_handler.process(self.current_cycle)
+        kill_state = False
+        if not self._logic_handler._is_pacman_dead:
+            self._gui_events = self._logic_handler.process(self.current_cycle)
+            kill_state = True
+        
+        if self._logic_handler._is_pacman_dead and not kill_state:
+            self._gui_events = self._logic_handler.recover_agents()    
 
         winner, details = self._logic_handler.check_end_game(self.current_cycle)
         if winner != None or details != None:

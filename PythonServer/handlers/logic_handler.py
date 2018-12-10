@@ -13,7 +13,7 @@ class LogicHandler ():
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
         self._num_of_seeds = 0
-
+        self._is_pacman_dead = False
 
     def initialize(self):
 
@@ -57,7 +57,6 @@ class LogicHandler ():
     def process(self, current_cycle):
 
         gui_events = []
-        self._is_pacman_dead = False
     
         # Change direction
         for side_name in self._sides:
@@ -71,7 +70,6 @@ class LogicHandler ():
         # Kill pacman
         if self._check_hit():
             self._is_pacman_dead = True
-            # return(self._kill_pacman())
             self._kill_pacman()
 
         # Eat food
@@ -81,7 +79,7 @@ class LogicHandler ():
                 # Can be eaten
                 self._eat_food(pacman_position)
                 gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
-        
+
         return gui_events
 
 
@@ -205,6 +203,8 @@ class LogicHandler ():
 
     def recover_agents(self):
         gui_events = []
+        print("too recover")
+        print(self._get_position("Pacman", None))
 
         # Pacman reset
         self.world.pacman.x = self.world.pacman.init_x
@@ -213,7 +213,8 @@ class LogicHandler ():
         gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.world.pacman.direction))
         gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self._get_position("Pacman", None)))
 
-        # Ghosts rest
+        print(self._get_position("Pacman", None))
+        # Ghosts reset
         for ghost in self.world.ghosts:
             ghost.x = ghost.init_x
             ghost.y = ghost.init_y
@@ -223,6 +224,7 @@ class LogicHandler ():
 
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
+        self._is_pacman_dead = False
         return gui_events
 
 
