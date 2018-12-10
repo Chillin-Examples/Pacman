@@ -22,7 +22,7 @@ class GuiHandler():
         self._canvas = canvas
 
 
-    def initialize(self, config):
+    def initialize(self, config, statuses):
 
         self._angle = {
             EDirection.Up.name:    90,
