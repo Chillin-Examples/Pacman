@@ -47,11 +47,18 @@ class GameManager(RealtimeGameHandler):
 
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
+        if self._logic_handler._is_pacman_dead:
+            print("deeead")
+            self._gui_events = self._logic_handler.recover_agents()
 
         self._gui_events = self._logic_handler.process(self.current_cycle)
+
         winner, details = self._logic_handler.check_end_game(self.current_cycle)
         if winner != None and details != None:
             self.end_game(winner_sidename=winner, details=details)
+
+        self._logic_handler.clear_commands()
+
 
     def on_update_clients(self):
         print('update clients')
