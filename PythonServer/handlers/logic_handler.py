@@ -59,6 +59,7 @@ class LogicHandler ():
         gui_events = []
         if self._is_pacman_dead:
             gui_events.extend(self.recover_agents())
+
         else:
             # Change direction
             for side_name in self._sides:
@@ -205,8 +206,6 @@ class LogicHandler ():
 
     def recover_agents(self):
         gui_events = []
-        print("too recover")
-        print(self._get_position("Pacman", None))
 
         # Pacman reset
         self.world.pacman.x = self.world.pacman.init_x
@@ -215,7 +214,6 @@ class LogicHandler ():
         gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.world.pacman.direction))
         gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self._get_position("Pacman", None)))
 
-        print(self._get_position("Pacman", None))
         # Ghosts reset
         for ghost in self.world.ghosts:
             ghost.x = ghost.init_x
