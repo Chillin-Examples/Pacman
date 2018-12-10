@@ -32,6 +32,13 @@ class LogicHandler ():
             EDirection.Left.name: (-1, 0)
         }
 
+        self.opponent_direction = {
+            EDirection.Up.name: EDirection.Down.name,
+            EDirection.Down.name: EDirection.Up.name,
+            EDirection.Right.name: EDirection.Left.name,
+            EDirection.Left.name: EDirection.Right.name
+        }
+
 
     def store_command(self, side_name, command):
 
@@ -71,7 +78,7 @@ class LogicHandler ():
         if not self._is_pacman_dead:
             pacman_position = self._get_position("Pacman", None)
             if self._can_be_eaten(pacman_position):
-                print("can be eaten")
+                # Can be eaten
                 self._eat_food(pacman_position)
                 gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
         
@@ -79,13 +86,6 @@ class LogicHandler ():
 
 
     def _check_toward_move(self, pacman, ghost):
-
-        self.opponent_direction={
-            EDirection.Up.name: EDirection.Down.name,
-            EDirection.Down.name: EDirection.Up.name,
-            EDirection.Right.name: EDirection.Left.name,
-            EDirection.Left.name: EDirection.Right.name
-        }
 
         if ghost.direction.name == self.opponent_direction[pacman.direction.name]:
             if ghost.direction.name == EDirection.Up.name and ghost.y < pacman.y:
