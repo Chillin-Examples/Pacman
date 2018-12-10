@@ -60,7 +60,7 @@ class LogicHandler ():
         # Move
         gui_events.extend(self._move_pacman())
         gui_events.extend(self._move_ghosts())
-        
+
         # Kill pacman
         if self._check_hit():
             self._is_pacman_dead = True
@@ -115,10 +115,10 @@ class LogicHandler ():
 
     def _check_adjacency(self, ghost):
 
-        if ghost.x == self.world.pacman.x and (ghost.y==self.world.pacman.y+1 or ghost.y==self.world.pacman.y-1):
+        if ghost.x == self.world.pacman.x and (ghost.y == self.world.pacman.y+1 or ghost.y == self.world.pacman.y-1):
             return True
 
-        elif ghost.y == self.world.pacman.y and (ghost.x==self.world.pacman.x+1 or ghost.x==self.world.pacman.x-1):
+        elif ghost.y == self.world.pacman.y and (ghost.x == self.world.pacman.x+1 or ghost.x == self.world.pacman.x-1):
             return True
         else:
             return False
@@ -246,11 +246,12 @@ class LogicHandler ():
                 winner = 'Pacman'
             elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
                 winner = 'Ghost'
-            details={
-            'Scores': {
-                'Pacman': str(self.world.scores['Pacman']),
-                'Ghost': str(self.world.scores['Ghost'])
-            }}
+            details = {
+                'Scores': {
+                    'Pacman': str(self.world.scores['Pacman']),
+                    'Ghost': str(self.world.scores['Ghost'])
+                    }
+                }
         print("*************************")
         print(end_game)
         return winner, details
