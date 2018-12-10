@@ -15,12 +15,13 @@ from gui_events import GuiEventType
 
 class GuiHandler():
 
-    def __init__(self, world, sides, canvas, statuses):
+    def __init__(self, world, sides, canvas, statuses, current_cycle):
 
         self._world = world
         self._sides = sides
         self._canvas = canvas
         self._statuses = statuses
+        self._current_cycle = current_cycle
 
 
     def initialize(self, config):
@@ -139,6 +140,12 @@ class GuiHandler():
 
                 food_ref =  self._food_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
+
+        # Statuses
+        # self._canvas.edit_text(self._statuses['cycle_ref'], 'Cycle: ' + str(self._current_cycle))
+
+        # for side in self._sides:
+        #     self._canvas.edit_text(self._statuses['scores_' + side], text=str(self._world.scores[side]))
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
