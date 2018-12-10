@@ -93,18 +93,18 @@ class LogicHandler ():
 
 
     def _check_hit(self):
-
-        # Check same cell 
+     
         for ghost in self.world.ghosts:
+    
+            # Check same cell 
             if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
                 return True
 
-        # Check moving toward each other
-        for ghost in self.world.ghosts:
+            # Check moving toward each other
             if self._check_toward_move(self.world.pacman, ghost) and self._check_adjacency(ghost):
                 return True
-            else:
-                return False
+
+        return False
 
 
     def _check_adjacency(self, ghost):
