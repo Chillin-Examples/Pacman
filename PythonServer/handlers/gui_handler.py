@@ -15,13 +15,12 @@ from gui_events import GuiEventType
 
 class GuiHandler():
 
-    def __init__(self, world, sides, canvas, statuses, current_cycle):
+    def __init__(self, world, sides, canvas, statuses):
 
         self._world = world
         self._sides = sides
         self._canvas = canvas
         self._statuses = statuses
-        self._current_cycle = current_cycle
 
 
     def initialize(self, config):
@@ -119,7 +118,7 @@ class GuiHandler():
         self._canvas.create_line(self._statuses['mid_x'], self._statuses['start_y'] - self._statuses['logo_width'], self._statuses['mid_x'], self._canvas.height, self._canvas.make_rgba(0, 0, 0, 150), stroke_width=1)
        
 
-    def update(self, events):
+    def update(self, events, current_cycle):
 
         for event in events:
 
@@ -142,10 +141,12 @@ class GuiHandler():
                 self._canvas.delete_element(food_ref)
 
         # Statuses
-        # self._canvas.edit_text(self._statuses['cycle_ref'], 'Cycle: ' + str(self._current_cycle))
+        print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        print current_cycle
+        self._canvas.edit_text(self._statuses['cycle_ref'], 'Cycle: ' + str(current_cycle))
 
-        # for side in self._sides:
-        #     self._canvas.edit_text(self._statuses['scores_' + side], text=str(self._world.scores[side]))
+        for side in self._sides:
+            self._canvas.edit_text(self._statuses['scores_' + side], text=str(self._world.scores[side]))
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
