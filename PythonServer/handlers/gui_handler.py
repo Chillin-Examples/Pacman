@@ -38,6 +38,7 @@ class GuiHandler():
         self._config(config)
         self._draw_board()
         self._draw_players()
+        self._draw_statuses()
 
 
     def _config(self, config):
@@ -105,6 +106,17 @@ class GuiHandler():
                                         
             self._ghosts_ref[ghost.id] = ghost_img_ref
 
+    def _draw_statuses(self):
+        self._statuses['cycle_ref'] = self._canvas.create_text('Cycle: 0', self._statuses['mid_x'], self._statuses['title_font_size'], self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
+
+        self._canvas.create_text('Score', self._statuses['mid_x'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
+        self._statuses['scores_Pacman'] = self._canvas.create_text('0', self._statuses['mid_x_Pacman'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
+        self._statuses['scores_Ghost'] = self._canvas.create_text('0', self._statuses['mid_x_Ghost'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(255, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
+
+        self._canvas.create_image('PacmanLogo', self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
+        self._canvas.create_image('GhostLogo', self._statuses['mid_x_Ghost'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
+        self._canvas.create_line(self._statuses['mid_x'], self._statuses['start_y'] - self._statuses['logo_width'], self._statuses['mid_x'], self._canvas.height, self._canvas.make_rgba(0, 0, 0, 150), stroke_width=1)
+       
 
     def update(self, events):
 
