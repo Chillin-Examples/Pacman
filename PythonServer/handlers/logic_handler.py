@@ -32,6 +32,13 @@ class LogicHandler ():
             EDirection.Left.name: (-1, 0)
         }
 
+        self._opponent_direction = {
+            EDirection.Up.name: EDirection.Down.name,
+            EDirection.Down.name: EDirection.Up.name,
+            EDirection.Right.name: EDirection.Left.name,
+            EDirection.Left.name: EDirection.Right.name
+        }
+
 
     def store_command(self, side_name, command):
 
@@ -71,7 +78,7 @@ class LogicHandler ():
         if not self._is_pacman_dead:
             pacman_position = self._get_position("Pacman", None)
             if self._can_be_eaten(pacman_position):
-                print("can be eaten")
+                # Can be eaten
                 self._eat_food(pacman_position)
                 gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
         
@@ -80,14 +87,7 @@ class LogicHandler ():
 
     def _check_toward_move(self, pacman, ghost):
 
-        self.opponent_direction={
-            EDirection.Up.name: EDirection.Down.name,
-            EDirection.Down.name: EDirection.Up.name,
-            EDirection.Right.name: EDirection.Left.name,
-            EDirection.Left.name: EDirection.Right.name
-        }
-
-        if ghost.direction.name == self.opponent_direction[pacman.direction.name]:
+        if ghost.direction.name == self._opponent_direction[pacman.direction.name]:
             if ghost.direction.name == EDirection.Up.name and ghost.y < pacman.y:
                 return True
             if ghost.direction.name == EDirection.Down.name and ghost.y > pacman.y:
@@ -220,24 +220,24 @@ class LogicHandler ():
             ghost.direction = ghost.init_direction
             gui_events.append(GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost.id, direction=ghost.direction))
             gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=(ghost.x, ghost.y), id=ghost.id))
-        # Add health
+
+        # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
-    
         return gui_events
 
 
     def check_end_game(self, current_cycle):
-        gui_events = []
+
         end_game = False
         winner = None
         details = None
         if current_cycle >= self.world.constants.max_cycles - 1:
             end_game = True
 
-        if self.world.pacman.health == 0:
+        elif self.world.pacman.health == 0:
             end_game = True
         
-        if self._num_of_seeds == 0:
+        elif self._num_of_seeds == 0:
             end_game = True
 
         if end_game:
@@ -252,7 +252,4 @@ class LogicHandler ():
                     'Ghost': str(self.world.scores['Ghost'])
                     }
                 }
-        print("*************************")
-        print(end_game)
         return winner, details
-        

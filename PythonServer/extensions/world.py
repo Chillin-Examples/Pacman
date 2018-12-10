@@ -5,15 +5,15 @@ from ks.commands import ECommandDirection, ChangePacmanDirection, ChangeGhostDir
 from ks.models import World, ECell, EDirection
 from gui_events import GuiEvent, GuiEventType
 
-
-def apply_command(self, side_name, command):
-    
-    self._convert_dir_to_pos = {
+_convert_dir_to_pos = {
         EDirection.Up.name:(0, -1),
         EDirection.Down.name: (0, +1),
         EDirection.Right.name: (+1, 0),
         EDirection.Left.name: (-1, 0)
     }
+def apply_command(self, side_name, command):
+    
+    
 
     if command.name() == ChangePacmanDirection.name():
 
@@ -42,7 +42,7 @@ def _pacman_can_change_direction(self, position):
     return self.board[(position[1])][(position[0])] != ECell.Wall
 
 
-def _ghost_can_change_direction(self, new_position, ghost_position, command):
+def _ghost_can_change_direction(self, new_position, current_position, command):
 
     self._calculate_forbidden_direction = {
         EDirection.Up.name: EDirection.Down.name,
@@ -52,20 +52,20 @@ def _ghost_can_change_direction(self, new_position, ghost_position, command):
     }
 
     if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
-        print("its a wall")
+        # It's a wall
         return False
 
     forbidden_direction = self._calculate_forbidden_direction[command.direction.name]
     if self.ghosts[command.id].direction.name != forbidden_direction:
-        print("legal")
+        # Legal
         return True
     else:
-        print("forbidden direction")
-        if self._check_dead_end(ghost_position, command.direction.name):
-            print("its a dead-end")
+        # Forbidden direction
+        if self._check_dead_end(current_position, command.direction.name):
+            # It's a dead-end
             return True
         else:
-            print("forbidden but you have other choices")
+            # Forbidden but you have other choices
             return False
 
 
@@ -103,4 +103,4 @@ World._ghost_can_change_direction = _ghost_can_change_direction
 World._check_dead_end = _check_dead_end
 World._get_position = _get_position
 World._get_new_position = _get_new_position
-# World._convert_dir_to_pos = _convert_dir_to_pos
+World._convert_dir_to_pos = _convert_dir_to_pos

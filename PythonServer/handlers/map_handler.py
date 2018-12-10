@@ -48,6 +48,7 @@ class MapHandler:
         pacman.direction = EDirection[pacman_config["direction"]]
         pacman.init_x = pacman_config["position"][0]
         pacman.init_y = pacman_config["position"][1]
+        pacman.ini = 2
         pacman.init_direction = EDirection[pacman_config["direction"]]
         pacman.health = pacman_config["health"]
         pacman.giant_form_remaining_time = 0
