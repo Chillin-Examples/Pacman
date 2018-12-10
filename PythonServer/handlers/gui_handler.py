@@ -15,14 +15,15 @@ from gui_events import GuiEventType
 
 class GuiHandler():
 
-    def __init__(self, world, sides, canvas):
+    def __init__(self, world, sides, canvas, statuses):
 
         self._world = world
         self._sides = sides
         self._canvas = canvas
+        self._statuses = statuses
 
 
-    def initialize(self, config, statuses):
+    def initialize(self, config):
 
         self._angle = {
             EDirection.Up.name:    90,
