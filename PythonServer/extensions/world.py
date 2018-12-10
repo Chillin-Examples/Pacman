@@ -42,7 +42,7 @@ def _pacman_can_change_direction(self, position):
     return self.board[(position[1])][(position[0])] != ECell.Wall
 
 
-def _ghost_can_change_direction(self, new_position, ghost_position, command):
+def _ghost_can_change_direction(self, new_position, current_position, command):
 
     self._calculate_forbidden_direction = {
         EDirection.Up.name: EDirection.Down.name,
@@ -61,7 +61,7 @@ def _ghost_can_change_direction(self, new_position, ghost_position, command):
         return True
     else:
         # Forbidden direction
-        if self._check_dead_end(ghost_position, command.direction.name):
+        if self._check_dead_end(current_position, command.direction.name):
             # It's a dead-end
             return True
         else:
