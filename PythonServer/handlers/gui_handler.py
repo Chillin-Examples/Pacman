@@ -129,15 +129,7 @@ class GuiHandler():
             
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
-                # Reset pacman position
-                ref = self._pacman_img_ref
-                pos = self._get_canvas_position(self._world.pacman.init_x, self._world.pacman.init_y)
-                self._canvas.edit_image(ref, pos['x'], pos['y'])
-                # Reset ghosts position
-                for ghost in self._world.ghosts:
-                    ref = self._ghosts_ref[ghost.id]
-                    pos = self._get_canvas_position(ghost.init_x, ghost.init_y)
-                    self._canvas.edit_image(ref, pos['x'], pos['y'])
+                print event.payload['health']
 
 
 
