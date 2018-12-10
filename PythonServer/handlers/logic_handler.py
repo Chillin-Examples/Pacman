@@ -227,17 +227,17 @@ class LogicHandler ():
 
 
     def check_end_game(self, current_cycle):
-        gui_events = []
+
         end_game = False
         winner = None
         details = None
         if current_cycle >= self.world.constants.max_cycles - 1:
             end_game = True
 
-        if self.world.pacman.health == 0:
+        elif self.world.pacman.health == 0:
             end_game = True
         
-        if self._num_of_seeds == 0:
+        elif self._num_of_seeds == 0:
             end_game = True
 
         if end_game:
@@ -252,7 +252,4 @@ class LogicHandler ():
                     'Ghost': str(self.world.scores['Ghost'])
                     }
                 }
-        print("*************************")
-        print(end_game)
         return winner, details
-        
