@@ -119,7 +119,7 @@ class GuiHandler():
             if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
                 ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
                 angle = self._angle[event.payload["direction"].name]
-                self._canvas.edit_image(ref, None, None, angle=angle)
+                self._canvas.edit_image(ref, None, None, angle=angle, center_origin=True)
 
             # Remove food
             if event.type == GuiEventType.EatFood:
