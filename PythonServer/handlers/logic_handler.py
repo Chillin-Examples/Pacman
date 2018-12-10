@@ -220,9 +220,9 @@ class LogicHandler ():
             ghost.direction = ghost.init_direction
             gui_events.append(GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost.id, direction=ghost.direction))
             gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=(ghost.x, ghost.y), id=ghost.id))
-        # Add health
+
+        # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
-    
         return gui_events
 
 
