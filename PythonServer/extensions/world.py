@@ -52,20 +52,20 @@ def _ghost_can_change_direction(self, new_position, ghost_position, command):
     }
 
     if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
-        print("its a wall")
+        # It's a wall
         return False
 
     forbidden_direction = self._calculate_forbidden_direction[command.direction.name]
     if self.ghosts[command.id].direction.name != forbidden_direction:
-        print("legal")
+        # Legal
         return True
     else:
-        print("forbidden direction")
+        # Forbidden direction
         if self._check_dead_end(ghost_position, command.direction.name):
-            print("its a dead-end")
+            # It's a dead-end
             return True
         else:
-            print("forbidden but you have other choices")
+            # Forbidden but you have other choices
             return False
 
 
