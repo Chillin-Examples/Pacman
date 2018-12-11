@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+import threading 
+
 from ks.commands import ECommandDirection
 from extensions import world
 from gui_events import *
@@ -60,6 +63,10 @@ class LogicHandler ():
     def process(self, current_cycle):
 
         gui_events = []
+        for ghost in self.world.ghosts:
+            if self.is_ghost_dead[ghost.id] == True:
+                self.recover_ghost(ghost.id)
+
         if self._is_pacman_dead:
             gui_events.extend(self.recover_agents())
 
@@ -82,7 +89,7 @@ class LogicHandler ():
             elif hit_ghosts_id!=[] and self._freeze_mode:
                 for ghost_id in hit_ghosts_id:
                     self.is_ghost_dead[ghost_id] = True
-                    self.kill_ghost()
+                    self._kill_ghost()
 
             # Eat food
             if not self._is_pacman_dead:
@@ -95,8 +102,11 @@ class LogicHandler ():
                 if self._can_be_eaten_as_a_super_food(pacman_position):
                     self._eat_super_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
-        for i in gui_events:
-            print(i.__dict__)
+
+
+
+        # for i in gui_events:
+        #     print(i.__dict__)
         # if self._freeze_mode:
         #     gui_events.appesnd(GuiEvent(GuiEventType.FreezeMode))
 
@@ -150,7 +160,7 @@ class LogicHandler ():
                          self._convert_dir_to_pos[self.world.pacman.direction.name][1]+pacman_position[1])
 
         if self._can_move(new_position):
-            print("pacman can move")
+            # print("pacman can move")
 
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
@@ -158,7 +168,7 @@ class LogicHandler ():
             return gui_events
 
         else:
-            print("pacman cannot move")
+            # print("pacman cannot move")
             return []
 
 
@@ -172,13 +182,13 @@ class LogicHandler ():
                          self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
 
             if self._can_move(new_position):
-                print("ghost can move")
+                # print("ghost can move")
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
                 gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
 
-            else:
-                print("ghost cannot move")
+            # else:
+                # print("ghost cannot move")
 
         return gui_events
 
@@ -209,11 +219,19 @@ class LogicHandler ():
 
         self.world.scores["Pacman"] += self.world.constants.super_food_score
         self.world.board[(position[1])][(position[0])] = ECell.Empty
-        # self.freeze_mode()
+        self.freeze_mode()
+
+
+    def deactive(self):
+        print("deactive")
+        self._freeze_mode = False
+
 
     def freeze_mode(self):
-
-        self.world.pacman.giant_form_remaining_time = self.world.pacman_giant_form_duration
+                
+        timer = threading.Timer(self.world.constants.pacman_giant_form_duration, self.deactive) 
+        timer.start() 
+        self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
         self._freeze_mode = True
 
 
@@ -237,9 +255,17 @@ class LogicHandler ():
         # return(self.recover_agents())
 
     def _kill_ghost(self):
-        seeds.world.score["Pacman"] += self.world.constants.ghost_death_score
+        self.world.scores["Pacman"] += self.world.constants.ghost_death_score
 
-        
+
+    def recover_ghost(self, ghost_id):
+        self.world.ghosts[ghost_id].x = self.world.ghosts[ghost_id].init_x
+        self.world.ghosts[ghost_id].y = self.world.ghosts[ghost_id].init_y
+        self.world.ghosts[ghost_id].direction = self.world.ghosts[ghost_id].init_direction
+        return [GuiEvent(GuiEventType.MoveGhost,
+                new_pos=(self.world.ghosts[ghost_id].x,
+                self.world.ghosts[ghost_id].y), id=ghost_id)]
+
     def recover_agents(self):
         gui_events = []
 
