@@ -33,6 +33,7 @@ class GuiHandler():
 
         self._ghosts_ref = {}
         self._foods_ref = {}
+        self._super_foods_ref = {}
 
         self._config(config)
         self._draw_board()
@@ -79,8 +80,9 @@ class GuiHandler():
                     self._foods_ref[x, y] = food_img_ref
 
                 elif cell == ECell.SuperFood:
-                    self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
+                    super_food_img_ref = self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
+                    self._super_foods_ref[x, y] = super_food_img_ref
 
 
     def _draw_players(self):
@@ -123,14 +125,19 @@ class GuiHandler():
 
             # Remove food
             if event.type == GuiEventType.EatFood:
-
                 food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
+            
+            # Remove super food
+            if event.type == GuiEventType.EatSuperFood:
+                super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
+                self._canvas.delete_element(super_food_ref)
             
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
                 pass
                 # print event.payload['health']
+            
 
 
 
