@@ -142,7 +142,8 @@ class GuiHandler():
             
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
-                print event.payload['health']
+                pass
+                # print event.payload['health']
 
 
         # Statuses

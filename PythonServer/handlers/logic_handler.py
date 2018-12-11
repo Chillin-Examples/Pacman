@@ -13,7 +13,7 @@ class LogicHandler ():
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
         self._num_of_seeds = 0
-
+        self._is_pacman_dead = False
 
     def initialize(self):
 
@@ -57,31 +57,32 @@ class LogicHandler ():
     def process(self, current_cycle):
 
         gui_events = []
-        self._is_pacman_dead = False
-    
-        # Change direction
-        for side_name in self._sides:
-            for command_id in self._last_cycle_commands[side_name]:
-                gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
+        if self._is_pacman_dead:
+            gui_events.extend(self.recover_agents())
 
-        # Move
-        gui_events.extend(self._move_pacman())
-        gui_events.extend(self._move_ghosts())
+        else:
+            # Change direction
+            for side_name in self._sides:
+                for command_id in self._last_cycle_commands[side_name]:
+                    gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
 
-        # Kill pacman
-        if self._check_hit():
-            self._is_pacman_dead = True
-            # return(self._kill_pacman())
-            self._kill_pacman()
+            # Move
+            gui_events.extend(self._move_pacman())
+            gui_events.extend(self._move_ghosts())
 
-        # Eat food
-        if not self._is_pacman_dead:
-            pacman_position = self._get_position("Pacman", None)
-            if self._can_be_eaten(pacman_position):
-                # Can be eaten
-                self._eat_food(pacman_position)
-                gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
-        
+            # Kill pacman
+            if self._check_hit():
+                self._is_pacman_dead = True
+                self._kill_pacman()
+
+            # Eat food
+            if not self._is_pacman_dead:
+                pacman_position = self._get_position("Pacman", None)
+                if self._can_be_eaten(pacman_position):
+                    # Can be eaten
+                    self._eat_food(pacman_position)
+                    gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
+
         return gui_events
 
 
@@ -213,7 +214,7 @@ class LogicHandler ():
         gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.world.pacman.direction))
         gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self._get_position("Pacman", None)))
 
-        # Ghosts rest
+        # Ghosts reset
         for ghost in self.world.ghosts:
             ghost.x = ghost.init_x
             ghost.y = ghost.init_y
@@ -223,6 +224,7 @@ class LogicHandler ():
 
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
+        self._is_pacman_dead = False
         return gui_events
 
 
