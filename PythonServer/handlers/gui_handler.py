@@ -119,6 +119,9 @@ class GuiHandler():
         self._canvas.create_image('GhostLogo', self._statuses['mid_x_Ghost'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
         self._canvas.create_line(self._statuses['mid_x'], self._statuses['start_y'] - self._statuses['logo_width'], self._statuses['mid_x'], self._canvas.height, self._canvas.make_rgba(0, 0, 0, 150), stroke_width=1)
 
+        self._canvas.create_text('Health', self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15 + 200, self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
+        self._statuses['health_pacman'] = self._canvas.create_text(str(self._world.pacman.health), self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15 + 250, self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
+
 
     def update(self, events, current_cycle):
 
@@ -141,10 +144,10 @@ class GuiHandler():
 
                 food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
-            
+
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
-                pass
+                self._canvas.edit_text(self._statuses['health_pacman'], str(self._world.pacman.health))
 
 
         # Statuses
