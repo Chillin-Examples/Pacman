@@ -36,6 +36,7 @@ class MapHandler:
         world.constants.pacman_death_score = constants_config["pacman_death_score"]
         world.constants.pacman_giant_form_duration = constants_config["pacman_giant_form_duration"]
         world.constants.max_cycles = constants_config["max_cycles"]
+        world.constants.pacman_max_health = constants_config["pacman_max_health"]
 
 
     def _fill_players(self, world, players_config):
@@ -68,7 +69,7 @@ class MapHandler:
             world.ghosts.append(new_ghost)
 
 
-    def load_map(self, map_path):
+    def load_map(self, map_path, config, canvas):
 
         with open((map_path), "r") as map_file:
             map_config = json.loads(map_file.read())
@@ -86,5 +87,29 @@ class MapHandler:
         self._fill_board(world, board)
         self._fill_constants(world, constants_config)
         self._fill_players(world, players_config)
+        self._init_statuses(world, config, canvas)
 
         return world
+
+    def _init_statuses(self, world, config, canvas):
+
+        self.statuses = {
+                'start_x': canvas.width - config['statuses_width'],
+                'end_x': canvas.width,
+                'mid_x': canvas.width - (config['statuses_width'] // 2),
+
+                'cycle': None,
+                'title_font_size': 55 * config['statuses_width'] // 1000,
+                'logo_width': config['cell_size'] * config['statuses_width'] // 1000,
+
+                'players': {side: {} for side in self._sides}
+            }
+        self.statuses['start_x_Pacman'] = self.statuses['start_x']
+        self.statuses['mid_x_Pacman'] = (self.statuses['start_x'] + self.statuses['mid_x']) // 2
+        self.statuses['start_x_Ghost'] = self.statuses['mid_x']
+        self.statuses['mid_x_Ghost'] = (self.statuses['mid_x'] + self.statuses['end_x']) // 2
+        self.statuses['cell_size'] = (self.statuses['mid_x'] - self.statuses['start_x'] - 30) // (world.constants.pacman_max_health +  3)
+        self.statuses['font_size'] = self.statuses['cell_size'] + 5
+        self.statuses['start_y'] = 5 * (self.statuses['title_font_size'] + 10) + self.statuses['logo_width'] + 10
+        self.statuses['step_y'] = self.statuses['cell_size'] + 20
+        self.statuses['calc_y'] = lambda id: self.statuses['start_y'] + self.statuses['step_y'] * id
