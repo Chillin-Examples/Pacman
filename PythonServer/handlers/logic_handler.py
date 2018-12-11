@@ -14,6 +14,8 @@ class LogicHandler ():
         self._last_cycle_commands = {side: {} for side in self._sides}
         self._num_of_seeds = 0
         self._is_pacman_dead = False
+        self._freeze_mode = False
+
 
     def initialize(self):
 
@@ -71,17 +73,19 @@ class LogicHandler ():
             gui_events.extend(self._move_ghosts())
 
             # Kill pacman
-            if self._check_hit():
+            if self._check_hit() and not self._freeze_mode:
                 self._is_pacman_dead = True
                 self._kill_pacman()
-
             # Eat food
             if not self._is_pacman_dead:
                 pacman_position = self._get_position("Pacman", None)
-                if self._can_be_eaten(pacman_position):
+                if self._can_be_eaten_as_a_food(pacman_position):
                     # Can be eaten
                     self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
+                if self._can_be_eaten_as_a_super_food(pacman_position):
+                    self._eat_super_food(pacman_position)
+
 
         return gui_events
 
@@ -170,8 +174,12 @@ class LogicHandler ():
         return self.world.board[(position[1])][(position[0])] != ECell.Wall
 
 
-    def _can_be_eaten(self, position):
+    def _can_be_eaten_as_a_food(self, position):
         return self.world.board[(position[1])][(position[0])] == ECell.Food
+
+
+    def _can_be_eaten_as_a_super_food(self, position):
+        return self.world.board[(position[1])][(position[0])] == ECell.SuperFood
 
 
     def _eat_food(self, position):
@@ -182,6 +190,18 @@ class LogicHandler ():
         self.world.board[(position[1])][(position[0])] = ECell.Empty
         # Decrease the number of seeds
         self._num_of_seeds -= 1
+
+
+    def _eat_super_food(self, position):
+
+        self.world.scores["Pacman"] += self.world.constants.super_food_score
+        self.world.board[(position[1])][(position[0])] = ECell.Empty
+        # self.freeze_mode()
+
+    def freeze_mode(self):
+
+        self.world.pacman.giant_form_remaining_time = self.world.pacman_giant_form_duration
+        self._freeze_mode = True
 
 
     def _get_position(self, side_name, id):
@@ -203,7 +223,10 @@ class LogicHandler ():
         self.world.pacman.health -= 1
         # return(self.recover_agents())
 
+    def _kill_ghost(self):
+        seeds.world.score["Pacman"] += self.world.constants.ghost_death_score
 
+        
     def recover_agents(self):
         gui_events = []
 
