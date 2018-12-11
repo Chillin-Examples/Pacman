@@ -107,6 +107,7 @@ class GuiHandler():
             self._ghosts_ref[ghost.id] = ghost_img_ref
 
     def _draw_statuses(self):
+        
         self._statuses['cycle_ref'] = self._canvas.create_text('Cycle: 0', self._statuses['mid_x'], self._statuses['title_font_size'], self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
 
         self._canvas.create_text('Score', self._statuses['mid_x'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
@@ -143,7 +144,6 @@ class GuiHandler():
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
                 pass
-                # print event.payload['health']
 
 
         # Statuses
