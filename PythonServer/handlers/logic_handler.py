@@ -74,13 +74,15 @@ class LogicHandler ():
             gui_events.extend(self._move_ghosts())
 
             # Kill pacman
-            if self._check_hit()!=[] and not self._freeze_mode:
+            hit_ghosts_id = self._check_hit()
+            if hit_ghosts_id!=[] and not self._freeze_mode:
                 self._is_pacman_dead = True
                 self._kill_pacman()
 
-            # elif self._check_hit() and self._freeze_mode:
-            #     self.is_ghost_dead[id] = True
-            #     self.kill_ghost()
+            elif hit_ghosts_id!=[] and self._freeze_mode:
+                for ghost_id in hit_ghosts_id:
+                    self.is_ghost_dead[ghost_id] = True
+                    self.kill_ghost()
 
             # Eat food
             if not self._is_pacman_dead:
@@ -89,10 +91,12 @@ class LogicHandler ():
                 if self._can_be_eaten_as_a_food(pacman_position):
                     self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
-                # # super food
-                # if self._can_be_eaten_as_a_super_food(pacman_position):
-                #     self._eat_super_food(pacman_position)
-    
+                # super food
+                if self._can_be_eaten_as_a_super_food(pacman_position):
+                    self._eat_super_food(pacman_position)
+                    gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
+        for i in gui_events:
+            print(i.__dict__)
         # if self._freeze_mode:
         #     gui_events.appesnd(GuiEvent(GuiEventType.FreezeMode))
 
