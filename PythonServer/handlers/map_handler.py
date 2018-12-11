@@ -103,6 +103,7 @@ class MapHandler:
 
                 'players': {side: {} for side in self._sides}
             }
+
         self.statuses['start_x_Pacman'] = self.statuses['start_x']
         self.statuses['mid_x_Pacman'] = (self.statuses['start_x'] + self.statuses['mid_x']) // 2
         self.statuses['start_x_Ghost'] = self.statuses['mid_x']
@@ -112,3 +113,4 @@ class MapHandler:
         self.statuses['start_y'] = 5 * (self.statuses['title_font_size'] + 10) + self.statuses['logo_width'] + 10
         self.statuses['step_y'] = self.statuses['cell_size'] + 20
         self.statuses['calc_y'] = lambda id: self.statuses['start_y'] + self.statuses['step_y'] * id
+           
