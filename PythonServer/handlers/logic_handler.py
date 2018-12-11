@@ -15,8 +15,9 @@ class LogicHandler ():
         self._num_of_seeds = 0
         self._is_pacman_dead = False
         self._freeze_mode = False
+        self.is_ghost_dead = {ghost.id : False for ghost in self.world.ghosts} 
 
-
+    
     def initialize(self):
 
         self._is_pacman_dead = False
@@ -73,19 +74,27 @@ class LogicHandler ():
             gui_events.extend(self._move_ghosts())
 
             # Kill pacman
-            if self._check_hit() and not self._freeze_mode:
+            if self._check_hit()!=[] and not self._freeze_mode:
                 self._is_pacman_dead = True
                 self._kill_pacman()
+
+            # elif self._check_hit() and self._freeze_mode:
+            #     self.is_ghost_dead[id] = True
+            #     self.kill_ghost()
+
             # Eat food
             if not self._is_pacman_dead:
                 pacman_position = self._get_position("Pacman", None)
+                # foood
                 if self._can_be_eaten_as_a_food(pacman_position):
-                    # Can be eaten
                     self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
-                if self._can_be_eaten_as_a_super_food(pacman_position):
-                    self._eat_super_food(pacman_position)
-
+                # # super food
+                # if self._can_be_eaten_as_a_super_food(pacman_position):
+                #     self._eat_super_food(pacman_position)
+    
+        # if self._freeze_mode:
+        #     gui_events.appesnd(GuiEvent(GuiEventType.FreezeMode))
 
         return gui_events
 
@@ -104,18 +113,18 @@ class LogicHandler ():
 
 
     def _check_hit(self):
-     
+        hit_ghosts_id = []
         for ghost in self.world.ghosts:
     
             # Check same cell 
             if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
-                return True
+                hit_ghosts_id.append(ghost.id)
 
             # Check moving toward each other
             if self._check_toward_move(self.world.pacman, ghost) and self._check_adjacency(ghost):
-                return True
+                hit_ghosts_id.append(ghost.id)
 
-        return False
+        return hit_ghosts_id
 
 
     def _check_adjacency(self, ghost):
