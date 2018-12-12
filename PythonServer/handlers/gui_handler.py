@@ -15,11 +15,12 @@ from gui_events import GuiEventType
 
 class GuiHandler():
 
-    def __init__(self, world, sides, canvas):
+    def __init__(self, world, sides, canvas, statuses):
 
         self._world = world
         self._sides = sides
         self._canvas = canvas
+        self._statuses = statuses
 
 
     def initialize(self, config):
@@ -38,6 +39,7 @@ class GuiHandler():
         self._config(config)
         self._draw_board()
         self._draw_players()
+        self._draw_statuses()
 
     def _config(self, config):
 
@@ -106,7 +108,23 @@ class GuiHandler():
             self._ghosts_ref[ghost.id] = ghost_img_ref
 
 
-    def update(self, events):
+    def _draw_statuses(self):
+
+        self._statuses['cycle_ref'] = self._canvas.create_text('Cycle: 0', self._statuses['mid_x'], self._statuses['title_font_size'], self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
+
+        self._canvas.create_text('Score', self._statuses['mid_x'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
+        self._statuses['scores_Pacman'] = self._canvas.create_text('0', self._statuses['mid_x_Pacman'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
+        self._statuses['scores_Ghost'] = self._canvas.create_text('0', self._statuses['mid_x_Ghost'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(255, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
+
+        self._canvas.create_image('PacmanLogo', self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
+        self._canvas.create_image('GhostLogo', self._statuses['mid_x_Ghost'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
+        self._canvas.create_line(self._statuses['mid_x'], self._statuses['start_y'] - self._statuses['logo_width'], self._statuses['mid_x'], self._canvas.height, self._canvas.make_rgba(0, 0, 0, 150), stroke_width=1)
+
+        self._canvas.create_text('Health', self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15 + 200, self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
+        self._statuses['health_pacman'] = self._canvas.create_text(str(self._world.pacman.health), self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15 + 250, self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
+
+
+    def update(self, events, current_cycle):
 
         self.freeze_mode = False
         for event in events:
@@ -159,9 +177,18 @@ class GuiHandler():
                                         
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
+
+
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
-                pass
+                self._canvas.edit_text(self._statuses['health_pacman'], str(self._world.pacman.health))
+
+
+        # Statuses
+        self._canvas.edit_text(self._statuses['cycle_ref'], 'Cycle: ' + str(current_cycle))
+
+        for side in self._sides:
+            self._canvas.edit_text(self._statuses['scores_' + side], text=str(self._world.scores[side]))
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
