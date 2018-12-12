@@ -62,10 +62,13 @@ class LogicHandler ():
 
     def process(self, current_cycle):
 
+        print(self._freeze_mode)
         gui_events = []
+
+        # Freeze mode Recover ghosts
         for ghost in self.world.ghosts:
             if self.is_ghost_dead[ghost.id] == True:
-                self.recover_ghost(ghost.id)
+                gui_events.extend(self.recover_ghost(ghost.id))
 
         if self._is_pacman_dead:
             gui_events.extend(self.recover_agents())
@@ -252,7 +255,8 @@ class LogicHandler ():
 
         self.world.scores["Ghost"] += self.world.constants.pacman_death_score
         self.world.pacman.health -= 1
-        # return(self.recover_agents())
+
+
 
     def _kill_ghost(self):
         self.world.scores["Pacman"] += self.world.constants.ghost_death_score
@@ -262,9 +266,11 @@ class LogicHandler ():
         self.world.ghosts[ghost_id].x = self.world.ghosts[ghost_id].init_x
         self.world.ghosts[ghost_id].y = self.world.ghosts[ghost_id].init_y
         self.world.ghosts[ghost_id].direction = self.world.ghosts[ghost_id].init_direction
+        self.is_ghost_dead[ghost_id] = False
         return [GuiEvent(GuiEventType.MoveGhost,
                 new_pos=(self.world.ghosts[ghost_id].x,
                 self.world.ghosts[ghost_id].y), id=ghost_id)]
+
 
     def recover_agents(self):
         gui_events = []
