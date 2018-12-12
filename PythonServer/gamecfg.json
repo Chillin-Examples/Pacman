@@ -36,7 +36,8 @@
 			"InterWall": "images/interWall.png",
 
 			"Food": "images/food.png",
-			"SuperFood": "images/superFood.png"
+			"SuperFood": "images/superFood.png",
+			"FreezedGhost": "images/freezedGhost.png"
 		
 		}
 	},
