@@ -24,7 +24,6 @@ food_score = int
 super_food_score = int
 ghost_death_score = int 
 pacman_death_score = int
-pacman_max_health = int
 pacman_giant_form_duration = int
 max_cycles = int
 
@@ -40,9 +39,9 @@ giant_form_remaining_time = int
 
 [Ghost]
 _def = class
-id = int
 x = int
 y = int
+id = int
 direction = EDirection
 
 

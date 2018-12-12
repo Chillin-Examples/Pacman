@@ -1,3 +1,10 @@
-def change_direction(world, command):
+# -*- coding: utf-8 -*-
 
-    return true
+# project imports
+from ks.models import Ghost
+
+
+def change_direction(self, command):
+    self.direction = command.direction
+
+Ghost.change_direction = change_direction
