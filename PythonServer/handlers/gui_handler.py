@@ -109,6 +109,7 @@ class GuiHandler():
 
     def update(self, events):
 
+        self.freeze_mode = False
         for event in events:
 
             # Move
@@ -130,8 +131,35 @@ class GuiHandler():
             
             # Remove super food
             if event.type == GuiEventType.EatSuperFood:
+                self.freeze_mode = True
+                # Remove food
                 super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(super_food_ref)
+                # Freeze ghosts
+                for ghost in self._world.ghosts:
+                    self._canvas.delete_element(self._ghosts_ref[ghost.id])
+                    ghost_angle = self._angle[ghost.direction.name]
+                    canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
+                    ghost_img_ref = self._canvas.create_image('FreezedGhost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                                angle=ghost_angle,
+                                                scale_type=ScaleType.ScaleToWidth,
+                                                scale_value=self._cell_size)
+                                        
+                    self._ghosts_ref[ghost.id] = ghost_img_ref
+            
+            print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            print self._world.pacman.giant_form_remaining_time
+            if self.freeze_mode and self._world.pacman.giant_form_remaining_time == 0:
+                for ghost in self._world.Ghosts:
+                    self._canvas.delete_element(self._ghosts_ref[ghost.id])
+                    ghost_angle = self._angle[ghost.direction.name]
+                    canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
+                    ghost_img_ref = self._canvas.create_image('Ghost',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                                angle=ghost_angle,
+                                                scale_type=ScaleType.ScaleToWidth,
+                                                scale_value=self._cell_size)
+                                        
+                    self._ghosts_ref[ghost.id] = ghost_img_ref
             
             # kill-pacman
             if event.type == GuiEventType.UpdateHealth:
