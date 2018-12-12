@@ -2,8 +2,8 @@
     "board": [
         "wwwwwwwwwww",
         "weseffwesew",
-        "weeeffffeew",
-        "weeeweeeeew",
+        "wseeffffeew",
+        "wfeeweeeeew",
         "weeeweeeeew",
         "weeewwweeew",
         "weefffffeew",
@@ -30,7 +30,7 @@
             {
                 "position": [1,1],
                 "direction": "Left",
-                "health": 5
+                "health": 30
             }
     },
 

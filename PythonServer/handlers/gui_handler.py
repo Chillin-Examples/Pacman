@@ -141,7 +141,6 @@ class GuiHandler():
 
             # Remove food
             if event.type == GuiEventType.EatFood:
-
                 food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
 
