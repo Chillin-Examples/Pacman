@@ -35,6 +35,7 @@ class MapHandler:
         world.constants.ghost_death_score = constants_config["ghost_death_score"]
         world.constants.pacman_death_score = constants_config["pacman_death_score"]
         world.constants.pacman_giant_form_duration = constants_config["pacman_giant_form_duration"]
+        world.constants.max_giant_form_duration = constants_config["max_giant_form_duration"]
         world.constants.max_cycles = constants_config["max_cycles"]
 
 

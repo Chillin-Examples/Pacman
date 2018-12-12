@@ -64,7 +64,7 @@ class LogicHandler ():
 
         print(self._freeze_mode)
         gui_events = []
-
+    
         # Freeze mode Recover ghosts
         for ghost in self.world.ghosts:
             if self.is_ghost_dead[ghost.id] == True:
