@@ -111,7 +111,7 @@ class LogicHandler ():
         # for i in gui_events:
         #     print(i.__dict__)
         # if self._freeze_mode:
-        #     gui_events.appesnd(GuiEvent(GuiEventType.FreezeMode))
+        #     gui_events.append(GuiEvent(GuiEventType.FreezeMode))
 
         return gui_events
 
@@ -255,7 +255,6 @@ class LogicHandler ():
 
         self.world.scores["Ghost"] += self.world.constants.pacman_death_score
         self.world.pacman.health -= 1
-
 
 
     def _kill_ghost(self):
