@@ -70,6 +70,14 @@ class LogicHandler ():
 
         gui_events = []
 
+        if self._giant_form:
+            self.world.pacman.giant_form_remaining_time -= 1
+
+            # Check if giant form is ended(TODO: make it a method)
+            if self.world.pacman.giant_form_remaining_time == 0:
+                gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
+                self._giant_form = False
+    
         # Giant form Recover ghosts
         for ghost in self.world.ghosts:
             if self._is_ghost_dead[ghost.id] == True:
@@ -112,13 +120,6 @@ class LogicHandler ():
                     self._eat_super_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
 
-            if self._giant_form:
-                self.world.pacman.giant_form_remaining_time -= 1
-                print(self.world.pacman.giant_form_remaining_time)
-                # Check if giant form is ended(TODO: make it a method)
-                if self.world.pacman.giant_form_remaining_time == 0:
-                    gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
-                    self._giant_form = False
 
         return gui_events
 
@@ -288,25 +289,27 @@ class LogicHandler ():
         end_game = False
         winner = None
         details = None
-        if current_cycle >= self.world.constants.max_cycles - 1:
-            end_game = True
 
-        elif self.world.pacman.health == 0:
-            end_game = True
-        
-        elif self._num_of_foods == 0:
-            end_game = True
+        if self._giant_form == False:
+            if current_cycle >= self.world.constants.max_cycles - 1:
+                end_game = True
 
-        if end_game:
+            elif self.world.pacman.health == 0:
+                end_game = True
             
-            if self.world.scores['Pacman'] > self.world.scores['Ghost']:
-                winner = 'Pacman'
-            elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
-                winner = 'Ghost'
-            details = {
-                'Scores': {
-                    'Pacman': str(self.world.scores['Pacman']),
-                    'Ghost': str(self.world.scores['Ghost'])
+            elif self._num_of_foods == 0 and self._num_of_super_foods == 0:
+                end_game = True
+
+            if end_game:
+                
+                if self.world.scores['Pacman'] > self.world.scores['Ghost']:
+                    winner = 'Pacman'
+                elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
+                    winner = 'Ghost'
+                details = {
+                    'Scores': {
+                        'Pacman': str(self.world.scores['Pacman']),
+                        'Ghost': str(self.world.scores['Ghost'])
+                        }
                     }
-                }
         return end_game, winner, details
