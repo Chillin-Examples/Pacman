@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import threading 
-
 from ks.commands import ECommandDirection
 from extensions import world
 from gui_events import *
@@ -19,11 +17,10 @@ class LogicHandler ():
         self._is_pacman_dead = False
         self._freeze_mode = False
         self._is_ghost_dead = {ghost.id : False for ghost in self.world.ghosts} 
-        self._wait_cycle = {ghost.id : False for ghost in self.world.ghosts}
-    
+
+
     def initialize(self):
 
-        self._is_pacman_dead = False
 
         for y in range(self.world.width):
             for x in range(self.world.height):
@@ -53,13 +50,11 @@ class LogicHandler ():
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
         if side_name == "Ghost":
-            print("wait ")
-            print(self._wait_cycle[command.id])
-            if not self._wait_cycle[command.id]:
-                print("raft too in")
-                self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
+            if not self._is_ghost_dead[command.id]:
+                self._last_cycle_commands[side_name][command.id] = command
+
         elif side_name == "Pacman":
-            self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
+            self._last_cycle_commands[side_name][None] = command
 
 
 
@@ -83,16 +78,11 @@ class LogicHandler ():
             for side_name in self._sides:
                 for command_id in self._last_cycle_commands[side_name]:
                     gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
-            # print("wait before move")
-            # print(self._wait_cycle)
+           
             # Move
             gui_events.extend(self._move_pacman())
             gui_events.extend(self._move_ghosts())
             
-            # Reset _wait_cycles
-            for ghost in self.world.ghosts:
-                if self._wait_cycle[ghost.id] == True:
-                    self._wait_cycle[ghost.id]= False
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
@@ -105,7 +95,6 @@ class LogicHandler ():
                 print("hite freeziii")
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
-                    self._wait_cycle[ghost.id] = True
                     self._kill_ghost()
 
             # Eat food
@@ -181,14 +170,11 @@ class LogicHandler ():
         print(new_position)
         if self._can_move(new_position):
             # print("pacman can move")
-
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
             gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=new_position))
             return gui_events
 
-        # else:
-        #     # print("pacman cannot move")
         return gui_events
 
 
@@ -203,15 +189,12 @@ class LogicHandler ():
                          self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
             print(new_position)
             if self._can_move(new_position):
-                # print("ghost can move")
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
-                if self._wait_cycle[ghost.id]==False:
+                if self._is_ghost_dead[ghost.id]==False:
                     print("ghost can move")
                     gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
 
-            # else:
-                # print("ghost cannot move")
 
         return gui_events
 
