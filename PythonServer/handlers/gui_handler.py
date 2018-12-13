@@ -11,16 +11,16 @@ from chillin_server.gui.canvas_elements import ScaleType
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ECommandDirection
 from gui_events import GuiEventType
+from handlers import game_status
 
 
 class GuiHandler():
 
-    def __init__(self, world, sides, canvas, statuses):
+    def __init__(self, world, sides, canvas):
 
         self._world = world
         self._sides = sides
         self._canvas = canvas
-        self._statuses = statuses
 
 
     def initialize(self, config):
@@ -39,7 +39,12 @@ class GuiHandler():
         self._config(config)
         self._draw_board()
         self._draw_players()
-        self._draw_statuses()
+
+        # Status
+        self._game_status = game_status.GameStatus(config, self._canvas, self._sides, self._world)
+        self._game_status.initialize()
+        self._game_status.draw_statuses()
+
 
     def _config(self, config):
 
@@ -104,24 +109,8 @@ class GuiHandler():
                                         angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
-                                        
+
             self._ghosts_ref[ghost.id] = ghost_img_ref
-
-
-    def _draw_statuses(self):
-
-        self._statuses['cycle_ref'] = self._canvas.create_text('Cycle: 0', self._statuses['mid_x'], self._statuses['title_font_size'], self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
-
-        self._canvas.create_text('Score', self._statuses['mid_x'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
-        self._statuses['scores_Pacman'] = self._canvas.create_text('0', self._statuses['mid_x_Pacman'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
-        self._statuses['scores_Ghost'] = self._canvas.create_text('0', self._statuses['mid_x_Ghost'], 2 * (self._statuses['title_font_size'] + 10), self._canvas.make_rgba(255, 0, 0, 255), self._statuses['title_font_size'], center_origin=True)
-
-        self._canvas.create_image('PacmanLogo', self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
-        self._canvas.create_image('GhostLogo', self._statuses['mid_x_Ghost'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._statuses['logo_width'], center_origin=True)
-        self._canvas.create_line(self._statuses['mid_x'], self._statuses['start_y'] - self._statuses['logo_width'], self._statuses['mid_x'], self._canvas.height, self._canvas.make_rgba(0, 0, 0, 150), stroke_width=1)
-
-        self._canvas.create_text('Health', self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15 + 200, self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
-        self._statuses['health_pacman'] = self._canvas.create_text(str(self._world.pacman.health), self._statuses['mid_x_Pacman'], self._statuses['start_y'] - self._statuses['logo_width'] // 2 - 15 + 250, self._canvas.make_rgba(0, 0, 255, 255), self._statuses['title_font_size'], center_origin=True)
 
 
     def update(self, events, current_cycle):
@@ -136,18 +125,18 @@ class GuiHandler():
                 self._canvas.edit_image(ref, pos['x'], pos['y'])
 
             # Change direction
-            if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
+            elif event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
                 ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
                 angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(ref, None, None, angle=angle, center_origin=True)
 
             # Remove food
-            if event.type == GuiEventType.EatFood:
+            elif event.type == GuiEventType.EatFood:
                 food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
 
             # Remove super food
-            if event.type == GuiEventType.EatSuperFood:
+            elif event.type == GuiEventType.EatSuperFood:
                 self.freeze_mode = True
                 # Remove food
                 super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
@@ -165,8 +154,8 @@ class GuiHandler():
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
             # Go to default mode
-            if self.freeze_mode and self._world.pacman.giant_form_remaining_time == 0:
-                for ghost in self._world.Ghosts:
+            elif event.type == GuiEventType.EndGiantForm:
+                for ghost in self._world.ghosts:
                     self._canvas.delete_element(self._ghosts_ref[ghost.id])
                     ghost_angle = self._angle[ghost.direction.name]
                     canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
@@ -177,18 +166,10 @@ class GuiHandler():
                                         
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
-
-
-            # kill-pacman
-            if event.type == GuiEventType.UpdateHealth:
-                self._canvas.edit_text(self._statuses['health_pacman'], str(self._world.pacman.health))
-
-
-        # Statuses
-        self._canvas.edit_text(self._statuses['cycle_ref'], 'Cycle: ' + str(current_cycle))
-
-        for side in self._sides:
-            self._canvas.edit_text(self._statuses['scores_' + side], text=str(self._world.scores[side]))
+            # Status
+            elif event.type == GuiEventType.UpdateHealth:
+                self._game_status.update_health()
+            self._game_status.update_statuses(current_cycle)
 
 
     def _get_canvas_position(self, x, y, center_origin=True):

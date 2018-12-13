@@ -31,17 +31,15 @@ class GameManager(RealtimeGameHandler):
     def on_initialize(self):
         print('initialize')
 
-        self._map_handler = map_handler.MapHandler(self.sides)
-        world = self._map_handler.load_map(self.config['map'], self.config, self.canvas)
+        world = map_handler.MapHandler(self.sides).load_map(self.config['map'])
         self._logic_handler = logic_handler.LogicHandler(world, self.sides)
         self._logic_handler.initialize()
-
 
 
     def on_initialize_gui(self):
         print('initialize gui')
 
-        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.get_client_world(), self.sides, self.canvas, self._map_handler.statuses)
+        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.get_client_world(), self.sides, self.canvas)
         self.gui_handler.initialize(self.config)
         self.canvas.apply_actions()
 
@@ -49,7 +47,7 @@ class GameManager(RealtimeGameHandler):
     def on_process_cycle(self):
         print("\n")
         print('cycle %i' % (self.current_cycle, ))
-        
+
         self._gui_events = self._logic_handler.process(self.current_cycle)
         print("\n")
         for i in self._gui_events:
