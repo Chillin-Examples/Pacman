@@ -46,7 +46,6 @@ class GuiHandler():
         self._game_status.draw_statuses()
 
 
-
     def _config(self, config):
 
         self._status_size = config['statuses_width']
@@ -110,10 +109,10 @@ class GuiHandler():
                                         angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
-                                        
+
             self._ghosts_ref[ghost.id] = ghost_img_ref
 
-       
+
     def update(self, events, current_cycle):
 
         self.freeze_mode = False
@@ -170,9 +169,7 @@ class GuiHandler():
             # Status
             self._game_status.update_statuses(current_cycle)
             if event.type == GuiEventType.UpdateHealth:
-                print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                 self._game_status.update_health()
-
 
 
     def _get_canvas_position(self, x, y, center_origin=True):

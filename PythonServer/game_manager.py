@@ -37,7 +37,6 @@ class GameManager(RealtimeGameHandler):
         self._logic_handler.initialize()
 
 
-
     def on_initialize_gui(self):
         print('initialize gui')
 
@@ -49,7 +48,7 @@ class GameManager(RealtimeGameHandler):
     def on_process_cycle(self):
         print("\n")
         print('cycle %i' % (self.current_cycle, ))
-        
+
         self._gui_events = self._logic_handler.process(self.current_cycle)
         print("\n")
         for i in self._gui_events:

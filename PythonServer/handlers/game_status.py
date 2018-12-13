@@ -15,7 +15,7 @@ class GameStatus:
         self._canvas = canvas
         self._sides = sides
         self._world = world
-    
+
     def initialize(self):
 
         self._statuses = {
@@ -59,16 +59,10 @@ class GameStatus:
 
 
     def update_statuses(self, current_cycle):
-
         self._canvas.edit_text(self._statuses['cycle_ref'], 'Cycle: ' + str(current_cycle))
-
         for side in self._sides:
             self._canvas.edit_text(self._statuses['scores_' + side], text=str(self._world.scores[side]))
 
+
     def update_health(self):
-        print "########################################################"
-        print self._world.pacman.health
-        print "########################################################"
-
         self._canvas.edit_text(self._statuses['health_pacman'], str(self._world.pacman.health))
-
