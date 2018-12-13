@@ -35,5 +35,13 @@ class AI(RealtimeAI):
             # self.send_command(ChangePacmanDirection(direction=direction))
 
         if self.my_side == 'Ghost':
+            # direction = random.choice([
+            #     ECommandDirection.Up,
+            #     ECommandDirection.Right,
+            #     ECommandDirection.Down,
+            #     ECommandDirection.Left
+            # ])
+            # self.send_command(ChangeGhostDirection(direction=direction, id=0))
+            # self.send_command(ChangeGhostDirection(direction=direction, id=1))
             self.send_command(ChangeGhostDirection(direction=ECommandDirection.Up, id=0))
             self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=1))
