@@ -11,6 +11,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ECommandDirection
 from gui_events import GuiEventType
+from handlers import game_status
 
 
 class GuiHandler():
@@ -38,6 +39,11 @@ class GuiHandler():
         self._config(config)
         self._draw_board()
         self._draw_players()
+
+        self._game_status = game_status.GameStatus(config, self._canvas, self._sides)
+        self._game_status.initialize(self._world)
+
+
 
     def _config(self, config):
 
