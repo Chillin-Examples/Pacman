@@ -15,7 +15,7 @@ class LogicHandler ():
         self._last_cycle_commands = {side: {} for side in self._sides}
         self._num_of_seeds = 0
         self._is_pacman_dead = False
-        self._freeze_mode = False
+        self._giant_form = False
         self._is_ghost_dead = {ghost.id : False for ghost in self.world.ghosts} 
 
 
@@ -86,12 +86,12 @@ class LogicHandler ():
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
-            if hit_ghosts_id!=[] and not self._freeze_mode:
+            if hit_ghosts_id!=[] and not self._giant_form:
                 print("hite adiiii")
                 self._is_pacman_dead = True
                 self._kill_pacman()
 
-            elif hit_ghosts_id!=[] and self._freeze_mode:
+            elif hit_ghosts_id!=[] and self._giant_form:
                 print("hite freeziii")
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
@@ -109,14 +109,14 @@ class LogicHandler ():
                     self._eat_super_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
 
-            if self._freeze_mode:
+            if self._giant_form:
                 self.world.pacman.giant_form_remaining_time -= 1
                 # print("timeeeeeeeeeeeee")
                 print(self.world.pacman.giant_form_remaining_time)
                 # Check if giant form is ended(TODO: make it a method)
                 if self.world.pacman.giant_form_remaining_time == 0:
                     gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
-                    self._freeze_mode = False
+                    self._giant_form = False
 
         return gui_events
 
@@ -230,15 +230,15 @@ class LogicHandler ():
 
     def deactive(self):
         print("deactive")
-        self._freeze_mode = False
+        self._giant_form = False
 
 
     def freeze_mode(self):
                 
         self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
-        self._freeze_mode = True
+        self._giant_form = True
 
-# TODO(Zahra): Move to pacman 
+
     def _get_position(self, side_name, id):
 
         if side_name == "Pacman":
