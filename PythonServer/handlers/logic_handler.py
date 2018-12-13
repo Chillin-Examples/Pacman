@@ -68,10 +68,10 @@ class LogicHandler ():
         # Freeze mode Recover ghosts
         for ghost in self.world.ghosts:
             if self._is_ghost_dead[ghost.id] == True:
-                gui_events.extend(self.recover_ghost(ghost.id))
+                gui_events.extend(self _recover_ghost(ghost.id))
 
         if self._is_pacman_dead:
-            gui_events.extend(self.recover_agents())
+            gui_events.extend(self._recover_agents())
 
         else:
             # Change direction
@@ -210,7 +210,7 @@ class LogicHandler ():
     def _can_be_eaten_as_a_super_food(self, position):
         return self.world.board[(position[1])][(position[0])] == ECell.SuperFood
 
-    # TODO: move to pacman
+
     def _eat_food(self, position):
 
         # Add score to pacman
@@ -262,7 +262,7 @@ class LogicHandler ():
         self.world.scores["Pacman"] += self.world.constants.ghost_death_score
 
 
-    def recover_ghost(self, ghost_id):
+    def _recover_ghost(self, ghost_id):
         self.world.ghosts[ghost_id].x = self.world.ghosts[ghost_id].init_x
         self.world.ghosts[ghost_id].y = self.world.ghosts[ghost_id].init_y
         self.world.ghosts[ghost_id].direction = self.world.ghosts[ghost_id].init_direction
@@ -273,7 +273,7 @@ class LogicHandler ():
             ]
 
 
-    def recover_agents(self):
+    def _recover_agents(self):
         gui_events = []
 
         # Pacman reset
@@ -285,11 +285,7 @@ class LogicHandler ():
 
         # Ghosts reset
         for ghost in self.world.ghosts:
-            ghost.x = ghost.init_x
-            ghost.y = ghost.init_y
-            ghost.direction = ghost.init_direction
-            gui_events.append(GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost.id, direction=ghost.direction))
-            gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=(ghost.x, ghost.y), id=ghost.id))
+            gui_events.extend(self._recover_ghost(ghost.id))
 
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
