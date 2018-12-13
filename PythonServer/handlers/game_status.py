@@ -9,14 +9,14 @@
 
 class Game_status():
 
-    def __init__():
-        pass
+    def __init__(self, config, canvas):
+        self._config = config
+        self._canvas = canvas
     
     def initialize(self):
-        pass
+
 
     def draw_statuses(self):
-        pass
+
 
     def update_statuses(self):
-        pass
