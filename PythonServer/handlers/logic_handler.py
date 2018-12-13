@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# project imports
 from ks.commands import ECommandDirection
 from extensions import world
 from gui_events import *
@@ -49,6 +50,7 @@ class LogicHandler ():
             if command.id < 0 or command.id >= ( len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
+
         if side_name == "Ghost":
             if not self._is_ghost_dead[command.id]:
                 self._last_cycle_commands[side_name][command.id] = command
@@ -57,15 +59,15 @@ class LogicHandler ():
             self._last_cycle_commands[side_name][None] = command
 
 
-
     def clear_commands(self):
         self._last_cycle_commands = {side: {} for side in self._sides}
+
 
     def process(self, current_cycle):
 
         gui_events = []
 
-        # Freeze mode Recover ghosts
+        # Giant form Recover ghosts
         for ghost in self.world.ghosts:
             if self._is_ghost_dead[ghost.id] == True:
                 gui_events.extend(self._recover_ghost(ghost.id))
@@ -87,19 +89,17 @@ class LogicHandler ():
             # Kill pacman
             hit_ghosts_id = self._check_hit()
             if hit_ghosts_id!=[] and not self._giant_form:
-                print("hite adiiii")
                 self._is_pacman_dead = True
                 self._kill_pacman()
 
             elif hit_ghosts_id!=[] and self._giant_form:
-                print("hite freeziii")
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
                     self._kill_ghost()
 
             # Eat food
             if not self._is_pacman_dead:
-                pacman_position = self._get_position("Pacman", None)
+                pacman_position = self.world.pacman.get_position()
                 # foood
                 if self._can_be_eaten_as_a_food(pacman_position):
                     self._eat_food(pacman_position)
@@ -111,7 +111,6 @@ class LogicHandler ():
 
             if self._giant_form:
                 self.world.pacman.giant_form_remaining_time -= 1
-                # print("timeeeeeeeeeeeee")
                 print(self.world.pacman.giant_form_remaining_time)
                 # Check if giant form is ended(TODO: make it a method)
                 if self.world.pacman.giant_form_remaining_time == 0:
@@ -139,7 +138,7 @@ class LogicHandler ():
         for ghost in self.world.ghosts:
     
             # Check same cell 
-            if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
+            if self.world.ghosts[ghost.id].get_position() == self.world.pacman.get_position():
                 hit_ghosts_id.append(ghost.id)
 
             # Check moving toward each other
@@ -163,7 +162,7 @@ class LogicHandler ():
     def _move_pacman(self):
 
         gui_events = []
-        pacman_position = self._get_position("Pacman", None)
+        pacman_position = self.world.pacman.get_position()
         new_position = (self._convert_dir_to_pos[self.world.pacman.direction.name][0]+pacman_position[0],
                          self._convert_dir_to_pos[self.world.pacman.direction.name][1]+pacman_position[1])
 
@@ -181,7 +180,7 @@ class LogicHandler ():
         gui_events = []
 
         for ghost in self.world.ghosts:
-            ghost_position = self._get_position("Ghost", ghost.id)
+            ghost_position = self.world.ghosts[ghost.id].get_position()
             print(ghost_position)
             new_position = (self._convert_dir_to_pos[ghost.direction.name][0]+ghost_position[0],
                          self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
@@ -237,15 +236,6 @@ class LogicHandler ():
         self._giant_form = True
 
 
-    def _get_position(self, side_name, id):
-
-        if side_name == "Pacman":
-            return (self.world.pacman.x, self.world.pacman.y)
-
-        elif side_name == "Ghost":
-            return (self.world.ghosts[id].x, self.world.ghosts[id].y)
-
-
     def get_client_world(self):
         return self.world
 
@@ -279,7 +269,7 @@ class LogicHandler ():
         self.world.pacman.y = self.world.pacman.init_y
         self.world.pacman.direction = self.world.pacman.init_direction
         gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.world.pacman.direction))
-        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self._get_position("Pacman", None)))
+        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self.world.pacman.get_position()))
 
         # Ghosts reset
         for ghost in self.world.ghosts:
