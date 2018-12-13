@@ -40,8 +40,10 @@ class GuiHandler():
         self._draw_board()
         self._draw_players()
 
-        self._game_status = game_status.GameStatus(config, self._canvas, self._sides)
-        self._game_status.initialize(self._world)
+        # Status
+        self._game_status = game_status.GameStatus(config, self._canvas, self._sides, self._world)
+        self._game_status.initialize()
+        self._game_status.draw_statuses()
 
 
 
