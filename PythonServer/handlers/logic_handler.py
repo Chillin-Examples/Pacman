@@ -68,7 +68,7 @@ class LogicHandler ():
         # Freeze mode Recover ghosts
         for ghost in self.world.ghosts:
             if self._is_ghost_dead[ghost.id] == True:
-                gui_events.extend(self _recover_ghost(ghost.id))
+                gui_events.extend(self._recover_ghost(ghost.id))
 
         if self._is_pacman_dead:
             gui_events.extend(self._recover_agents())
@@ -166,10 +166,8 @@ class LogicHandler ():
         pacman_position = self._get_position("Pacman", None)
         new_position = (self._convert_dir_to_pos[self.world.pacman.direction.name][0]+pacman_position[0],
                          self._convert_dir_to_pos[self.world.pacman.direction.name][1]+pacman_position[1])
-        print(pacman_position)
-        print(new_position)
+
         if self._can_move(new_position):
-            # print("pacman can move")
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
             gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=new_position))
