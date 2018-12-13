@@ -115,4 +115,3 @@ class MapHandler:
         self.statuses['step_y'] = self.statuses['cell_size'] + 20
         self.statuses['calc_y'] = lambda id: self.statuses['start_y'] + self.statuses['step_y'] * id
         self.statuses['health_offset_x'] = self.statuses['font_size'] + 5
-           
