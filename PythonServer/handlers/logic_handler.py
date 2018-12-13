@@ -14,7 +14,8 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        self._num_of_seeds = 0
+        self._num_of_foods = 0
+        self._num_of_super_foods = 0
         self._is_pacman_dead = False
         self._giant_form = False
         self._is_ghost_dead = {ghost.id : False for ghost in self.world.ghosts} 
@@ -26,7 +27,9 @@ class LogicHandler ():
         for y in range(self.world.width):
             for x in range(self.world.height):
                 if self.world.board[y][x] == ECell.Food:
-                    self._num_of_seeds += 1
+                    self._num_of_foods += 1
+                elif self.world.board[y][x] == ECell.SuperFood:
+                    self._num_of_super_foods += 1
 
 
         self._convert_dir_to_pos = {
@@ -214,23 +217,22 @@ class LogicHandler ():
         self.world.scores["Pacman"] += self.world.constants.food_score
         # Change Food to Empty
         self.world.board[(position[1])][(position[0])] = ECell.Empty
-        # Decrease the number of seeds
-        self._num_of_seeds -= 1
+        # Decrease the number of foods
+        self._num_of_foods -= 1
 
 
     def _eat_super_food(self, position):
 
+        # Add score to pacman
         self.world.scores["Pacman"] += self.world.constants.super_food_score
+        # Change Food to Empty
         self.world.board[(position[1])][(position[0])] = ECell.Empty
-        self.freeze_mode()
+        # Decrease the number of super foods
+        self.world._num_of_super_foods -= 1
+        self.giant_form()
 
 
-    def deactive(self):
-        print("deactive")
-        self._giant_form = False
-
-
-    def freeze_mode(self):
+    def giant_form(self):
                 
         self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
         self._giant_form = True
@@ -292,7 +294,7 @@ class LogicHandler ():
         elif self.world.pacman.health == 0:
             end_game = True
         
-        elif self._num_of_seeds == 0:
+        elif self._num_of_foods == 0:
             end_game = True
 
         if end_game:
