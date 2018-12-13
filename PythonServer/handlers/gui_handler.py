@@ -167,12 +167,12 @@ class GuiHandler():
                                         
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
-
-
-            # kill-pacman
+            # Status
+            self._game_status.update_statuses(current_cycle)
             if event.type == GuiEventType.UpdateHealth:
-                print "aa"
-                # self._canvas.edit_text(self._statuses['health_pacman'], str(self._world.pacman.health))
+                print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                self._game_status.update_health()
+
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
