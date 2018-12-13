@@ -154,8 +154,8 @@ class GuiHandler():
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
             # Go to default mode
-            if self.freeze_mode and self._world.pacman.giant_form_remaining_time == 0:
-                for ghost in self._world.Ghosts:
+            if event.type == GuiEventType.EndGiantForm:
+                for ghost in self._world.ghosts:
                     self._canvas.delete_element(self._ghosts_ref[ghost.id])
                     ghost_angle = self._angle[ghost.direction.name]
                     canvas_pos = self._get_canvas_position(x=ghost.x, y=ghost.y)
