@@ -125,18 +125,18 @@ class GuiHandler():
                 self._canvas.edit_image(ref, pos['x'], pos['y'])
 
             # Change direction
-            if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
+            elif event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
                 ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
                 angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(ref, None, None, angle=angle, center_origin=True)
 
             # Remove food
-            if event.type == GuiEventType.EatFood:
+            elif event.type == GuiEventType.EatFood:
                 food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
 
             # Remove super food
-            if event.type == GuiEventType.EatSuperFood:
+            elif event.type == GuiEventType.EatSuperFood:
                 self.freeze_mode = True
                 # Remove food
                 super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
@@ -154,7 +154,7 @@ class GuiHandler():
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
             # Go to default mode
-            if event.type == GuiEventType.EndGiantForm:
+            elif event.type == GuiEventType.EndGiantForm:
                 for ghost in self._world.ghosts:
                     self._canvas.delete_element(self._ghosts_ref[ghost.id])
                     ghost_angle = self._angle[ghost.direction.name]
@@ -167,9 +167,9 @@ class GuiHandler():
                     self._ghosts_ref[ghost.id] = ghost_img_ref
 
             # Status
-            self._game_status.update_statuses(current_cycle)
-            if event.type == GuiEventType.UpdateHealth:
+            elif event.type == GuiEventType.UpdateHealth:
                 self._game_status.update_health()
+            self._game_status.update_statuses(current_cycle)
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
