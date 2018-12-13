@@ -228,7 +228,7 @@ class LogicHandler ():
         # Change Food to Empty
         self.world.board[(position[1])][(position[0])] = ECell.Empty
         # Decrease the number of super foods
-        self.world._num_of_super_foods -= 1
+        self._num_of_super_foods -= 1
         self.giant_form()
 
 
@@ -309,4 +309,4 @@ class LogicHandler ():
                     'Ghost': str(self.world.scores['Ghost'])
                     }
                 }
-        return winner, details
+        return end_game, winner, details

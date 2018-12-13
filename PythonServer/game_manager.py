@@ -49,14 +49,12 @@ class GameManager(RealtimeGameHandler):
         print('cycle %i' % (self.current_cycle, ))
 
         self._gui_events = self._logic_handler.process(self.current_cycle)
-        print("\n")
+
         for i in self._gui_events:
             print(i.__dict__)
-        print("\n")
-
-        # TODO(Zahra): boolean 
-        winner, details = self._logic_handler.check_end_game(self.current_cycle)
-        if winner != None or details != None:
+        
+        end_game, winner, details = self._logic_handler.check_end_game(self.current_cycle)
+        if end_game:
             self.end_game(winner_sidename=winner, details=details)
 
         self._logic_handler.clear_commands()
