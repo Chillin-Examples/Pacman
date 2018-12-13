@@ -72,11 +72,7 @@ class LogicHandler ():
 
         if self._giant_form:
             self.world.pacman.giant_form_remaining_time -= 1
-
-            # Check if giant form is ended(TODO: make it a method)
-            if self.world.pacman.giant_form_remaining_time == 0:
-                gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
-                self._giant_form = False
+            gui_events.extend(self._check_end_giant_form())
     
         # Giant form Recover ghosts
         for ghost in self.world.ghosts:
@@ -281,6 +277,14 @@ class LogicHandler ():
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
         self._is_pacman_dead = False
+        return gui_events
+
+
+    def _check_end_giant_form(self):
+        gui_events = []
+        if self.world.pacman.giant_form_remaining_time == 0:
+            self._giant_form = False
+            gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
         return gui_events
 
 
