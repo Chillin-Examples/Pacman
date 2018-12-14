@@ -25,7 +25,7 @@ class GameStatus:
         self._end_x = self._canvas.width
 
         self._logo_width = self._config['cell_size'] * self._config['statuses_width'] // 1000
-    
+
         self._mid_x_Pacman = (self._start_x + self._mid_x) // 2
         self._mid_x_Ghost = (self._mid_x + self._end_x) // 2
         self._start_y = 5 * (self._title_font_size + 10) + self._logo_width + 10

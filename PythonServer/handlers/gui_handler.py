@@ -115,7 +115,6 @@ class GuiHandler():
 
     def update(self, events, current_cycle):
 
-        self.freeze_mode = False
         for event in events:
 
             # Move
@@ -137,7 +136,6 @@ class GuiHandler():
 
             # Remove super food
             elif event.type == GuiEventType.EatSuperFood:
-                self.freeze_mode = True
                 # Remove food
                 super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(super_food_ref)
