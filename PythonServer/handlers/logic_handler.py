@@ -121,7 +121,7 @@ class LogicHandler ():
                 hit_ghosts_id.append(ghost.id)
 
             # Check moving toward each other
-            if self._check_toward_move(self.world.pacman, ghost) and self._check_adjacency(ghost):
+            elif self._check_toward_move(self.world.pacman, ghost) and self._check_adjacency(ghost):
                 hit_ghosts_id.append(ghost.id)
 
         return hit_ghosts_id
@@ -159,7 +159,7 @@ class LogicHandler ():
         for ghost in self.world.ghosts:
             new_position = ghost.calculate_new_position()
 
-            if self._can_move(new_position):
+            if self._can_move(new_position) and not self._is_ghost_dead[ghost.id]:
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
                 if not self._is_ghost_dead[ghost.id]:
