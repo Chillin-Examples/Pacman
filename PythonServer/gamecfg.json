@@ -41,7 +41,8 @@
 			"Food": "images/food.png",
 
 			"SuperFood": "images/superFood.png",
-			"FreezedGhost": "images/freezedGhost.png"
+			"FreezedGhost": "images/freezedGhost.png",
+			"FreezedPacman": "images/freezedPacman.png"
 		}
 	},
 
