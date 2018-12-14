@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.commands import ECommandDirection
 from extensions import world
 from gui_events import *
 from ks.models import World, ECell, EDirection
@@ -191,7 +190,6 @@ class LogicHandler ():
 
 
     def _kill_pacman(self):
-
         self.world.scores["Ghost"] += self.world.constants.pacman_death_score
         self.world.pacman.health -= 1
 

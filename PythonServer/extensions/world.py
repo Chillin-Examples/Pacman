@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.commands import ECommandDirection, ChangePacmanDirection, ChangeGhostDirection
+from ks.commands import ChangePacmanDirection, ChangeGhostDirection
 from ks.models import World, ECell, EDirection
 from gui_events import GuiEvent, GuiEventType
 
 
 def apply_command(self, side_name, command):
-
 
     if command.name() == ChangePacmanDirection.name():
 
@@ -70,8 +69,8 @@ def _check_dead_end(self, ghost_position, dir_to_go):
 
 def _get_new_position(self, position, direction):
     return(
-        self._convert_dir_to_pos[direction][0]+position[0],
-        self._convert_dir_to_pos[direction][1]+position[1]
+        self._convert_dir_to_pos[direction][0] + position[0],
+        self._convert_dir_to_pos[direction][1] + position[1]
     )
 
 
@@ -83,7 +82,7 @@ def _get_position(self, side_name, id):
 
 
 _convert_dir_to_pos = {
-        EDirection.Up.name:(0, -1),
+        EDirection.Up.name: (0, -1),
         EDirection.Down.name: (0, +1),
         EDirection.Right.name: (+1, 0),
         EDirection.Left.name: (-1, 0)

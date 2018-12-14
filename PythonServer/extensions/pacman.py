@@ -4,6 +4,7 @@
 from ks.models import Pacman, ECell
 from extensions.agent import get_position, calculate_new_position
 
+
 def change_direction(self, world, command):
     self.direction = command.direction
 
