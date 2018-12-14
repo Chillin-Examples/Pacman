@@ -97,7 +97,8 @@ class LogicHandler ():
                 pacman_position = self.world.pacman.get_position()
                 # Foood
                 if self._can_be_eaten_as_a_food(pacman_position):
-                    self._eat_food(pacman_position)
+                    self.world.pacman.eat_food(self.world)
+                    # self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
                 # SuperFood
                 if self._can_be_eaten_as_a_super_food(pacman_position):
@@ -188,14 +189,14 @@ class LogicHandler ():
         return self.world.board[(position[1])][(position[0])] == ECell.SuperFood
 
 
-    def _eat_food(self, position):
+    # def _eat_food(self, position):
 
-        # Add score to pacman
-        self.world.scores["Pacman"] += self.world.constants.food_score
-        # Change Food to Empty
-        self.world.board[(position[1])][(position[0])] = ECell.Empty
-        # Decrease the number of foods
-        self._num_of_foods -= 1
+    #     # Add score to pacman
+    #     self.world.scores["Pacman"] += self.world.constants.food_score
+    #     # Change Food to Empty
+    #     self.world.board[(position[1])][(position[0])] = ECell.Empty
+    #     # Decrease the number of foods
+    #     self._num_of_foods -= 1
 
 
     def _eat_super_food(self, position):
