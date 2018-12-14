@@ -107,15 +107,14 @@ class LogicHandler ():
             # Eat food
             if not self._is_pacman_dead:
                 pacman_position = self.world.pacman.get_position()
-                # foood
+                # Foood
                 if self._can_be_eaten_as_a_food(pacman_position):
                     self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
-                # super food
+                # SuperFood
                 if self._can_be_eaten_as_a_super_food(pacman_position):
                     self._eat_super_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
-
 
         return gui_events
 
@@ -163,8 +162,7 @@ class LogicHandler ():
 
         gui_events = []
         pacman_position = self.world.pacman.get_position()
-        new_position = (self._convert_dir_to_pos[self.world.pacman.direction.name][0]+pacman_position[0],
-                         self._convert_dir_to_pos[self.world.pacman.direction.name][1]+pacman_position[1])
+        new_position = self.world.pacman.calculate_new_position()
 
         if self._can_move(new_position):
             self.world.pacman.x = new_position[0]
@@ -181,17 +179,14 @@ class LogicHandler ():
 
         for ghost in self.world.ghosts:
             ghost_position = self.world.ghosts[ghost.id].get_position()
-            print(ghost_position)
-            new_position = (self._convert_dir_to_pos[ghost.direction.name][0]+ghost_position[0],
-                         self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
-            print(new_position)
+            new_position = ghost.calculate_new_position()
+
             if self._can_move(new_position):
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
                 if self._is_ghost_dead[ghost.id]==False:
                     print("ghost can move")
                     gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
-
 
         return gui_events
 
