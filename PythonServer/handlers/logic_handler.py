@@ -21,13 +21,6 @@ class LogicHandler ():
 
     def initialize(self):
 
-        # for y in range(self.world.width):
-        #     for x in range(self.world.height):
-        #         if self.world.board[y][x] == ECell.Food:
-        #             self._num_of_foods += 1
-        #         elif self.world.board[y][x] == ECell.SuperFood:
-        #             self._num_of_super_foods += 1
-
         self._opponent_direction = {
             EDirection.Up.name: EDirection.Down.name,
             EDirection.Down.name: EDirection.Up.name,
@@ -81,11 +74,11 @@ class LogicHandler ():
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
-            if hit_ghosts_id!=[] and not self._giant_form:
+            if hit_ghosts_id != [] and not self._giant_form:
                 self._is_pacman_dead = True
                 self._kill_pacman()
 
-            elif hit_ghosts_id!=[] and self._giant_form:
+            elif hit_ghosts_id != [] and self._giant_form:
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
                     self._kill_ghost()
@@ -93,10 +86,9 @@ class LogicHandler ():
             # Eat food
             if not self._is_pacman_dead:
                 pacman_position = self.world.pacman.get_position()
-                # Foood
+                # Food
                 if self._can_be_eaten_as_a_food(pacman_position):
                     self.world.pacman.eat_food(self.world)
-                    # self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
                 # SuperFood
                 if self._can_be_eaten_as_a_super_food(pacman_position):
@@ -189,9 +181,9 @@ class LogicHandler ():
 
 
     def giant_form(self):
-
-        self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
         self._giant_form = True
+        self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
+        
 
 
     def get_client_world(self):
@@ -216,7 +208,7 @@ class LogicHandler ():
         return [
             GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=self.world.ghosts[ghost_id].direction),
             GuiEvent(GuiEventType.MoveGhost, new_pos=(self.world.ghosts[ghost_id].x, self.world.ghosts[ghost_id].y), id=ghost_id)
-            ]
+        ]
 
 
     def _recover_agents(self):
