@@ -114,7 +114,6 @@ class GuiHandler():
 
 
     def update(self, events, current_cycle):
-
         for event in events:
 
             # Move
@@ -139,11 +138,11 @@ class GuiHandler():
                 # Remove food
                 super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(super_food_ref)
-                # Freeze pacman
+                # Pacman giant form
                 self._canvas.delete_element(self._pacman_img_ref)
                 pacman_angle = self._angle[self._world.pacman.direction.name]
                 canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y)
-                self._pacman_img_ref = self._canvas.create_image('FreezedPacman',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                self._pacman_img_ref = self._canvas.create_image('PacmanGiantForm',canvas_pos["x"], canvas_pos["y"], center_origin=True,
                                                     angle=pacman_angle,
                                                     scale_type=ScaleType.ScaleToWidth,
                                                     scale_value=self._cell_size)
