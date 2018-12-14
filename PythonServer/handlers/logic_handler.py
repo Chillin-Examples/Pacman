@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import threading 
-
+# project imports
 from ks.commands import ECommandDirection
 from extensions import world
 from gui_events import *
@@ -15,28 +14,21 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        self._num_of_seeds = 0
+        self._num_of_foods = 0
+        self._num_of_super_foods = 0
         self._is_pacman_dead = False
-        self._freeze_mode = False
-        self._is_ghost_dead = {ghost.id : False for ghost in self.world.ghosts} 
-        self._wait_cycle = {ghost.id : False for ghost in self.world.ghosts}
-    
-    def initialize(self):
+        self._giant_form = False
+        self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
 
-        self._is_pacman_dead = False
+
+    def initialize(self):
 
         for y in range(self.world.width):
             for x in range(self.world.height):
                 if self.world.board[y][x] == ECell.Food:
-                    self._num_of_seeds += 1
-
-
-        self._convert_dir_to_pos = {
-            EDirection.Up.name:(0, -1),
-            EDirection.Down.name: (0, +1),
-            EDirection.Right.name: (+1, 0),
-            EDirection.Left.name: (-1, 0)
-        }
+                    self._num_of_foods += 1
+                elif self.world.board[y][x] == ECell.SuperFood:
+                    self._num_of_super_foods += 1
 
         self._opponent_direction = {
             EDirection.Up.name: EDirection.Down.name,
@@ -49,85 +41,70 @@ class LogicHandler ():
     def store_command(self, side_name, command):
 
         if side_name == "Ghost":
-            if command.id < 0 or command.id >= ( len(self.world.ghosts)):
+            if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-        if side_name == "Ghost":
-            print("wait ")
-            print(self._wait_cycle[command.id])
-            if not self._wait_cycle[command.id]:
-                print("raft too in")
-                self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
-        elif side_name == "Pacman":
-            self._last_cycle_commands[side_name][command.id if side_name == 'Ghost' else None] = command
 
+        if side_name == "Ghost":
+            if not self._is_ghost_dead[command.id]:
+                self._last_cycle_commands[side_name][command.id] = command
+
+        elif side_name == "Pacman":
+            self._last_cycle_commands[side_name][None] = command
 
 
     def clear_commands(self):
         self._last_cycle_commands = {side: {} for side in self._sides}
 
+
     def process(self, current_cycle):
 
         gui_events = []
 
-        # Freeze mode Recover ghosts
+        if self._giant_form:
+            self.world.pacman.giant_form_remaining_time -= 1
+            gui_events.extend(self._check_end_giant_form())
+
+        # Giant form Recover ghosts
         for ghost in self.world.ghosts:
             if self._is_ghost_dead[ghost.id] == True:
-                gui_events.extend(self.recover_ghost(ghost.id))
+                gui_events.extend(self._recover_ghost(ghost.id))
 
         if self._is_pacman_dead:
-            gui_events.extend(self.recover_agents())
+            gui_events.extend(self._recover_agents())
 
         else:
             # Change direction
             for side_name in self._sides:
                 for command_id in self._last_cycle_commands[side_name]:
                     gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
-            # print("wait before move")
-            # print(self._wait_cycle)
+
             # Move
             gui_events.extend(self._move_pacman())
             gui_events.extend(self._move_ghosts())
-            
-            # Reset _wait_cycles
-            for ghost in self.world.ghosts:
-                if self._wait_cycle[ghost.id] == True:
-                    self._wait_cycle[ghost.id]= False
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
-            if hit_ghosts_id!=[] and not self._freeze_mode:
-                print("hite adiiii")
+            if hit_ghosts_id!=[] and not self._giant_form:
                 self._is_pacman_dead = True
                 self._kill_pacman()
 
-            elif hit_ghosts_id!=[] and self._freeze_mode:
-                print("hite freeziii")
+            elif hit_ghosts_id!=[] and self._giant_form:
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
-                    self._wait_cycle[ghost.id] = True
                     self._kill_ghost()
 
             # Eat food
             if not self._is_pacman_dead:
-                pacman_position = self._get_position("Pacman", None)
-                # foood
+                pacman_position = self.world.pacman.get_position()
+                # Foood
                 if self._can_be_eaten_as_a_food(pacman_position):
                     self._eat_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
-                # super food
+                # SuperFood
                 if self._can_be_eaten_as_a_super_food(pacman_position):
                     self._eat_super_food(pacman_position)
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
-
-            if self._freeze_mode:
-                self.world.pacman.giant_form_remaining_time -= 1
-                # print("timeeeeeeeeeeeee")
-                print(self.world.pacman.giant_form_remaining_time)
-                # Check if giant form is ended(TODO: make it a method)
-                if self.world.pacman.giant_form_remaining_time == 0:
-                    gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
-                    self._freeze_mode = False
 
         return gui_events
 
@@ -148,9 +125,9 @@ class LogicHandler ():
     def _check_hit(self):
         hit_ghosts_id = []
         for ghost in self.world.ghosts:
-    
-            # Check same cell 
-            if self._get_position("Ghost", ghost.id) == self._get_position("Pacman", None):
+
+            # Check same cell
+            if self.world.ghosts[ghost.id].get_position() == self.world.pacman.get_position():
                 hit_ghosts_id.append(ghost.id)
 
             # Check moving toward each other
@@ -174,21 +151,14 @@ class LogicHandler ():
     def _move_pacman(self):
 
         gui_events = []
-        pacman_position = self._get_position("Pacman", None)
-        new_position = (self._convert_dir_to_pos[self.world.pacman.direction.name][0]+pacman_position[0],
-                         self._convert_dir_to_pos[self.world.pacman.direction.name][1]+pacman_position[1])
-        print(pacman_position)
-        print(new_position)
-        if self._can_move(new_position):
-            # print("pacman can move")
+        new_position = self.world.pacman.calculate_new_position()
 
+        if self._can_move(new_position):
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
             gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=new_position))
             return gui_events
 
-        # else:
-        #     # print("pacman cannot move")
         return gui_events
 
 
@@ -197,21 +167,13 @@ class LogicHandler ():
         gui_events = []
 
         for ghost in self.world.ghosts:
-            ghost_position = self._get_position("Ghost", ghost.id)
-            print(ghost_position)
-            new_position = (self._convert_dir_to_pos[ghost.direction.name][0]+ghost_position[0],
-                         self._convert_dir_to_pos[ghost.direction.name][1]+ghost_position[1])
-            print(new_position)
+            new_position = ghost.calculate_new_position()
+
             if self._can_move(new_position):
-                # print("ghost can move")
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
-                if self._wait_cycle[ghost.id]==False:
-                    print("ghost can move")
+                if not self._is_ghost_dead[ghost.id]:
                     gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
-
-            # else:
-                # print("ghost cannot move")
 
         return gui_events
 
@@ -227,42 +189,32 @@ class LogicHandler ():
     def _can_be_eaten_as_a_super_food(self, position):
         return self.world.board[(position[1])][(position[0])] == ECell.SuperFood
 
-    # TODO: move to pacman
+
     def _eat_food(self, position):
 
         # Add score to pacman
         self.world.scores["Pacman"] += self.world.constants.food_score
         # Change Food to Empty
         self.world.board[(position[1])][(position[0])] = ECell.Empty
-        # Decrease the number of seeds
-        self._num_of_seeds -= 1
+        # Decrease the number of foods
+        self._num_of_foods -= 1
 
 
     def _eat_super_food(self, position):
 
+        # Add score to pacman
         self.world.scores["Pacman"] += self.world.constants.super_food_score
+        # Change Food to Empty
         self.world.board[(position[1])][(position[0])] = ECell.Empty
-        self.freeze_mode()
+        # Decrease the number of super foods
+        self._num_of_super_foods -= 1
+        self.giant_form()
 
 
-    def deactive(self):
-        print("deactive")
-        self._freeze_mode = False
+    def giant_form(self):
 
-
-    def freeze_mode(self):
-                
         self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
-        self._freeze_mode = True
-
-# TODO(Zahra): Move to pacman 
-    def _get_position(self, side_name, id):
-
-        if side_name == "Pacman":
-            return (self.world.pacman.x, self.world.pacman.y)
-
-        elif side_name == "Ghost":
-            return (self.world.ghosts[id].x, self.world.ghosts[id].y)
+        self._giant_form = True
 
 
     def get_client_world(self):
@@ -279,18 +231,18 @@ class LogicHandler ():
         self.world.scores["Pacman"] += self.world.constants.ghost_death_score
 
 
-    def recover_ghost(self, ghost_id):
+    def _recover_ghost(self, ghost_id):
         self.world.ghosts[ghost_id].x = self.world.ghosts[ghost_id].init_x
         self.world.ghosts[ghost_id].y = self.world.ghosts[ghost_id].init_y
         self.world.ghosts[ghost_id].direction = self.world.ghosts[ghost_id].init_direction
         self._is_ghost_dead[ghost_id] = False
         return [
             GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=self.world.ghosts[ghost_id].direction),
-            GuiEvent(GuiEventType.MoveGhost,new_pos=(self.world.ghosts[ghost_id].x,self.world.ghosts[ghost_id].y), id=ghost_id)
+            GuiEvent(GuiEventType.MoveGhost, new_pos=(self.world.ghosts[ghost_id].x, self.world.ghosts[ghost_id].y), id=ghost_id)
             ]
 
 
-    def recover_agents(self):
+    def _recover_agents(self):
         gui_events = []
 
         # Pacman reset
@@ -298,19 +250,23 @@ class LogicHandler ():
         self.world.pacman.y = self.world.pacman.init_y
         self.world.pacman.direction = self.world.pacman.init_direction
         gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.world.pacman.direction))
-        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self._get_position("Pacman", None)))
+        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self.world.pacman.get_position()))
 
         # Ghosts reset
         for ghost in self.world.ghosts:
-            ghost.x = ghost.init_x
-            ghost.y = ghost.init_y
-            ghost.direction = ghost.init_direction
-            gui_events.append(GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost.id, direction=ghost.direction))
-            gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=(ghost.x, ghost.y), id=ghost.id))
+            gui_events.extend(self._recover_ghost(ghost.id))
 
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
         self._is_pacman_dead = False
+        return gui_events
+
+
+    def _check_end_giant_form(self):
+        gui_events = []
+        if self.world.pacman.giant_form_remaining_time == 0:
+            self._giant_form = False
+            gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
         return gui_events
 
 
@@ -319,25 +275,27 @@ class LogicHandler ():
         end_game = False
         winner = None
         details = None
-        if current_cycle >= self.world.constants.max_cycles - 1:
-            end_game = True
 
-        elif self.world.pacman.health == 0:
-            end_game = True
-        
-        elif self._num_of_seeds == 0:
-            end_game = True
+        if not self._giant_form:
+            if current_cycle >= self.world.constants.max_cycles - 1:
+                end_game = True
 
-        if end_game:
-            
-            if self.world.scores['Pacman'] > self.world.scores['Ghost']:
-                winner = 'Pacman'
-            elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
-                winner = 'Ghost'
-            details = {
-                'Scores': {
-                    'Pacman': str(self.world.scores['Pacman']),
-                    'Ghost': str(self.world.scores['Ghost'])
+            elif self.world.pacman.health == 0:
+                end_game = True
+
+            elif self._num_of_foods == 0 and self._num_of_super_foods == 0:
+                end_game = True
+
+            if end_game:
+
+                if self.world.scores['Pacman'] > self.world.scores['Ghost']:
+                    winner = 'Pacman'
+                elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
+                    winner = 'Ghost'
+                details = {
+                    'Scores': {
+                        'Pacman': str(self.world.scores['Pacman']),
+                        'Ghost': str(self.world.scores['Ghost'])
+                        }
                     }
-                }
-        return winner, details
+        return end_game, winner, details

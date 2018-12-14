@@ -2,19 +2,11 @@
 
 # python imports
 from __future__ import division
-import random
-import json
-import math
-from enum import Enum
 
 # chillin imports
 from chillin_server import RealtimeGameHandler
-from chillin_server.gui.canvas_elements import ScaleType
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
-from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
-from extensions import *
 from handlers import gui_handler, logic_handler, map_handler
 
 
@@ -45,18 +37,12 @@ class GameManager(RealtimeGameHandler):
 
 
     def on_process_cycle(self):
-        print("\n")
         print('cycle %i' % (self.current_cycle, ))
 
         self._gui_events = self._logic_handler.process(self.current_cycle)
-        print("\n")
-        for i in self._gui_events:
-            print(i.__dict__)
-        print("\n")
 
-        # TODO(Zahra): boolean 
-        winner, details = self._logic_handler.check_end_game(self.current_cycle)
-        if winner != None or details != None:
+        end_game, winner, details = self._logic_handler.check_end_game(self.current_cycle)
+        if end_game:
             self.end_game(winner_sidename=winner, details=details)
 
         self._logic_handler.clear_commands()

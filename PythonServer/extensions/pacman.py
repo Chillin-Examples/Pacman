@@ -2,7 +2,7 @@
 
 # project imports
 from ks.models import Pacman
-from extensions.agent import get_position
+from extensions.agent import get_position, calculate_new_position
 
 
 def change_direction(self, world, command):
@@ -11,3 +11,4 @@ def change_direction(self, world, command):
 
 Pacman.change_direction = change_direction
 Pacman.get_position = get_position
+Pacman.calculate_new_position = calculate_new_position
