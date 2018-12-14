@@ -14,8 +14,6 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        self._num_of_foods = 0
-        self._num_of_super_foods = 0
         self._is_pacman_dead = False
         self._giant_form = False
         self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
@@ -23,12 +21,12 @@ class LogicHandler ():
 
     def initialize(self):
 
-        for y in range(self.world.width):
-            for x in range(self.world.height):
-                if self.world.board[y][x] == ECell.Food:
-                    self._num_of_foods += 1
-                elif self.world.board[y][x] == ECell.SuperFood:
-                    self._num_of_super_foods += 1
+        # for y in range(self.world.width):
+        #     for x in range(self.world.height):
+        #         if self.world.board[y][x] == ECell.Food:
+        #             self._num_of_foods += 1
+        #         elif self.world.board[y][x] == ECell.SuperFood:
+        #             self._num_of_super_foods += 1
 
         self._opponent_direction = {
             EDirection.Up.name: EDirection.Down.name,
@@ -102,7 +100,8 @@ class LogicHandler ():
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
                 # SuperFood
                 if self._can_be_eaten_as_a_super_food(pacman_position):
-                    self._eat_super_food(pacman_position)
+                    self.world.pacman.eat_super_food(self.world)
+                    self.giant_form()
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
 
         return gui_events
@@ -189,27 +188,6 @@ class LogicHandler ():
         return self.world.board[(position[1])][(position[0])] == ECell.SuperFood
 
 
-    # def _eat_food(self, position):
-
-    #     # Add score to pacman
-    #     self.world.scores["Pacman"] += self.world.constants.food_score
-    #     # Change Food to Empty
-    #     self.world.board[(position[1])][(position[0])] = ECell.Empty
-    #     # Decrease the number of foods
-    #     self._num_of_foods -= 1
-
-
-    def _eat_super_food(self, position):
-
-        # Add score to pacman
-        self.world.scores["Pacman"] += self.world.constants.super_food_score
-        # Change Food to Empty
-        self.world.board[(position[1])][(position[0])] = ECell.Empty
-        # Decrease the number of super foods
-        self._num_of_super_foods -= 1
-        self.giant_form()
-
-
     def giant_form(self):
 
         self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
@@ -281,7 +259,7 @@ class LogicHandler ():
         elif self.world.pacman.health == 0 and not self._giant_form:
             end_game = True
 
-        elif self._num_of_foods == 0 and self._num_of_super_foods == 0 and not self._giant_form:
+        elif self.world.num_of_foods == 0 and self.world.num_of_super_foods == 0 and not self._giant_form:
             end_game = True
 
         if end_game:
