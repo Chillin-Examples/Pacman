@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.commands import ECommandDirection, ChangePacmanDirection, ChangeGhostDirection
+from ks.commands import ChangePacmanDirection, ChangeGhostDirection
 from ks.models import World, ECell, EDirection
 from gui_events import GuiEvent, GuiEventType
 
 
 def apply_command(self, side_name, command):
-
 
     if command.name() == ChangePacmanDirection.name():
 
@@ -15,7 +14,7 @@ def apply_command(self, side_name, command):
         new_position = self._get_new_position(pacman_position, command.direction.name)
 
         if self._pacman_can_change_direction(new_position):
-            self.pacman.change_direction(command)
+            self.pacman.change_direction(self, command)
             return [GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction)]
         else:
             return []
@@ -26,7 +25,7 @@ def apply_command(self, side_name, command):
         new_position = self._get_new_position(ghost_position, command.direction.name)
 
         if self._ghost_can_change_direction(new_position, ghost_position, command):
-            self.ghosts[command.id].change_direction(command)
+            self.ghosts[command.id].change_direction(self, command)
             return [GuiEvent(GuiEventType.ChangeGhostDirection, id=command.id, direction=self.ghosts[command.id].direction)]
         else:
             return []
@@ -37,7 +36,6 @@ def _pacman_can_change_direction(self, position):
 
 
 def _ghost_can_change_direction(self, new_position, current_position, command):
-
 
     if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
         # It's a wall
@@ -70,22 +68,21 @@ def _check_dead_end(self, ghost_position, dir_to_go):
 
 
 def _get_new_position(self, position, direction):
-
     return(
-        self._convert_dir_to_pos[direction][0]+position[0],
-        self._convert_dir_to_pos[direction][1]+position[1])
+        self._convert_dir_to_pos[direction][0] + position[0],
+        self._convert_dir_to_pos[direction][1] + position[1]
+    )
 
 
 def _get_position(self, side_name, id):
-
     if side_name == "Pacman":
         return (self.pacman.x, self.pacman.y)
-
     elif side_name == "Ghost":
         return (self.ghosts[id].x, self.ghosts[id].y)
 
+
 _convert_dir_to_pos = {
-        EDirection.Up.name:(0, -1),
+        EDirection.Up.name: (0, -1),
         EDirection.Down.name: (0, +1),
         EDirection.Right.name: (+1, 0),
         EDirection.Left.name: (-1, 0)

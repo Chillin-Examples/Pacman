@@ -12,6 +12,8 @@ class GuiEventType(Enum):
     ChangeGhostDirection = 3
     EatFood = 4
     UpdateHealth = 5
+    EatSuperFood = 6
+    EndGiantForm = 7
 
 
 class GuiEvent(object):

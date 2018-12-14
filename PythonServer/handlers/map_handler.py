@@ -24,8 +24,10 @@ class MapHandler:
                     world.board[y][x] = ECell.Empty
                 elif map_board[y][x] == 'f':
                     world.board[y][x] = ECell.Food
+                    world.num_of_foods += 1
                 elif map_board[y][x] == 's':
                     world.board[y][x] = ECell.SuperFood
+                    world.num_of_super_foods += 1
 
 
     def _fill_constants(self, world, constants_config):
@@ -79,7 +81,8 @@ class MapHandler:
         world = World()
         world.width = len(board[0])
         world.height = len(board)
-
+        world.num_of_foods = 0
+        world.num_of_super_foods = 0
         # Initialize scores
         world.scores = {side: 0 for side in self._sides}
         # board initialization
@@ -88,3 +91,4 @@ class MapHandler:
         self._fill_players(world, players_config)
 
         return world
+        

@@ -11,6 +11,7 @@ from chillin_server.gui.canvas_elements import ScaleType
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 from ks.commands import ECommandDirection
 from gui_events import GuiEventType
+from handlers import game_status
 
 
 class GuiHandler():
@@ -33,10 +34,16 @@ class GuiHandler():
 
         self._ghosts_ref = {}
         self._foods_ref = {}
+        self._super_foods_ref = {}
 
         self._config(config)
         self._draw_board()
         self._draw_players()
+
+        # Status
+        self._game_status = game_status.GameStatus(config, self._canvas, self._sides, self._world)
+        self._game_status.initialize()
+        self._game_status.draw_statuses()
 
 
     def _config(self, config):
@@ -79,8 +86,9 @@ class GuiHandler():
                     self._foods_ref[x, y] = food_img_ref
 
                 elif cell == ECell.SuperFood:
-                    self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
+                    super_food_img_ref = self._canvas.create_image('SuperFood', canvas_pos["x"], canvas_pos["y"], scale_type=ScaleType.ScaleToWidth,
                                               scale_value=self._cell_size)
+                    self._super_foods_ref[x, y] = super_food_img_ref
 
 
     def _draw_players(self):
@@ -101,12 +109,11 @@ class GuiHandler():
                                         angle=ghost_angle,
                                         scale_type=ScaleType.ScaleToWidth,
                                         scale_value=self._cell_size)
-                                        
+
             self._ghosts_ref[ghost.id] = ghost_img_ref
 
 
-    def update(self, events):
-
+    def update(self, events, current_cycle):
         for event in events:
 
             # Move
@@ -116,22 +123,44 @@ class GuiHandler():
                 self._canvas.edit_image(ref, pos['x'], pos['y'])
 
             # Change direction
-            if event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
+            elif event.type in [GuiEventType.ChangePacmanDirection, GuiEventType.ChangeGhostDirection]:
                 ref = self._pacman_img_ref if event.type == GuiEventType.ChangePacmanDirection else self._ghosts_ref[event.payload["id"]]
                 angle = self._angle[event.payload["direction"].name]
                 self._canvas.edit_image(ref, None, None, angle=angle, center_origin=True)
 
             # Remove food
-            if event.type == GuiEventType.EatFood:
-
+            elif event.type == GuiEventType.EatFood:
                 food_ref =  self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 self._canvas.delete_element(food_ref)
-            
-            # kill-pacman
-            if event.type == GuiEventType.UpdateHealth:
-                pass
-                # print event.payload['health']
 
+            # Remove super food
+            elif event.type == GuiEventType.EatSuperFood:
+                # Remove food
+                super_food_ref =  self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
+                self._canvas.delete_element(super_food_ref)
+                # Pacman giant form
+                self._canvas.delete_element(self._pacman_img_ref)
+                pacman_angle = self._angle[self._world.pacman.direction.name]
+                canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y)
+                self._pacman_img_ref = self._canvas.create_image('PacmanGiantForm',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                                    angle=pacman_angle,
+                                                    scale_type=ScaleType.ScaleToWidth,
+                                                    scale_value=self._cell_size)
+
+            # Go to default mode
+            elif event.type == GuiEventType.EndGiantForm:
+                self._canvas.delete_element(self._pacman_img_ref)
+                pacman_angle = self._angle[self._world.pacman.direction.name]
+                canvas_pos = self._get_canvas_position(x=self._world.pacman.x, y=self._world.pacman.y)
+                self._pacman_img_ref = self._canvas.create_image('Pacman',canvas_pos["x"], canvas_pos["y"], center_origin=True,
+                                                    angle=pacman_angle,
+                                                    scale_type=ScaleType.ScaleToWidth,
+                                                    scale_value=self._cell_size)
+
+            # Status
+            elif event.type == GuiEventType.UpdateHealth:
+                self._game_status.update_health()
+            self._game_status.update_statuses(current_cycle)
 
 
     def _get_canvas_position(self, x, y, center_origin=True):
