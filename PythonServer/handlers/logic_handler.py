@@ -44,8 +44,6 @@ class LogicHandler ():
             if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-
-        if side_name == "Ghost":
             if not self._is_ghost_dead[command.id]:
                 self._last_cycle_commands[side_name][command.id] = command
 
@@ -275,27 +273,26 @@ class LogicHandler ():
         end_game = False
         winner = None
         details = None
+        
+        if current_cycle >= self.world.constants.max_cycles - 1:
+            end_game = True
 
-        if not self._giant_form:
-            if current_cycle >= self.world.constants.max_cycles - 1:
-                end_game = True
+        elif self.world.pacman.health == 0 and not self._giant_form:
+            end_game = True
 
-            elif self.world.pacman.health == 0:
-                end_game = True
+        elif self._num_of_foods == 0 and self._num_of_super_foods == 0 and not self._giant_form:
+            end_game = True
 
-            elif self._num_of_foods == 0 and self._num_of_super_foods == 0:
-                end_game = True
+        if end_game:
 
-            if end_game:
-
-                if self.world.scores['Pacman'] > self.world.scores['Ghost']:
-                    winner = 'Pacman'
-                elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
-                    winner = 'Ghost'
-                details = {
-                    'Scores': {
-                        'Pacman': str(self.world.scores['Pacman']),
-                        'Ghost': str(self.world.scores['Ghost'])
-                        }
+            if self.world.scores['Pacman'] > self.world.scores['Ghost']:
+                winner = 'Pacman'
+            elif self.world.scores['Ghost'] > self.world.scores['Pacman']:
+                winner = 'Ghost'
+            details = {
+                'Scores': {
+                    'Pacman': str(self.world.scores['Pacman']),
+                    'Ghost': str(self.world.scores['Ghost'])
                     }
+                }
         return end_game, winner, details
