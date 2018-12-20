@@ -86,11 +86,11 @@ class LogicHandler ():
             if not self._is_pacman_dead:
                 pacman_position = self.world.pacman.get_position()
                 # Food
-                if self._can_be_eaten_as_a_food(pacman_position):
+                if self.world.pacman.can_eat_food(self.world, pacman_position):
                     self.world.pacman.eat_food(self.world)
                     gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
                 # SuperFood
-                if self._can_be_eaten_as_a_super_food(pacman_position):
+                if self.world.pacman.can_eat_super_food(self.world, pacman_position):
                     self.world.pacman.eat_super_food(self.world)
                     self.giant_form()
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
@@ -169,14 +169,6 @@ class LogicHandler ():
 
     def _can_move(self, position):
         return self.world.board[(position[1])][(position[0])] != ECell.Wall
-
-
-    def _can_be_eaten_as_a_food(self, position):
-        return self.world.board[(position[1])][(position[0])] == ECell.Food
-
-
-    def _can_be_eaten_as_a_super_food(self, position):
-        return self.world.board[(position[1])][(position[0])] == ECell.SuperFood
 
 
     def giant_form(self):

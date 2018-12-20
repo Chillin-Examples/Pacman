@@ -29,8 +29,18 @@ def eat_super_food(self, world):
     world.num_of_super_foods -= 1
 
 
+def can_eat_food(self, world, position):
+    return world.board[(position[1])][(position[0])] == ECell.Food
+
+
+def can_eat_super_food(self, world, position):
+    return world.board[(position[1])][(position[0])] == ECell.SuperFood
+
+
 Pacman.change_direction = change_direction
 Pacman.get_position = get_position
 Pacman.calculate_new_position = calculate_new_position
 Pacman.eat_food = eat_food
 Pacman.eat_super_food = eat_super_food
+Pacman.can_eat_food = can_eat_food
+Pacman.can_eat_super_food = can_eat_super_food
