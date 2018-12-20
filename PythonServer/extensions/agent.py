@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.models import EDirection
+from ks.models import EDirection, ECell
 
 def get_position(self):
     return (self.x, self.y)
@@ -18,3 +18,7 @@ def calculate_new_position(self):
 
     return(self._convert_dir_to_pos[self.direction.name][0] + self.x,
            self._convert_dir_to_pos[self.direction.name][1] + self.y)
+
+
+def can_move(self, world, position):
+    return world.board[(position[1])][(position[0])] != ECell.Wall

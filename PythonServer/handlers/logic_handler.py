@@ -142,7 +142,7 @@ class LogicHandler ():
         gui_events = []
         new_position = self.world.pacman.calculate_new_position()
 
-        if self._can_move(new_position):
+        if self.world.pacman.can_move(self.world, new_position):
             self.world.pacman.x = new_position[0]
             self.world.pacman.y = new_position[1]
             gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=new_position))
@@ -158,17 +158,13 @@ class LogicHandler ():
         for ghost in self.world.ghosts:
             new_position = ghost.calculate_new_position()
 
-            if self._can_move(new_position) and not self._is_ghost_dead[ghost.id]:
+            if ghost.can_move(self.world, new_position) and not self._is_ghost_dead[ghost.id]:
                 ghost.x = new_position[0]
                 ghost.y = new_position[1]
                 if not self._is_ghost_dead[ghost.id]:
                     gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
 
         return gui_events
-
-
-    def _can_move(self, position):
-        return self.world.board[(position[1])][(position[0])] != ECell.Wall
 
 
     def giant_form(self):

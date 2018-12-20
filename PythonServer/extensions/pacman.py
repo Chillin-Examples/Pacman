@@ -2,7 +2,7 @@
 
 # project imports
 from ks.models import Pacman, ECell
-from extensions.agent import get_position, calculate_new_position
+from extensions.agent import get_position, calculate_new_position, can_move
 
 
 def change_direction(self, world, command):
@@ -44,3 +44,4 @@ Pacman.eat_food = eat_food
 Pacman.eat_super_food = eat_super_food
 Pacman.can_eat_food = can_eat_food
 Pacman.can_eat_super_food = can_eat_super_food
+Pacman.can_move = can_move
