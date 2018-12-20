@@ -15,8 +15,9 @@ class LogicHandler ():
         self._last_cycle_commands = {side: {} for side in self._sides}
         self._is_pacman_dead = False
         self._giant_form = False
-        self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
-
+        # self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
+        for ghost in self.world.ghosts:
+            ghost.set_ghosts_status(ghost.id)
 
     def initialize(self):
 
@@ -34,8 +35,13 @@ class LogicHandler ():
             if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-            if not self._is_ghost_dead[command.id]:
-                self._last_cycle_commands[side_name][command.id] = command
+            for ghost in self.world.ghosts:
+                if ghost.id != command.id:
+                    continue    
+                if not ghost.is_dead[command.id]:
+                    self._last_cycle_commands[side_name][command.id] = command
+                    break
+
 
         elif side_name == "Pacman":
             self._last_cycle_commands[side_name][None] = command
@@ -55,7 +61,7 @@ class LogicHandler ():
 
         # Giant form Recover ghosts
         for ghost in self.world.ghosts:
-            if self._is_ghost_dead[ghost.id] == True:
+            if ghost.is_dead[ghost.id] == True:
                 gui_events.extend(self._recover_ghost(ghost.id))
 
         if self._is_pacman_dead:
@@ -68,8 +74,9 @@ class LogicHandler ():
                     gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
 
             # Move
-            gui_events.extend(self._move_pacman())
-            gui_events.extend(self._move_ghosts())
+            gui_events.extend(self.world.pacman.move(self.world))
+            for ghost in self.world.ghosts:
+                gui_events.extend(ghost.move(self.world, ghost))
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
@@ -79,7 +86,7 @@ class LogicHandler ():
 
             elif hit_ghosts_id != [] and self._giant_form:
                 for ghost_id in hit_ghosts_id:
-                    self._is_ghost_dead[ghost_id] = True
+                    ghost.is_dead[ghost_id] = True
                     self._kill_ghost()
 
             # Eat food
@@ -137,36 +144,6 @@ class LogicHandler ():
             return False
 
 
-    def _move_pacman(self):
-
-        gui_events = []
-        new_position = self.world.pacman.calculate_new_position()
-
-        if self.world.pacman.can_move(self.world, new_position):
-            self.world.pacman.x = new_position[0]
-            self.world.pacman.y = new_position[1]
-            gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=new_position))
-            return gui_events
-
-        return gui_events
-
-
-    def _move_ghosts(self):
-
-        gui_events = []
-
-        for ghost in self.world.ghosts:
-            new_position = ghost.calculate_new_position()
-
-            if ghost.can_move(self.world, new_position) and not self._is_ghost_dead[ghost.id]:
-                ghost.x = new_position[0]
-                ghost.y = new_position[1]
-                if not self._is_ghost_dead[ghost.id]:
-                    gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
-
-        return gui_events
-
-
     def giant_form(self):
         self._giant_form = True
         self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
@@ -190,7 +167,7 @@ class LogicHandler ():
         self.world.ghosts[ghost_id].x = self.world.ghosts[ghost_id].init_x
         self.world.ghosts[ghost_id].y = self.world.ghosts[ghost_id].init_y
         self.world.ghosts[ghost_id].direction = self.world.ghosts[ghost_id].init_direction
-        self._is_ghost_dead[ghost_id] = False
+        ghost.is_dead[ghost_id] = False
         return [
             GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=self.world.ghosts[ghost_id].direction),
             GuiEvent(GuiEventType.MoveGhost, new_pos=(self.world.ghosts[ghost_id].x, self.world.ghosts[ghost_id].y), id=ghost_id)
