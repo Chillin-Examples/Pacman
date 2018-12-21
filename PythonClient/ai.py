@@ -7,41 +7,27 @@ import random
 from chillin_client import RealtimeAI
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
-from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
+import simple_ai
+from ks.models import World
 
 
 class AI(RealtimeAI):
 
     def __init__(self, world):
         super(AI, self).__init__(world)
+        simple_ai.ai = self
 
 
     def initialize(self):
         print('initialize')
 
+        world = self.world
+        simple_ai.initialize()
+
 
     def decide(self):
         print('decide')
-        
-        if self.my_side == 'Pacman':
-            self.send_command(ChangePacmanDirection(direction=ECommandDirection.Down))
-            # direction = random.choice([
-            #     ECommandDirection.Up,
-            #     ECommandDirection.Right,
-            #     ECommandDirection.Down,
-            #     ECommandDirection.Left
-            # ])
-            # self.send_command(ChangePacmanDirection(direction=direction))
 
-        if self.my_side == 'Ghost':
-            # direction = random.choice([
-            #     ECommandDirection.Up,
-            #     ECommandDirection.Right,
-            #     ECommandDirection.Down,
-            #     ECommandDirection.Left
-            # ])
-            # self.send_command(ChangeGhostDirection(direction=direction, id=0))
-            # self.send_command(ChangeGhostDirection(direction=direction, id=1))
-            self.send_command(ChangeGhostDirection(direction=ECommandDirection.Up, id=0))
-            self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=1))
+        world = self.world
+        simple_ai.decide(self.my_side)
+        
