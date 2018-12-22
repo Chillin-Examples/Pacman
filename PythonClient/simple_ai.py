@@ -6,6 +6,7 @@ import random
 # project imports
 from ks.commands import ECommandDirection,ChangeGhostDirection,ChangePacmanDirection
 
+
 ai = None
 
 MOVE_DIR_UP = ECommandDirection.Up

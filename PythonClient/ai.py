@@ -34,5 +34,3 @@ class AI(RealtimeAI):
         simple_ai.decide(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
                              world.board, world.pacman, world.ghosts, world.constants,
                              self.my_side, self.current_cycle, self.cycle_duration)
-
-        
