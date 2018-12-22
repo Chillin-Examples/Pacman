@@ -4,10 +4,21 @@
 import random
 
 # project imports
-from ks.commands import ECommandDirection,ChangeGhostDirection,ChangePacmanDirection
+from ks.commands import ECommandDirection, ChangeGhostDirection, ChangePacmanDirection
+from ks.models import ECell, EDirection
 
 
 ai = None
+
+CELL_EMPTY = ECell.Empty
+CELL_FOOD = ECell.Food
+CELL_SUPERFOOD = ECell.SuperFood
+CELL_WALL = ECell.Wall
+
+DIR_UP = EDirection.Up
+DIR_RIGHT = EDirection.Right
+DIR_DOWN = EDirection.Down
+DIR_LEFT = EDirection.Left
 
 MOVE_DIR_UP = ECommandDirection.Up
 MOVE_DIR_RIGHT = ECommandDirection.Right
