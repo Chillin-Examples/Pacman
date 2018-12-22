@@ -13,11 +13,15 @@ MOVE_DIR_RIGHT = ECommandDirection.Right
 MOVE_DIR_DOWN = ECommandDirection.Down
 MOVE_DIR_LEFT = ECommandDirection.Left
 
-def initialize():
+def initialize(width, height, my_score, other_side,
+               board, pacman, ghosts, constants,
+               my_side, current_cycle, cycle_duration):
     pass
 
 
-def decide(my_side):
+def decide(width, height, my_score, other_side,
+           board, pacman, ghosts, constants,
+           my_side, current_cycle, cycle_duration):
 
     if my_side == 'Pacman':
         direction = random.choice([

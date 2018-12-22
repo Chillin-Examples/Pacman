@@ -22,12 +22,17 @@ class AI(RealtimeAI):
         print('initialize')
 
         world = self.world
-        simple_ai.initialize()
+        simple_ai.initialize(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
+                             world.board, world.pacman, world.ghosts, world.constants,
+                             self.my_side, self.current_cycle, self.cycle_duration)
 
 
     def decide(self):
         print('decide')
 
         world = self.world
-        simple_ai.decide(self.my_side)
+        simple_ai.decide(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
+                             world.board, world.pacman, world.ghosts, world.constants,
+                             self.my_side, self.current_cycle, self.cycle_duration)
+
         
