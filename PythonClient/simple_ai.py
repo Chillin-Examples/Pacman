@@ -20,38 +20,34 @@ DIR_RIGHT = EDirection.Right
 DIR_DOWN = EDirection.Down
 DIR_LEFT = EDirection.Left
 
-MOVE_DIR_UP = ECommandDirection.Up
-MOVE_DIR_RIGHT = ECommandDirection.Right
-MOVE_DIR_DOWN = ECommandDirection.Down
-MOVE_DIR_LEFT = ECommandDirection.Left
 
-def initialize(width, height, my_score, other_side,
+def initialize(width, height, my_score, other_score,
                board, pacman, ghosts, constants,
-               my_side, current_cycle, cycle_duration):
+               my_side, other_side, current_cycle, cycle_duration):
+
     pass
 
 
-def decide(width, height, my_score, other_side,
+def decide(width, height, my_score, other_score,
            board, pacman, ghosts, constants,
-           my_side, current_cycle, cycle_duration):
+           my_side, other_side, current_cycle, cycle_duration):
 
     if my_side == 'Pacman':
         move_pacman(random.choice([
-            MOVE_DIR_UP,
-            MOVE_DIR_RIGHT,
-            MOVE_DIR_DOWN,
-            MOVE_DIR_LEFT
+            DIR_UP,
+            DIR_RIGHT,
+            DIR_DOWN,
+            DIR_LEFT
         ]))
 
-    if my_side == 'Ghost':
+    elif my_side == 'Ghost':
         for ghost in ghosts:
             move_ghosts(ghost.id, random.choice([
-                        MOVE_DIR_UP,
-                        MOVE_DIR_RIGHT,
-                        MOVE_DIR_DOWN,
-                        MOVE_DIR_LEFT
+                        DIR_UP,
+                        DIR_RIGHT,
+                        DIR_DOWN,
+                        DIR_LEFT
                     ]))
-        
 
 
 def move_pacman(dir):
