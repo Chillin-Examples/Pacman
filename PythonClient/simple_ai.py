@@ -55,4 +55,4 @@ def move_pacman(dir):
 
 
 def move_ghosts(id, dir):
-    ai.send_command(ChangeGhostDirection(direction=dir, id=id))
+    ai.send_command(ChangeGhostDirection(id=id, direction=dir))
