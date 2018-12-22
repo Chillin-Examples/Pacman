@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 
 # python imports
+import random
 
 # project imports
 from ks.commands import ECommandDirection,ChangeGhostDirection,ChangePacmanDirection
 
 ai = None
 
+MOVE_DIR_UP = ECommandDirection.Up
+MOVE_DIR_RIGHT = ECommandDirection.Right
+MOVE_DIR_DOWN = ECommandDirection.Down
+MOVE_DIR_LEFT = ECommandDirection.Left
 
 def initialize():
     pass
@@ -15,25 +20,20 @@ def initialize():
 def decide(my_side):
 
     if my_side == 'Pacman':
-        print "BBBBBBBBBBBBBBBBBBBBBBB"
-        ai.send_command(ChangePacmanDirection(direction=ECommandDirection.Down))
-        # direction = random.choice([
-        #     ECommandDirection.Up,
-        #     ECommandDirection.Right,
-        #     ECommandDirection.Down,
-        #     ECommandDirection.Left
-        # ])
-        # self.send_command(ChangePacmanDirection(direction=direction))
-    print "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+        direction = random.choice([
+            MOVE_DIR_UP,
+            MOVE_DIR_RIGHT,
+            MOVE_DIR_DOWN,
+            MOVE_DIR_LEFT
+        ])
+        ai.send_command(ChangePacmanDirection(direction=direction))
+
     if my_side == 'Ghost':
-        print "AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        # direction = random.choice([
-        #     ECommandDirection.Up,
-        #     ECommandDirection.Right,
-        #     ECommandDirection.Down,
-        #     ECommandDirection.Left
-        # ])
-        # self.send_command(ChangeGhostDirection(direction=direction, id=0))
-        # self.send_command(ChangeGhostDirection(direction=direction, id=1))
-        ai.send_command(ChangeGhostDirection(direction=ECommandDirection.Up, id=0))
-        ai.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=1))
+        direction = random.choice([
+            ECommandDirection.Up,
+            ECommandDirection.Right,
+            MOVE_DIR_DOWN,
+            MOVE_DIR_LEFT
+        ])
+        ai.send_command(ChangeGhostDirection(direction=direction, id=0))
+        ai.send_command(ChangeGhostDirection(direction=direction, id=1))
