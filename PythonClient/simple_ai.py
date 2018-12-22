@@ -30,8 +30,8 @@ def decide(my_side):
 
     if my_side == 'Ghost':
         direction = random.choice([
-            ECommandDirection.Up,
-            ECommandDirection.Right,
+            MOVE_DIR_UP,
+            MOVE_DIR_RIGHT,
             MOVE_DIR_DOWN,
             MOVE_DIR_LEFT
         ])
