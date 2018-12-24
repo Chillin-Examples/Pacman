@@ -147,7 +147,6 @@ class LogicHandler ():
     def giant_form(self):
         self._giant_form = True
         self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
-        
 
 
     def get_client_world(self):
