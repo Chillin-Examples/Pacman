@@ -7,30 +7,41 @@ import random
 from chillin_client import RealtimeAI
 
 # project imports
-import simple_ai
-from ks.models import World
+from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+from ks.commands import ChangePacmanDirection, ChangeGhostDirection, ECommandDirection
 
 
 class AI(RealtimeAI):
 
     def __init__(self, world):
         super(AI, self).__init__(world)
-        simple_ai.ai = self
 
 
     def initialize(self):
         print('initialize')
 
-        world = self.world
-        simple_ai.initialize(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
-                             world.board, world.pacman, world.ghosts, world.constants,
-                             self.my_side, self.other_side, self.current_cycle, self.cycle_duration)
-
 
     def decide(self):
         print('decide')
+        
+        if self.my_side == 'Pacman':
+            # self.send_command(ChangePacmanDirection(direction=ECommandDirection.Down))
+            direction = random.choice([
+                ECommandDirection.Up,
+                ECommandDirection.Right,
+                ECommandDirection.Down,
+                ECommandDirection.Left
+            ])
+            self.send_command(ChangePacmanDirection(direction=direction))
 
-        world = self.world
-        simple_ai.decide(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
-                             world.board, world.pacman, world.ghosts, world.constants,
-                             self.my_side, self.other_side, self.current_cycle, self.cycle_duration)
+        if self.my_side == 'Ghost':
+            direction = random.choice([
+                ECommandDirection.Up,
+                ECommandDirection.Right,
+                ECommandDirection.Down,
+                ECommandDirection.Left
+            ])
+            self.send_command(ChangeGhostDirection(direction=direction, id=0))
+            self.send_command(ChangeGhostDirection(direction=direction, id=1))
+            # self.send_command(ChangeGhostDirection(direction=ECommandDirection.Up, id=0))
+            # self.send_command(ChangeGhostDirection(direction=ECommandDirection.Right, id=1))
