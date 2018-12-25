@@ -13,7 +13,7 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        self._is_pacman_dead = False
+        # self._is_pacman_dead = False
         # self._giant_form = False
         self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
         # for ghost in self.world.ghosts:
@@ -63,7 +63,7 @@ class LogicHandler ():
             if self._is_ghost_dead[ghost.id] == True:
                 gui_events.extend(ghost.recover_ghost(ghost.id, self.world, self._is_ghost_dead))
 
-        if self._is_pacman_dead:
+        if self.world.pacman._is_pacman_dead:
             gui_events.extend(self._recover_agents())
 
         else:
@@ -81,7 +81,7 @@ class LogicHandler ():
             hit_ghosts_id = self._check_hit()
             if hit_ghosts_id != [] and not self.world.pacman._giant_form:
                 for ghost in self.world.ghosts:
-                    self._is_pacman_dead = True
+                    self.world.pacman._is_pacman_dead = True
                     ghost.kill_pacman(self.world)
                     break
 
@@ -91,7 +91,7 @@ class LogicHandler ():
                     self.world.pacman.kill_ghost(self.world)
 
             # Eat food
-            if not self._is_pacman_dead:
+            if not self.world.pacman._is_pacman_dead:
                 pacman_position = self.world.pacman.get_position()
                 # Food
                 if self.world.pacman.can_eat_food(self.world, pacman_position):
@@ -179,7 +179,7 @@ class LogicHandler ():
 
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
-        self._is_pacman_dead = False
+        self.world.pacman._is_pacman_dead = False
         return gui_events
 
 

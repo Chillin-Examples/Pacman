@@ -81,6 +81,26 @@ def _get_position(self, side_name, id):
         return (self.ghosts[id].x, self.ghosts[id].y)
 
 
+def recover_agents(self, is_ghost_dead):
+    gui_events = []
+
+    # Pacman reset
+    self.pacman.x = self.pacman.init_x
+    self.pacman.y = self.pacman.init_y
+    self.pacman.direction = self.pacman.init_direction
+    gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction))
+    gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self.pacman.get_position()))
+
+    # Ghosts reset
+    for ghost in self.ghosts:
+        gui_events.extend(ghost.recover_ghost(ghost.id, self, is_ghost_dead))
+
+    # Update health
+    gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
+    self._is_pacman_dead = False
+    return gui_events
+
+
 _convert_dir_to_pos = {
         EDirection.Up.name: (0, -1),
         EDirection.Down.name: (0, +1),
@@ -104,3 +124,4 @@ World._get_position = _get_position
 World._get_new_position = _get_new_position
 World._convert_dir_to_pos = _convert_dir_to_pos
 World._calculate_forbidden_direction = _calculate_forbidden_direction
+World.recover_agents = recover_agents

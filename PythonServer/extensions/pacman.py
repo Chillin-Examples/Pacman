@@ -61,6 +61,7 @@ def giant_form(self, world):
     world.pacman.giant_form_remaining_time = world.constants.pacman_giant_form_duration
 
 _giant_form = False
+_is_pacman_dead = False
 
 Pacman.change_direction = change_direction
 Pacman.get_position = get_position
@@ -74,3 +75,4 @@ Pacman.move = move
 Pacman.kill_ghost = kill_ghost
 Pacman.giant_form = giant_form
 Pacman._giant_form = _giant_form
+Pacman._is_pacman_dead = _is_pacman_dead
