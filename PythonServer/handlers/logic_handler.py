@@ -61,7 +61,7 @@ class LogicHandler ():
         # Giant form Recover ghosts
         for ghost in self.world.ghosts:
             if self._is_ghost_dead[ghost.id] == True:
-                gui_events.extend(self._recover_ghost(ghost.id))
+                gui_events.extend(ghost.recover_ghost(ghost.id, self.world, self._is_ghost_dead))
 
         if self._is_pacman_dead:
             gui_events.extend(self._recover_agents())
@@ -161,17 +161,6 @@ class LogicHandler ():
         self.world.scores["Pacman"] += self.world.constants.ghost_death_score
 
 
-    def _recover_ghost(self, ghost_id):
-        self.world.ghosts[ghost_id].x = self.world.ghosts[ghost_id].init_x
-        self.world.ghosts[ghost_id].y = self.world.ghosts[ghost_id].init_y
-        self.world.ghosts[ghost_id].direction = self.world.ghosts[ghost_id].init_direction
-        self._is_ghost_dead[ghost_id] = False
-        return [
-            GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=self.world.ghosts[ghost_id].direction),
-            GuiEvent(GuiEventType.MoveGhost, new_pos=(self.world.ghosts[ghost_id].x, self.world.ghosts[ghost_id].y), id=ghost_id)
-        ]
-
-
     def _recover_agents(self):
         gui_events = []
 
@@ -184,7 +173,7 @@ class LogicHandler ():
 
         # Ghosts reset
         for ghost in self.world.ghosts:
-            gui_events.extend(self._recover_ghost(ghost.id))
+            gui_events.extend(ghost.recover_ghost(ghost.id, self.world, self._is_ghost_dead))
 
         # Update health
         gui_events.append(GuiEvent(GuiEventType.UpdateHealth))

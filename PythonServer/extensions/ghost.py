@@ -26,6 +26,15 @@ def move(self,world, ghost, is_ghost_dead):
     return gui_events
 
 
+def recover_ghost(self, ghost_id, world, is_ghost_dead):
+    world.ghosts[ghost_id].x = world.ghosts[ghost_id].init_x
+    world.ghosts[ghost_id].y = world.ghosts[ghost_id].init_y
+    world.ghosts[ghost_id].direction = world.ghosts[ghost_id].init_direction
+    is_ghost_dead[ghost_id] = False
+    return [
+        GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=world.ghosts[ghost_id].direction),
+        GuiEvent(GuiEventType.MoveGhost, new_pos=(world.ghosts[ghost_id].x, world.ghosts[ghost_id].y), id=ghost_id)
+    ]
 # def set_ghosts_status(self, ghost_id):
 #     self.is_dead = {ghost_id: False}
 
@@ -35,4 +44,5 @@ Ghost.get_position = get_position
 Ghost.calculate_new_position = calculate_new_position
 Ghost.can_move = can_move
 Ghost.move = move
+Ghost.recover_ghost = recover_ghost
 # Ghost.set_ghosts_status = set_ghosts_status
