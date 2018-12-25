@@ -88,7 +88,7 @@ class LogicHandler ():
             elif hit_ghosts_id != [] and self._giant_form:
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
-                    self._kill_ghost()
+                    self.world.pacman.kill_ghost(self.world)
 
             # Eat food
             if not self._is_pacman_dead:
@@ -159,8 +159,8 @@ class LogicHandler ():
     #     self.world.pacman.health -= 1
 
 
-    def _kill_ghost(self):
-        self.world.scores["Pacman"] += self.world.constants.ghost_death_score
+    # def _kill_ghost(self):
+    #     self.world.scores["Pacman"] += self.world.constants.ghost_death_score
 
 
     def _recover_agents(self):

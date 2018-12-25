@@ -52,6 +52,10 @@ def move(self, world):
     return gui_events
 
 
+def kill_ghost(self, world):
+    world.scores["Pacman"] += world.constants.ghost_death_score
+
+
 Pacman.change_direction = change_direction
 Pacman.get_position = get_position
 Pacman.calculate_new_position = calculate_new_position
@@ -61,3 +65,4 @@ Pacman.can_eat_food = can_eat_food
 Pacman.can_eat_super_food = can_eat_super_food
 Pacman.can_move = can_move
 Pacman.move = move
+Pacman.kill_ghost = kill_ghost
