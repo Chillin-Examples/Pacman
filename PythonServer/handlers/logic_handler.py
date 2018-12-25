@@ -80,8 +80,10 @@ class LogicHandler ():
             # Kill pacman
             hit_ghosts_id = self._check_hit()
             if hit_ghosts_id != [] and not self._giant_form:
-                self._is_pacman_dead = True
-                self._kill_pacman()
+                for ghost in self.world.ghosts:
+                    self._is_pacman_dead = True
+                    ghost.kill_pacman(self.world)
+                    break
 
             elif hit_ghosts_id != [] and self._giant_form:
                 for ghost_id in hit_ghosts_id:
@@ -152,9 +154,9 @@ class LogicHandler ():
         return self.world
 
 
-    def _kill_pacman(self):
-        self.world.scores["Ghost"] += self.world.constants.pacman_death_score
-        self.world.pacman.health -= 1
+    # def _kill_pacman(self):
+    #     self.world.scores["Ghost"] += self.world.constants.pacman_death_score
+    #     self.world.pacman.health -= 1
 
 
     def _kill_ghost(self):

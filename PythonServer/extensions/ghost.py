@@ -38,6 +38,10 @@ def recover_ghost(self, ghost_id, world, is_ghost_dead):
 # def set_ghosts_status(self, ghost_id):
 #     self.is_dead = {ghost_id: False}
 
+def kill_pacman(self, world):
+    world.scores["Ghost"] += world.constants.pacman_death_score
+    world.pacman.health -= 1
+
 
 Ghost.change_direction = change_direction
 Ghost.get_position = get_position
@@ -45,4 +49,5 @@ Ghost.calculate_new_position = calculate_new_position
 Ghost.can_move = can_move
 Ghost.move = move
 Ghost.recover_ghost = recover_ghost
+Ghost.kill_pacman = kill_pacman
 # Ghost.set_ghosts_status = set_ghosts_status
