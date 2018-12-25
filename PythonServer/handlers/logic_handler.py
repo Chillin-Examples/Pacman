@@ -14,7 +14,7 @@ class LogicHandler ():
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
         self._is_pacman_dead = False
-        self._giant_form = False
+        # self._giant_form = False
         self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
         # for ghost in self.world.ghosts:
         #     ghost.set_ghosts_status(ghost.id)
@@ -54,7 +54,7 @@ class LogicHandler ():
 
         gui_events = []
 
-        if self._giant_form:
+        if self.world.pacman._giant_form:
             self.world.pacman.giant_form_remaining_time -= 1
             gui_events.extend(self._check_end_giant_form())
 
@@ -79,13 +79,13 @@ class LogicHandler ():
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
-            if hit_ghosts_id != [] and not self._giant_form:
+            if hit_ghosts_id != [] and not self.world.pacman._giant_form:
                 for ghost in self.world.ghosts:
                     self._is_pacman_dead = True
                     ghost.kill_pacman(self.world)
                     break
 
-            elif hit_ghosts_id != [] and self._giant_form:
+            elif hit_ghosts_id != [] and self.world.pacman._giant_form:
                 for ghost_id in hit_ghosts_id:
                     self._is_ghost_dead[ghost_id] = True
                     self.world.pacman.kill_ghost(self.world)
@@ -100,7 +100,7 @@ class LogicHandler ():
                 # SuperFood
                 if self.world.pacman.can_eat_super_food(self.world, pacman_position):
                     self.world.pacman.eat_super_food(self.world)
-                    self.giant_form()
+                    self.world.pacman.giant_form(self.world)
                     gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
 
         return gui_events
@@ -145,9 +145,9 @@ class LogicHandler ():
             return False
 
 
-    def giant_form(self):
-        self._giant_form = True
-        self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
+    # def giant_form(self):
+    #     self._giant_form = True
+    #     self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
 
 
     def get_client_world(self):
@@ -186,7 +186,7 @@ class LogicHandler ():
     def _check_end_giant_form(self):
         gui_events = []
         if self.world.pacman.giant_form_remaining_time == 0:
-            self._giant_form = False
+            self.world.pacman._giant_form = False
             gui_events.append(GuiEvent(GuiEventType.EndGiantForm))
         return gui_events
 
@@ -200,10 +200,10 @@ class LogicHandler ():
         if current_cycle >= self.world.constants.max_cycles - 1:
             end_game = True
 
-        elif self.world.pacman.health == 0 and not self._giant_form:
+        elif self.world.pacman.health == 0 and not self.world.pacman._giant_form:
             end_game = True
 
-        elif self.world.num_of_foods == 0 and self.world.num_of_super_foods == 0 and not self._giant_form:
+        elif self.world.num_of_foods == 0 and self.world.num_of_super_foods == 0 and not self.world.pacman._giant_form:
             end_game = True
 
         if end_game:
