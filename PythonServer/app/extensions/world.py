@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.commands import ChangePacmanDirection, ChangeGhostDirection
-from ks.models import World, ECell, EDirection
-from gui_events import GuiEvent, GuiEventType
+from ..ks.commands import ChangePacmanDirection, ChangeGhostDirection
+from ..ks.models import World, ECell, EDirection
+from ..gui_events import GuiEvent, GuiEventType
 
 
 def apply_command(self, side_name, command):

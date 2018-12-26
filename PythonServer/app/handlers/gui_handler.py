@@ -8,10 +8,10 @@ import math
 from chillin_server.gui.canvas_elements import ScaleType
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
-from ks.commands import ECommandDirection
-from gui_events import GuiEventType
-from handlers import game_status
+from ..ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+from ..ks.commands import ECommandDirection
+from ..gui_events import GuiEventType
+from . import game_status
 
 
 class GuiHandler():

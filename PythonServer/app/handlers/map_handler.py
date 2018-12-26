@@ -4,7 +4,7 @@
 import json
 
 # project imports
-from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
+from ..ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
 
 
 class MapHandler:

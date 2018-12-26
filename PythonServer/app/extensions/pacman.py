@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.models import Pacman, ECell
-from extensions.agent import get_position, calculate_new_position, can_move
-from gui_events import GuiEvent, GuiEventType
+from ..ks.models import Pacman, ECell
+from ..extensions.agent import get_position, calculate_new_position, can_move
+from ..gui_events import GuiEvent, GuiEventType
 
 
 def change_direction(self, world, command):

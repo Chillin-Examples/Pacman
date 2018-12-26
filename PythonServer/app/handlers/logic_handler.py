@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from extensions import world
-from gui_events import *
-from ks.models import World, ECell, EDirection
+from ..extensions import world
+from ..gui_events import *
+from ..ks.models import World, ECell, EDirection
 
 
 class LogicHandler ():

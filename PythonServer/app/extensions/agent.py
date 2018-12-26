@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # project imports
-from ks.models import EDirection, ECell
+from ..ks.models import EDirection, ECell
 
 def get_position(self):
     return (self.x, self.y)
