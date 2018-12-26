@@ -35,9 +35,7 @@ class LogicHandler ():
             if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-            # for ghost in self.world.ghosts:
-            #     if ghost.id != command.id:
-            #         continue    
+
             if not self._is_ghost_dead[command.id]:
                 self._last_cycle_commands[side_name][command.id] = command
 
@@ -145,22 +143,8 @@ class LogicHandler ():
             return False
 
 
-    # def giant_form(self):
-    #     self._giant_form = True
-    #     self.world.pacman.giant_form_remaining_time = self.world.constants.pacman_giant_form_duration
-
-
     def get_client_world(self):
         return self.world
-
-
-    # def _kill_pacman(self):
-    #     self.world.scores["Ghost"] += self.world.constants.pacman_death_score
-    #     self.world.pacman.health -= 1
-
-
-    # def _kill_ghost(self):
-    #     self.world.scores["Pacman"] += self.world.constants.ghost_death_score
 
 
     def _recover_agents(self):
