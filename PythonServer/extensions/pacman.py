@@ -12,22 +12,28 @@ def change_direction(self, world, command):
 
 def eat_food(self, world):
 
+    gui_events = []
      # Add score to pacman
     world.scores["Pacman"] += world.constants.food_score
     # Change Food to Empty
     world.board[self.y][self.x] = ECell.Empty
     # Decrease the number of foods
     world.num_of_foods -= 1
+    gui_events.append(GuiEvent(GuiEventType.EatFood, position=(self.get_position())))
+    return gui_events
 
 
 def eat_super_food(self, world):
 
+    gui_events = []
     # Add score to pacman
     world.scores["Pacman"] += world.constants.super_food_score
     # Change Food to Empty
     world.board[self.y][self.x] = ECell.Empty
     # Decrease the number of super foods
     world.num_of_super_foods -= 1
+    gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(self.get_position())))
+    return gui_events
 
 
 def can_eat_food(self, world, position):

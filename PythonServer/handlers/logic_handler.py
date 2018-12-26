@@ -93,13 +93,11 @@ class LogicHandler ():
                 pacman_position = self.world.pacman.get_position()
                 # Food
                 if self.world.pacman.can_eat_food(self.world, pacman_position):
-                    self.world.pacman.eat_food(self.world)
-                    gui_events.append(GuiEvent(GuiEventType.EatFood, position=(pacman_position)))
+                    gui_events.extend(self.world.pacman.eat_food(self.world))
                 # SuperFood
                 if self.world.pacman.can_eat_super_food(self.world, pacman_position):
-                    self.world.pacman.eat_super_food(self.world)
+                    gui_events.extend(self.world.pacman.eat_super_food(self.world))
                     self.world.pacman.giant_form(self.world)
-                    gui_events.append(GuiEvent(GuiEventType.EatSuperFood, position=(pacman_position)))
 
         return gui_events
 
