@@ -35,8 +35,7 @@ def recover_ghost(self, ghost_id, world, is_ghost_dead):
         GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=world.ghosts[ghost_id].direction),
         GuiEvent(GuiEventType.MoveGhost, new_pos=(world.ghosts[ghost_id].x, world.ghosts[ghost_id].y), id=ghost_id)
     ]
-# def set_ghosts_status(self, ghost_id):
-#     self.is_dead = {ghost_id: False}
+
 
 def kill_pacman(self, world):
     world.scores["Ghost"] += world.constants.pacman_death_score
@@ -50,4 +49,3 @@ Ghost.can_move = can_move
 Ghost.move = move
 Ghost.recover_ghost = recover_ghost
 Ghost.kill_pacman = kill_pacman
-# Ghost.set_ghosts_status = set_ghosts_status

@@ -66,6 +66,7 @@ def giant_form(self, world):
     self._giant_form = True
     world.pacman.giant_form_remaining_time = world.constants.pacman_giant_form_duration
 
+#TODO: bring to map_handler
 _giant_form = False
 _is_pacman_dead = False
 

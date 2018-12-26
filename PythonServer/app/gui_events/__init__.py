@@ -4,7 +4,6 @@
 from enum import Enum
 
 
-# TODO: some other events are left
 class GuiEventType(Enum):    
     MovePacman = 0
     MoveGhost = 1

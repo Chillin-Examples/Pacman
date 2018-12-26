@@ -63,6 +63,6 @@
 		"": "my configs",
 		"cell_size": 150,
 		"statuses_width": 800,
-		"map": "maps/maze.json"
+		"map": "maps/map.json"
 	}
 }

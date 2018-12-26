@@ -58,7 +58,7 @@ class LogicHandler ():
                 gui_events.extend(ghost.recover_ghost(ghost.id, self.world, self._is_ghost_dead))
 
         if self.world.pacman._is_pacman_dead:
-            gui_events.extend(self._recover_agents())
+            gui_events.extend(self.world.recover_agents(self._is_ghost_dead))
 
         else:
             # Change direction
@@ -97,7 +97,7 @@ class LogicHandler ():
 
         return gui_events
 
-    # Move to World?
+
     def _check_toward_move(self, pacman, ghost):
 
         if ghost.direction.name == self._opponent_direction[pacman.direction.name]:
@@ -139,26 +139,6 @@ class LogicHandler ():
 
     def get_client_world(self):
         return self.world
-
-
-    def _recover_agents(self):
-        gui_events = []
-
-        # Pacman reset
-        self.world.pacman.x = self.world.pacman.init_x
-        self.world.pacman.y = self.world.pacman.init_y
-        self.world.pacman.direction = self.world.pacman.init_direction
-        gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.world.pacman.direction))
-        gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self.world.pacman.get_position()))
-
-        # Ghosts reset
-        for ghost in self.world.ghosts:
-            gui_events.extend(ghost.recover_ghost(ghost.id, self.world, self._is_ghost_dead))
-
-        # Update health
-        gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
-        self.world.pacman._is_pacman_dead = False
-        return gui_events
 
 
     def _check_end_giant_form(self):
