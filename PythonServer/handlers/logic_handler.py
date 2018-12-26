@@ -13,11 +13,7 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        # self._is_pacman_dead = False
-        # self._giant_form = False
         self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
-        # for ghost in self.world.ghosts:
-        #     ghost.set_ghosts_status(ghost.id)
 
     def initialize(self):
 
@@ -101,7 +97,7 @@ class LogicHandler ():
 
         return gui_events
 
-
+    # Move to World?
     def _check_toward_move(self, pacman, ghost):
 
         if ghost.direction.name == self._opponent_direction[pacman.direction.name]:
