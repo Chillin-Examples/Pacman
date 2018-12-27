@@ -23,34 +23,12 @@ def apply_command(self, side_name, command):
 
         ghost_position = self._get_position("Ghost", command.id)
         new_position = self._get_new_position(ghost_position, command.direction.name)
-        print(type(self.ghosts[command.id]))
-        print(self.ghosts[command.id])
-        print("**********\n")
+
         if self.ghosts[command.id].can_change_direction(new_position, ghost_position, command, self):
             self.ghosts[command.id].change_direction(self, command)
             return [GuiEvent(GuiEventType.ChangeGhostDirection, id=command.id, direction=self.ghosts[command.id].direction)]
         else:
             return []
-
-
-# def _ghost_can_change_direction(self, new_position, current_position, command):
-
-#     if self.board[(new_position[1])][(new_position[0])] == ECell.Wall:
-#         # It's a wall
-#         return False
-
-#     forbidden_direction = self._calculate_forbidden_direction[command.direction.name]
-#     if self.ghosts[command.id].direction.name != forbidden_direction:
-#         # Legal
-#         return True
-#     else:
-#         # Forbidden direction
-#         if self._check_dead_end(current_position, command.direction.name):
-#             # It's a dead-end
-#             return True
-#         else:
-#             # Forbidden but you have other choices
-#             return False
 
 
 def _check_dead_end(self, ghost_position, dir_to_go):
