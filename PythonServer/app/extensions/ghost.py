@@ -28,11 +28,7 @@ def recover_ghost(self, ghost_id, world):
     world.ghosts[ghost_id].x = world.ghosts[ghost_id].init_x
     world.ghosts[ghost_id].y = world.ghosts[ghost_id].init_y
     world.ghosts[ghost_id].direction = world.ghosts[ghost_id].init_direction
-    for ghost in world.ghosts:
-        if ghost.id == ghost_id:
-            ghost.is_dead = False
-        else:
-            continue
+    world.ghosts[ghost_id].is_dead = False
 
     return [
         GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=world.ghosts[ghost_id].direction),
