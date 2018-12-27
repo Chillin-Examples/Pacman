@@ -67,6 +67,10 @@ def giant_form(self, world):
     world.pacman.giant_form_remaining_time = world.constants.pacman_giant_form_duration
 
 
+def can_change_direction(self, position, world):
+    return world.board[(position[1])][(position[0])] != ECell.Wall
+
+
 Pacman.change_direction = change_direction
 Pacman.get_position = get_position
 Pacman.calculate_new_position = calculate_new_position
@@ -78,3 +82,4 @@ Pacman.can_move = can_move
 Pacman.move = move
 Pacman.kill_ghost = kill_ghost
 Pacman.giant_form = giant_form
+Pacman.can_change_direction = can_change_direction

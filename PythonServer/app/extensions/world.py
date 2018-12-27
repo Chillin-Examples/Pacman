@@ -13,7 +13,7 @@ def apply_command(self, side_name, command):
         pacman_position = self._get_position("Pacman", None)
         new_position = self._get_new_position(pacman_position, command.direction.name)
 
-        if self._pacman_can_change_direction(new_position):
+        if self.pacman.can_change_direction(new_position, self):
             self.pacman.change_direction(self, command)
             return [GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction)]
         else:
@@ -29,10 +29,6 @@ def apply_command(self, side_name, command):
             return [GuiEvent(GuiEventType.ChangeGhostDirection, id=command.id, direction=self.ghosts[command.id].direction)]
         else:
             return []
-
-# TODO :Bring to pacman
-def _pacman_can_change_direction(self, position):
-    return self.board[(position[1])][(position[0])] != ECell.Wall
 
 
 def _ghost_can_change_direction(self, new_position, current_position, command):
@@ -117,7 +113,7 @@ _calculate_forbidden_direction = {
 
 
 World.apply_command = apply_command
-World._pacman_can_change_direction = _pacman_can_change_direction
+# World._pacman_can_change_direction = _pacman_can_change_direction
 World._ghost_can_change_direction = _ghost_can_change_direction
 World._check_dead_end = _check_dead_end
 World._get_position = _get_position
