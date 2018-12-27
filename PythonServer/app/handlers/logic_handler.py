@@ -13,7 +13,6 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        # self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
 
     def initialize(self):
 
@@ -31,13 +30,8 @@ class LogicHandler ():
             if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-            for ghost in self.world.ghosts:
-                if ghost.id == command.id:
-                    if not ghost.is_dead:
-                        self._last_cycle_commands[side_name][command.id] = command
-                else:
-                    continue
-
+            if not self.world.ghosts[command.id].is_dead:
+                self._last_cycle_commands[side_name][command.id] = command
 
         elif side_name == "Pacman":
             self._last_cycle_commands[side_name][None] = command
@@ -84,10 +78,8 @@ class LogicHandler ():
 
             elif hit_ghosts_id != [] and self.world.pacman.is_giant_form:
                 for ghost_id in hit_ghosts_id:
-                    for ghost in self.world.ghosts:
-                        if ghost.id == ghost_id:
-                            ghost.is_dead = True
-                            self.world.pacman.kill_ghost(self.world)
+                    self.world.ghosts[ghost_id].is_dead = True
+                    self.world.pacman.kill_ghost(self.world)
 
             # Eat food
             if not self.world.pacman.is_dead:
