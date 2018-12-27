@@ -54,6 +54,8 @@ class MapHandler:
         pacman.init_direction = EDirection[pacman_config["direction"]]
         pacman.health = pacman_config["health"]
         pacman.giant_form_remaining_time = 0
+        pacman.is_dead = False
+        pacman.is_giant_form = False
         world.pacman = pacman
 
         # ghosts

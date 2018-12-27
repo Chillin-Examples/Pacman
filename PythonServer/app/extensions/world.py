@@ -97,7 +97,7 @@ def recover_agents(self, is_ghost_dead):
 
     # Update health
     gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
-    self.pacman._is_pacman_dead = False
+    self.pacman.is_dead = False
     return gui_events
 
 

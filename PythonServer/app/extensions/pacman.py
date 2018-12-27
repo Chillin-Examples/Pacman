@@ -63,12 +63,9 @@ def kill_ghost(self, world):
 
 
 def giant_form(self, world):
-    self._giant_form = True
+    self.is_giant_form = True
     world.pacman.giant_form_remaining_time = world.constants.pacman_giant_form_duration
 
-#TODO: bring to map_handler
-_giant_form = False
-_is_pacman_dead = False
 
 Pacman.change_direction = change_direction
 Pacman.get_position = get_position
@@ -81,5 +78,3 @@ Pacman.can_move = can_move
 Pacman.move = move
 Pacman.kill_ghost = kill_ghost
 Pacman.giant_form = giant_form
-Pacman._giant_form = _giant_form
-Pacman._is_pacman_dead = _is_pacman_dead
