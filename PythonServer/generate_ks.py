@@ -5,8 +5,10 @@ from koala_serializer import generate
 import sys
 from shutil import copyfile
 
-common_url = '/ks/commmands.ks'
-destination = ['../PythonClient'+common_url, '../PythonRandomClient'+common_url, '../CppClient/Game'+common_url]
+ks_reletive_dir = '/ks/commmands.ks'
+destination = ['../PythonClient' + ks_reletive_dir,
+               '../PythonRandomClient' + ks_reletive_dir,
+               '../CppClient/Game' + ks_reletive_dir]
 for dest in destination:
     copyfile('app/ks/commands.ks', dest)
 
