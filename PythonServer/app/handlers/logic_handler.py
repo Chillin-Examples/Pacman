@@ -13,7 +13,7 @@ class LogicHandler ():
         self._sides = sides
         self.world = world
         self._last_cycle_commands = {side: {} for side in self._sides}
-        self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
+        # self._is_ghost_dead = {ghost.id: False for ghost in self.world.ghosts}
 
     def initialize(self):
 
@@ -31,9 +31,12 @@ class LogicHandler ():
             if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-
-            if not self._is_ghost_dead[command.id]:
-                self._last_cycle_commands[side_name][command.id] = command
+            for ghost in self.world.ghosts:
+                if ghost.id == command.id:
+                    if not ghost.is_dead:
+                        self._last_cycle_commands[side_name][command.id] = command
+                else:
+                    continue
 
 
         elif side_name == "Pacman":
@@ -54,11 +57,11 @@ class LogicHandler ():
 
         # Giant form Recover ghosts
         for ghost in self.world.ghosts:
-            if self._is_ghost_dead[ghost.id] == True:
-                gui_events.extend(ghost.recover_ghost(ghost.id, self.world, self._is_ghost_dead))
+            if ghost.is_dead == True:
+                gui_events.extend(ghost.recover_ghost(ghost.id, self.world))
 
         if self.world.pacman.is_dead:
-            gui_events.extend(self.world.recover_agents(self._is_ghost_dead))
+            gui_events.extend(self.world.recover_agents())
 
         else:
             # Change direction
@@ -69,7 +72,7 @@ class LogicHandler ():
             # Move
             gui_events.extend(self.world.pacman.move(self.world))
             for ghost in self.world.ghosts:
-                gui_events.extend(ghost.move(self.world, ghost, self._is_ghost_dead))
+                gui_events.extend(ghost.move(self.world, ghost))
 
             # Kill pacman
             hit_ghosts_id = self._check_hit()
@@ -81,8 +84,10 @@ class LogicHandler ():
 
             elif hit_ghosts_id != [] and self.world.pacman.is_giant_form:
                 for ghost_id in hit_ghosts_id:
-                    self._is_ghost_dead[ghost_id] = True
-                    self.world.pacman.kill_ghost(self.world)
+                    for ghost in self.world.ghosts:
+                        if ghost.id == ghost_id:
+                            ghost.is_dead = True
+                            self.world.pacman.kill_ghost(self.world)
 
             # Eat food
             if not self.world.pacman.is_dead:

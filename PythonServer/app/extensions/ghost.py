@@ -10,27 +10,31 @@ def change_direction(self, world, command):
     self.direction = command.direction
 
 
-def move(self,world, ghost, is_ghost_dead):
+def move(self,world, ghost):
 
     gui_events = []
-
-   
     new_position = ghost.calculate_new_position()
 
-    if ghost.can_move(world, new_position) and not is_ghost_dead[ghost.id]:
+    if ghost.can_move(world, new_position) and not ghost.is_dead:
         ghost.x = new_position[0]
         ghost.y = new_position[1]
-        if not is_ghost_dead[ghost.id]:
+        if not ghost.is_dead:
             gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
 
     return gui_events
 
 
-def recover_ghost(self, ghost_id, world, is_ghost_dead):
+def recover_ghost(self, ghost_id, world):
     world.ghosts[ghost_id].x = world.ghosts[ghost_id].init_x
     world.ghosts[ghost_id].y = world.ghosts[ghost_id].init_y
     world.ghosts[ghost_id].direction = world.ghosts[ghost_id].init_direction
-    is_ghost_dead[ghost_id] = False
+    # is_ghost_dead[ghost_id] = False
+    for ghost in world.ghosts:
+        if ghost.id == ghost_id:
+            ghost.is_dead = False
+        else:
+            continue
+
     return [
         GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=world.ghosts[ghost_id].direction),
         GuiEvent(GuiEventType.MoveGhost, new_pos=(world.ghosts[ghost_id].x, world.ghosts[ghost_id].y), id=ghost_id)

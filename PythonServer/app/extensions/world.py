@@ -81,7 +81,7 @@ def _get_position(self, side_name, id):
         return (self.ghosts[id].x, self.ghosts[id].y)
 
 
-def recover_agents(self, is_ghost_dead):
+def recover_agents(self):
     gui_events = []
 
     # Pacman reset
@@ -93,7 +93,7 @@ def recover_agents(self, is_ghost_dead):
 
     # Ghosts reset
     for ghost in self.ghosts:
-        gui_events.extend(ghost.recover_ghost(ghost.id, self, is_ghost_dead))
+        gui_events.extend(ghost.recover_ghost(ghost.id, self))
 
     # Update health
     gui_events.append(GuiEvent(GuiEventType.UpdateHealth))

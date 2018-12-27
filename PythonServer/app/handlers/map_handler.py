@@ -69,6 +69,7 @@ class MapHandler:
             new_ghost.init_x = ghost_config["position"][0]
             new_ghost.init_y = ghost_config["position"][1]
             new_ghost.init_direction = EDirection[ghost_config["direction"]]
+            new_ghost.is_dead = False
             world.ghosts.append(new_ghost)
 
 
