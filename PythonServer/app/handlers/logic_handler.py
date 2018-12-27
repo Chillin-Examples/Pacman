@@ -71,10 +71,10 @@ class LogicHandler ():
             # Kill pacman
             hit_ghosts_id = self._check_hit()
             if hit_ghosts_id != [] and not self.world.pacman.is_giant_form:
-                for ghost in self.world.ghosts:
-                    self.world.pacman.is_dead = True
-                    ghost.kill_pacman(self.world)
-                    break
+                self.world.pacman.is_dead = True
+                # 0 is chosen in case of hitting more than one ghost
+                self.world.ghosts[hit_ghosts_id[0]].kill_pacman(self.world)
+
 
             elif hit_ghosts_id != [] and self.world.pacman.is_giant_form:
                 for ghost_id in hit_ghosts_id:
