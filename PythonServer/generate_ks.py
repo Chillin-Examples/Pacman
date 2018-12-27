@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from koala_serializer import generate
-import sys
 from shutil import copyfile
 
 ks_reletive_dir = '/ks/commmands.ks'
