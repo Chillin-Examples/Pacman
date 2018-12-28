@@ -4,12 +4,14 @@
 from koala_serializer import generate
 from shutil import copyfile
 
-ks_reletive_dir = '/ks/commmands.ks'
-destination = ['../PythonClient' + ks_reletive_dir,
-               '../PythonRandomClient' + ks_reletive_dir,
-               '../CppClient/Game' + ks_reletive_dir]
+commands_reletive_dir = '/ks/commmands.ks'
+models_reletive_dir = '/ks/models.ks'
+destination = ['../PythonClient',
+               '../PythonRandomClient',
+               '../CppClient/Game']
 for dest in destination:
-    copyfile('app/ks/commands.ks', dest)
+    copyfile('app/ks/commands.ks', dest + commands_reletive_dir)
+    copyfile('app/ks/models.ks', dest + models_reletive_dir)
 
 all_args = [('python', 'app/ks', 'snake_case'),
             ('python', '../PythonClient/ks', 'snake_case'),
