@@ -1,8 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from koala_serializer import generate
+# python imports
 from shutil import copyfile
+
+# chillin imports
+from koala_serializer import generate
+
 
 commands_reletive_dir = '/ks/commmands.ks'
 models_reletive_dir = '/ks/models.ks'
