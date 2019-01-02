@@ -8,7 +8,7 @@ from shutil import copyfile
 from koala_serializer import generate
 
 
-commands_reletive_dir = '/ks/commmands.ks'
+commands_reletive_dir = '/ks/commands.ks'
 models_reletive_dir = '/ks/models.ks'
 destination = ['../PythonClient',
                '../PythonRandomClient',
