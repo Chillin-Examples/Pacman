@@ -13,8 +13,7 @@
         "wwwwwwwwwww"
     ],
 
-    "players":{
-
+    "players": {
         "ghosts": [
             {
                 "position": [1, 9],
@@ -23,34 +22,30 @@
             {
                 "position": [6, 4],
                 "direction": "Right"
+            },
+            {
+                "position": [9, 1],
+                "direction": "Left"
+            },
+            {
+                "position": [9, 9],
+                "direction": "Up"
             }
         ],
-        
-        "pacman": 
-            {
-                "position": [1,1],
-                "direction": "Left",
-<<<<<<< HEAD
-                "health": 30
-=======
-                "health": 8
->>>>>>> features/159-refactor
-            }
+
+        "pacman": {
+            "position": [1, 1],
+            "direction": "Left",
+            "health": 8
+        }
     },
 
     "constants": {
         "food_score" : 2,
-<<<<<<< HEAD
         "super_food_score" : 5,
         "ghost_death_score" : 15,
         "pacman_death_score" : 20,
         "pacman_giant_form_duration" : 5,
-=======
-        "super_food_score": 5,
-        "ghost_death_score": 15,
-        "pacman_death_score": 20,
-        "pacman_giant_form_duration": 5,
->>>>>>> features/159-refactor
-        "max_cycles" : 200
+        "max_cycles" : 75
     }
 }

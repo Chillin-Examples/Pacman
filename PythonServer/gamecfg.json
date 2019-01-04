@@ -24,34 +24,10 @@
 		"save_replay": true,
 		"replay_dir": "replays",
 		"replay_filename": null,
-		"width": 1800,
-		"height": 1000,
-		"images": {
-
-			"Pacman": "images/pacman.png",
-			"Ghost": "images/ghost.png",
-
-<<<<<<< HEAD
-=======
-			"PacmanLogo": "images/pacmanLogo.png",
-			"GhostLogo": "images/ghostLogo.png",
-
->>>>>>> features/159-refactor
-			"Empty": "images/empty.png",
-			"RoundWall": "images/roundWall.png",
-			"InterWall": "images/interWall.png",
-
-			"Food": "images/food.png",
-<<<<<<< HEAD
-			"SuperFood": "images/superFood.png",
-			"FreezedGhost": "images/freezedGhost.png"
-		
-=======
-
-			"SuperFood": "images/superFood.png",
-			"FreezedGhost": "images/freezedGhost.png",
-			"PacmanGiantForm": "images/pacmanGiantForm.png"
->>>>>>> features/159-refactor
+		"cycle_duration": 0.5,
+		"side_colors": {
+			"Pacman": "#FFFF00",
+			"Ghost": "#FF0000"
 		}
 	},
 
@@ -70,12 +46,7 @@
 		"max_team_commands": 100,
 		"max_agent_commands": 100,
 		"": "my configs",
-		"cell_size": 150,
-		"statuses_width": 800,
-<<<<<<< HEAD
-		"map": "maps/map.json"
-=======
+		"cell_size": 1.125,
 		"map": "maps/maze.json"
->>>>>>> features/159-refactor
 	}
 }

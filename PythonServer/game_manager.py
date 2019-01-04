@@ -9,7 +9,7 @@ from enum import Enum
 
 # chillin imports
 from chillin_server import RealtimeGameHandler
-from chillin_server.gui.canvas_elements import ScaleType
+from chillin_server.gui.scene_actions import EndCycle
 
 # project imports
 from ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
@@ -40,9 +40,11 @@ class GameManager(RealtimeGameHandler):
     def on_initialize_gui(self):
         print('initialize gui')
 
-        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.get_client_world(), self.sides, self.canvas)
+        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.scene)
         self.gui_handler.initialize(self.config)
-        self.canvas.apply_actions()
+
+        self.scene.add_action(EndCycle())
+        self.scene.apply_actions()
 
 
     def on_process_cycle(self):
@@ -66,5 +68,7 @@ class GameManager(RealtimeGameHandler):
     def on_update_gui(self):
         print('update gui')
 
-        self.gui_handler.update(self._gui_events)
-        self.canvas.apply_actions()
+        self.gui_handler.update(self._gui_events, self.current_cycle)
+
+        self.scene.add_action(EndCycle())
+        self.scene.apply_actions()
