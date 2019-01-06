@@ -2,7 +2,7 @@
 	"general": {
 		"game_name": "Pacman",
 		"command_files": [
-			"ks/commands"
+			"app/ks/commands"
 		],
 		"allowed_teams": {},
 		"offline_mode": true,
@@ -31,14 +31,27 @@
 			"Pacman": "images/pacman.png",
 			"Ghost": "images/ghost.png",
 
+<<<<<<< HEAD
+=======
+			"PacmanLogo": "images/pacmanLogo.png",
+			"GhostLogo": "images/ghostLogo.png",
+
+>>>>>>> features/159-refactor
 			"Empty": "images/empty.png",
 			"RoundWall": "images/roundWall.png",
 			"InterWall": "images/interWall.png",
 
 			"Food": "images/food.png",
+<<<<<<< HEAD
 			"SuperFood": "images/superFood.png",
 			"FreezedGhost": "images/freezedGhost.png"
 		
+=======
+
+			"SuperFood": "images/superFood.png",
+			"FreezedGhost": "images/freezedGhost.png",
+			"PacmanGiantForm": "images/pacmanGiantForm.png"
+>>>>>>> features/159-refactor
 		}
 	},
 
@@ -59,6 +72,10 @@
 		"": "my configs",
 		"cell_size": 150,
 		"statuses_width": 800,
+<<<<<<< HEAD
 		"map": "maps/map.json"
+=======
+		"map": "maps/maze.json"
+>>>>>>> features/159-refactor
 	}
 }
