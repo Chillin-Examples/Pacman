@@ -5,8 +5,6 @@
 # chillin imports
 from chillin_server.gui.canvas_elements import ScaleType
 
-# project imports
-
 
 class GameStatus:
 

@@ -7,7 +7,7 @@ from __future__ import division
 from chillin_server import RealtimeGameHandler
 
 # project imports
-from handlers import gui_handler, logic_handler, map_handler
+from .handlers import gui_handler, logic_handler, map_handler
 
 
 class GameManager(RealtimeGameHandler):
