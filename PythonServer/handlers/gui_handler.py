@@ -47,6 +47,9 @@ class GuiHandler():
 
         self._eat_delay = 0.75
         self._ghost_eyes_ref = 'Eyes'
+        self._background_music_ref = self._rm.new()
+        self._wakawaka_music_ref = self._rm.new()
+        self._eating_food = False
 
         self._ghosts_ref = {}
         self._foods_ref = {}
@@ -54,6 +57,7 @@ class GuiHandler():
 
         self._config(config)
         self._init_camera()
+        self._init_sounds()
         self._draw_board()
         self._draw_players()
 
@@ -75,7 +79,34 @@ class GuiHandler():
             clear_flag = scene_actions.ECameraClearFlag.SolidColor,
             background_color = scene_actions.Vector4(x=0, y=19/255, z=48/255),
             is_orthographic = True,
-            orthographic_size = 9 # TODO: set based on map size
+            orthographic_size = self._world.height * self._cell_size / 2 + 2
+        ))
+
+
+    def _init_sounds(self):
+        # Background Music
+        self._scene.add_action(scene_actions.CreateBasicObject(
+            ref = self._background_music_ref,
+            type = scene_actions.EBasicObjectType.AudioSource
+        ))
+        self._scene.add_action(scene_actions.ChangeAudioSource(
+            ref = self._background_music_ref,
+            audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='siren'),
+            spatial_blend = 0,
+            play = True,
+            loop = True
+        ))
+
+        # wakawaka Music
+        self._scene.add_action(scene_actions.CreateBasicObject(
+            ref = self._wakawaka_music_ref,
+            type = scene_actions.EBasicObjectType.AudioSource
+        ))
+        self._scene.add_action(scene_actions.ChangeAudioSource(
+            ref = self._wakawaka_music_ref,
+            audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='wakawaka'),
+            spatial_blend = 0,
+            loop = True
         ))
 
 
@@ -258,9 +289,9 @@ class GuiHandler():
             ))
 
 
-    def update(self, events):
+    def update(self, events, current_cycle):
+        eat_food = False
 
-        self.freeze_mode = False
         for event in events:
 
             # Move
@@ -287,15 +318,14 @@ class GuiHandler():
 
             # Remove food
             elif event.type == GuiEventType.EatFood:
+                eat_food = True
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
                     ref = self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 ))
 
-            # Remove super food
-            if event.type == GuiEventType.EatSuperFood:
-                self.freeze_mode = True
-                # Remove food
+            elif event.type == GuiEventType.EatSuperFood:
+                # Remove super food
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
                     ref = self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
@@ -308,17 +338,60 @@ class GuiHandler():
                     state_name = 'PacmanSuper'
                 ))
 
-            # Go to default mode
+                # Change background music
+                self._scene.add_action(scene_actions.ChangeAudioSource(
+                    ref = self._background_music_ref,
+                    cycle = self._eat_delay,
+                    audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='intermission'),
+                    play = True
+                ))
+
             elif event.type == GuiEventType.EndGiantForm:
+                # Go to default mode
                 self._scene.add_action(scene_actions.ChangeAnimatorState(
                     ref = self._pacman_ref,
                     state_name = 'PacmanNormal'
                 ))
 
-            # Status
+                # Change background music
+                self._scene.add_action(scene_actions.ChangeAudioSource(
+                    ref = self._background_music_ref,
+                    audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='siren'),
+                    play = True
+                ))
+
             elif event.type == GuiEventType.UpdateHealth:
                 self._game_status.decrease_health()
-            self._game_status.update_statuses(current_cycle)
+                print 'update health'
+
+                # Stop background music for one cycle
+                self._scene.add_action(scene_actions.ChangeAudioSource(
+                    ref = self._background_music_ref,
+                    stop = True
+                ))
+                self._scene.add_action(scene_actions.ChangeAudioSource(
+                    ref = self._background_music_ref,
+                    cycle = 1,
+                    play = True
+                ))
+
+        # Status
+        self._game_status.update_statuses(current_cycle)
+
+        # eating sound
+        if eat_food and not self._eating_food:
+            self._scene.add_action(scene_actions.ChangeAudioSource(
+                ref = self._wakawaka_music_ref,
+                cycle = self._eat_delay,
+                play = True
+            ))
+        elif not eat_food and self._eating_food:
+            self._scene.add_action(scene_actions.ChangeAudioSource(
+                ref = self._wakawaka_music_ref,
+                play = False
+            ))
+
+        self._eating_food = eat_food
 
 
     def _get_scene_position(self, x, y):

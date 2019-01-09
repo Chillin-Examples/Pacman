@@ -1,22 +1,22 @@
 {
     "board": [
         "wwwwwwwwwww",
-        "weseffwesew",
-        "wseeffffeew",
-        "wfeeweeeeew",
-        "weeeweeeeew",
-        "weeewwweeew",
-        "weefffffeew",
-        "weeeeeeeeew",
-        "wewfffffeew",
-        "weweeeeesew",
+        "weffffwfsfw",
+        "wfffffffffw",
+        "wsffwfffffw",
+        "wfffwfsfffw",
+        "wfffwwwfffw",
+        "wfffffffffw",
+        "wfffffffffw",
+        "wfwfffffffw",
+        "wfwfffffsfw",
         "wwwwwwwwwww"
     ],
 
     "players": {
         "ghosts": [
             {
-                "position": [1, 9],
+                "position": [1, 5],
                 "direction": "Down"
             },
             {
@@ -42,10 +42,10 @@
 
     "constants": {
         "food_score" : 2,
-        "super_food_score" : 5,
-        "ghost_death_score" : 15,
-        "pacman_death_score" : 20,
-        "pacman_giant_form_duration" : 5,
-        "max_cycles" : 75
+        "super_food_score": 5,
+        "ghost_death_score": 15,
+        "pacman_death_score": 20,
+        "pacman_giant_form_duration": 15,
+        "max_cycles" : 100
     }
 }
