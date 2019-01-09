@@ -33,12 +33,12 @@ class AI(RealtimeAI):
             ])
             self.send_command(ChangePacmanDirection(direction=direction))
 
-        elif self.my_side == 'Ghost':
-            ghost_id = 0
-            direction = random.choice([
-                ECommandDirection.Up,
-                ECommandDirection.Right,
-                ECommandDirection.Down,
-                ECommandDirection.Left
-            ])
-            self.send_command(ChangeGhostDirection(id=ghost_id, direction=direction))
+        if self.my_side == 'Ghost':
+            for ghost in self.world.ghosts:
+                direction = random.choice([
+                    ECommandDirection.Up,
+                    ECommandDirection.Right,
+                    ECommandDirection.Down,
+                    ECommandDirection.Left
+                ])
+                self.send_command(ChangeGhostDirection(direction=direction, id=ghost.id))
