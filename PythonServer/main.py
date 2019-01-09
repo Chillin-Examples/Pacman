@@ -9,11 +9,7 @@ import sys
 from chillin_server import GameServer, Config
 
 # project imports
-<<<<<<< HEAD
-from game_manager import GameManager
-=======
 from app.game_manager import GameManager
->>>>>>> features/159-refactor
 
 
 config_path = os.path.join(
