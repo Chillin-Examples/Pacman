@@ -290,6 +290,20 @@ class GuiHandler():
             ))
 
 
+    def _change_background_music(self, music, cycle = None):
+        self._scene.add_action(scene_actions.ChangeAudioSource(
+            ref = self._background_music_ref,
+            cycle = cycle,
+            stop = True
+        ))
+        self._scene.add_action(scene_actions.ChangeAudioSource(
+            ref = self._background_music_ref,
+            cycle = cycle,
+            audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name=music),
+            play = True
+        ))
+
+
     def update(self, events, current_cycle):
         eat_food = False
 
@@ -326,6 +340,7 @@ class GuiHandler():
                 ))
 
             elif event.type == GuiEventType.EatSuperFood:
+                eat_food = True
                 # Remove super food
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
@@ -339,13 +354,7 @@ class GuiHandler():
                     state_name = 'PacmanSuper'
                 ))
 
-                # Change background music
-                self._scene.add_action(scene_actions.ChangeAudioSource(
-                    ref = self._background_music_ref,
-                    cycle = self._eat_delay,
-                    audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='intermission'),
-                    play = True
-                ))
+                self._change_background_music('intermission', self._eat_delay)
 
             elif event.type == GuiEventType.EndGiantForm:
                 # Go to default mode
@@ -354,12 +363,7 @@ class GuiHandler():
                     state_name = 'PacmanNormal'
                 ))
 
-                # Change background music
-                self._scene.add_action(scene_actions.ChangeAudioSource(
-                    ref = self._background_music_ref,
-                    audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='siren'),
-                    play = True
-                ))
+                self._change_background_music('siren')
 
             elif event.type == GuiEventType.UpdateHealth:
                 self._game_status.decrease_health()
