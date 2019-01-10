@@ -19,7 +19,8 @@ class GameStatus:
         self._top_panel_ref = self._rm.new()
         self._health_panel_ref = 'HealthPanel'
         self._health_images_ref = []
-        self._cycle_ref = 'CycleText'
+        self._cycle_text_ref = 'CycleText'
+        self._super_text_ref = 'SuperText'
         self._pacman_score_ref = 'ScorePanel/PacmanScore'
         self._ghost_score_ref = 'ScorePanel/GhostScore'
 
@@ -66,14 +67,24 @@ class GameStatus:
             text = str(self._world.scores['Ghost'])
         ))
 
+
     def _set_cycle_text(self, cycle):
         self._scene.add_action(scene_actions.ChangeText(
             ref = self._top_panel_ref,
-            child_ref = self._cycle_ref,
+            child_ref = self._cycle_text_ref,
             text = 'Cycle: {:d}/{:d}'.format(cycle, self._world.constants.max_cycles)
         ))
+
 
     def decrease_health(self):
         self._scene.add_action(scene_actions.Destroy(
             ref = self._health_images_ref.pop()
+        ))
+
+
+    def update_super_text(self, remaining_time):
+        self._scene.add_action(scene_actions.ChangeText(
+            ref = self._top_panel_ref,
+            child_ref = self._super_text_ref,
+            text = str(remaining_time) if remaining_time > 0 else ''
         ))

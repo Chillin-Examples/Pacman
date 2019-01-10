@@ -57,39 +57,35 @@ def _get_position(self, side_name, id):
         return (self.ghosts[id].x, self.ghosts[id].y)
 
 
-def recover_agents(self):
+def on_pacman_dead(self):
     gui_events = []
 
-    # Pacman reset
-    self.pacman.x = self.pacman.init_x
-    self.pacman.y = self.pacman.init_y
-    self.pacman.direction = self.pacman.init_direction
-    gui_events.append(GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.pacman.direction))
-    gui_events.append(GuiEvent(GuiEventType.MovePacman, new_pos=self.pacman.get_position()))
+    # It must be before recovers
+    gui_events.append(GuiEvent(GuiEventType.KillPacman))
 
-    # Ghosts reset
+    # Recover Pacman
+    gui_events.extend(self.pacman.recover(self))
+
+    # Recover Ghosts
     for ghost in self.ghosts:
-        gui_events.extend(ghost.recover_ghost(ghost.id, self))
+        gui_events.extend(ghost.recover(self))
 
-    # Update health
-    gui_events.append(GuiEvent(GuiEventType.UpdateHealth))
-    self.pacman.is_dead = False
     return gui_events
 
 
 _convert_dir_to_pos = {
-        EDirection.Up.name: (0, -1),
-        EDirection.Down.name: (0, +1),
-        EDirection.Right.name: (+1, 0),
-        EDirection.Left.name: (-1, 0)
-    }
+    EDirection.Up.name: (0, -1),
+    EDirection.Down.name: (0, +1),
+    EDirection.Right.name: (+1, 0),
+    EDirection.Left.name: (-1, 0)
+}
 
 _calculate_forbidden_direction = {
-        EDirection.Up.name: EDirection.Down.name,
-        EDirection.Down.name: EDirection.Up.name,
-        EDirection.Right.name: EDirection.Left.name,
-        EDirection.Left.name: EDirection.Right.name
-    }
+    EDirection.Up.name: EDirection.Down.name,
+    EDirection.Down.name: EDirection.Up.name,
+    EDirection.Right.name: EDirection.Left.name,
+    EDirection.Left.name: EDirection.Right.name
+}
 
 
 World.apply_command = apply_command
@@ -98,4 +94,4 @@ World._get_position = _get_position
 World._get_new_position = _get_new_position
 World._convert_dir_to_pos = _convert_dir_to_pos
 World._calculate_forbidden_direction = _calculate_forbidden_direction
-World.recover_agents = recover_agents
+World.on_pacman_dead = on_pacman_dead

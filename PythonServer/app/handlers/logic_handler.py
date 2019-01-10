@@ -30,8 +30,7 @@ class LogicHandler ():
             if command.id < 0 or command.id >= (len(self.world.ghosts)):
                 print('Invalid id in command: %s %i' % (side_name, command.id))
                 return
-            if not self.world.ghosts[command.id].is_dead:
-                self._last_cycle_commands[side_name][command.id] = command
+            self._last_cycle_commands[side_name][command.id] = command
 
         elif side_name == "Pacman":
             self._last_cycle_commands[side_name][None] = command
@@ -47,50 +46,46 @@ class LogicHandler ():
 
         if self.world.pacman.is_giant_form:
             self.world.pacman.giant_form_remaining_time -= 1
+            gui_events.append(GuiEvent(GuiEventType.UpdateGiantFormStatus, remaining=self.world.pacman.giant_form_remaining_time))
             gui_events.extend(self._check_end_giant_form())
 
-        # Giant form Recover ghosts
+        # Change direction
+        for side_name in self._sides:
+            for command_id in self._last_cycle_commands[side_name]:
+                gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
+
+        # Move
+        gui_events.extend(self.world.pacman.move(self.world))
         for ghost in self.world.ghosts:
-            if ghost.is_dead == True:
-                gui_events.extend(ghost.recover_ghost(ghost.id, self.world))
+            gui_events.extend(ghost.move(self.world, ghost))
 
-        if self.world.pacman.is_dead:
-            gui_events.extend(self.world.recover_agents())
-
-        else:
-            # Change direction
-            for side_name in self._sides:
-                for command_id in self._last_cycle_commands[side_name]:
-                    gui_events.extend(self.world.apply_command(side_name, self._last_cycle_commands[side_name][command_id]))
-
-            # Move
-            gui_events.extend(self.world.pacman.move(self.world))
-            for ghost in self.world.ghosts:
-                gui_events.extend(ghost.move(self.world, ghost))
-
+        # Check hits
+        is_pacman_dead = False
+        hit_ghosts_id = self._check_hit()
+        if len(hit_ghosts_id) > 0 and not self.world.pacman.is_giant_form:
             # Kill pacman
-            hit_ghosts_id = self._check_hit()
-            if hit_ghosts_id != [] and not self.world.pacman.is_giant_form:
-                self.world.pacman.is_dead = True
-                # 0 is chosen in case of hitting more than one ghost
-                self.world.ghosts[hit_ghosts_id[0]].kill_pacman(self.world)
+            is_pacman_dead = True
+            # 0 is chosen in case of hitting more than one ghost
+            self.world.ghosts[hit_ghosts_id[0]].kill_pacman(self.world)
+            gui_events.extend(self.world.on_pacman_dead())
 
+        elif len(hit_ghosts_id) > 0 and self.world.pacman.is_giant_form:
+            # Kill ghosts
+            for ghost_id in hit_ghosts_id:
+                self.world.pacman.kill_ghost(self.world)
+                gui_events.append(GuiEvent(GuiEventType.KillGhost, id=ghost_id))
+                gui_events.extend(self.world.ghosts[ghost_id].recover(self.world))
 
-            elif hit_ghosts_id != [] and self.world.pacman.is_giant_form:
-                for ghost_id in hit_ghosts_id:
-                    self.world.ghosts[ghost_id].is_dead = True
-                    self.world.pacman.kill_ghost(self.world)
-
-            # Eat food
-            if not self.world.pacman.is_dead:
-                pacman_position = self.world.pacman.get_position()
-                # Food
-                if self.world.pacman.can_eat_food(self.world, pacman_position):
-                    gui_events.extend(self.world.pacman.eat_food(self.world))
-                # SuperFood
-                if self.world.pacman.can_eat_super_food(self.world, pacman_position):
-                    gui_events.extend(self.world.pacman.eat_super_food(self.world))
-                    self.world.pacman.giant_form(self.world)
+        # Eat food
+        if not is_pacman_dead:
+            pacman_position = self.world.pacman.get_position()
+            # Food
+            if self.world.pacman.can_eat_food(self.world, pacman_position):
+                gui_events.extend(self.world.pacman.eat_food(self.world))
+            # SuperFood
+            if self.world.pacman.can_eat_super_food(self.world, pacman_position):
+                gui_events.extend(self.world.pacman.eat_super_food(self.world))
+                self.world.pacman.giant_form(self.world)
 
         return gui_events
 

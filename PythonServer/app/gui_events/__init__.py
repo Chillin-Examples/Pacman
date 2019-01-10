@@ -10,9 +10,11 @@ class GuiEventType(Enum):
     ChangePacmanDirection = 2
     ChangeGhostDirection = 3
     EatFood = 4
-    UpdateHealth = 5
+    KillPacman = 5
     EatSuperFood = 6
     EndGiantForm = 7
+    UpdateGiantFormStatus = 8
+    KillGhost = 9
 
 
 class GuiEvent(object):

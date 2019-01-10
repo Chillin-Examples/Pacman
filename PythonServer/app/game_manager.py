@@ -5,7 +5,6 @@ from __future__ import division
 
 # chillin imports
 from chillin_server import RealtimeGameHandler
-from chillin_server.gui.scene_actions import EndCycle
 
 # project imports
 from .handlers import gui_handler, logic_handler, map_handler
@@ -35,7 +34,6 @@ class GameManager(RealtimeGameHandler):
         self.gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.scene)
         self.gui_handler.initialize(self.config)
 
-        self.scene.add_action(EndCycle())
         self.scene.apply_actions()
 
 
@@ -62,5 +60,4 @@ class GameManager(RealtimeGameHandler):
 
         self.gui_handler.update(self._gui_events, self.current_cycle)
 
-        self.scene.add_action(EndCycle())
         self.scene.apply_actions()

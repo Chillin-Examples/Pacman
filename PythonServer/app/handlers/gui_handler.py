@@ -50,6 +50,7 @@ class GuiHandler():
         self._ghost_eyes_ref = 'Eyes'
         self._background_music_ref = self._rm.new()
         self._wakawaka_music_ref = self._rm.new()
+        self._eat_ghost_music_ref = self._rm.new()
         self._eating_food = False
 
         self._ghosts_ref = {}
@@ -67,6 +68,8 @@ class GuiHandler():
         self._game_status.initialize()
         self._game_status.draw_statuses()
 
+        self._scene.add_action(scene_actions.EndCycle())
+
 
     def _config(self, config):
         self._cell_size = config['cell_size']
@@ -80,7 +83,11 @@ class GuiHandler():
             clear_flag = scene_actions.ECameraClearFlag.SolidColor,
             background_color = scene_actions.Vector4(x=0, y=19/255, z=48/255),
             is_orthographic = True,
-            orthographic_size = self._world.height * self._cell_size / 2 + 2
+            orthographic_size = self._world.height * self._cell_size / 2 + 2,
+            min_position = scene_actions.Vector3(x=0, y=0, z=-10),
+            max_position = scene_actions.Vector3(x=0, y=0, z=-10),
+            min_rotation = scene_actions.Vector2(x=0, y=0),
+            max_rotation = scene_actions.Vector2(x=0, y=0)
         ))
 
 
@@ -108,6 +115,17 @@ class GuiHandler():
             audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='wakawaka'),
             spatial_blend = 0,
             loop = True
+        ))
+
+        # Eat ghost Music
+        self._scene.add_action(scene_actions.CreateBasicObject(
+            ref = self._eat_ghost_music_ref,
+            type = scene_actions.EBasicObjectType.AudioSource
+        ))
+        self._scene.add_action(scene_actions.ChangeAudioSource(
+            ref = self._eat_ghost_music_ref,
+            audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='eatghost'),
+            spatial_blend = 0
         ))
 
 
@@ -241,7 +259,8 @@ class GuiHandler():
         self._scene.add_action(scene_actions.ChangeTransform(
             ref = self._pacman_ref,
             position = scene_actions.Vector3(x=scene_pos['x'], y=scene_pos['y'], z=0),
-            rotation = scene_actions.Vector3(z=pacman_angle)
+            rotation = scene_actions.Vector3(z=pacman_angle),
+            change_local = False
         ))
 
         # Draw ghosts
@@ -257,6 +276,7 @@ class GuiHandler():
             self._scene.add_action(scene_actions.ChangeTransform(
                 ref = self._ghosts_ref[ghost.id],
                 position = scene_actions.Vector3(x=scene_pos['x'], y=scene_pos['y'], z=0),
+                change_local = False
             ))
             # Change color
             self._scene.add_action(scene_actions.ChangeSprite(
@@ -273,18 +293,20 @@ class GuiHandler():
             self._set_ghost_eyes(ghost.id, ghost.direction)
 
 
-    def _set_ghost_eyes(self, ghost_id, direction, is_scared = False):
+    def _set_ghost_eyes(self, ghost_id, direction, cycle = None, is_scared = False):
         ghost_ref = self._ghosts_ref[ghost_id]
 
         if is_scared:
             self._scene.add_action(scene_actions.ChangeSprite(
                 ref = ghost_ref,
+                cycle = cycle,
                 child_ref = self._ghost_eyes_ref,
                 sprite_asset = scene_actions.Asset(bundle_name='main', asset_name='GhostParts', index=4)
             ))
         else:
             self._scene.add_action(scene_actions.ChangeSprite(
                 ref = ghost_ref,
+                cycle = cycle,
                 child_ref = self._ghost_eyes_ref,
                 sprite_asset = scene_actions.Asset(bundle_name='main', asset_name='GhostParts', index=self._ghost_eyes_index[direction.name])
             ))
@@ -294,53 +316,82 @@ class GuiHandler():
         self._scene.add_action(scene_actions.ChangeAudioSource(
             ref = self._background_music_ref,
             cycle = cycle,
-            stop = True
-        ))
-        self._scene.add_action(scene_actions.ChangeAudioSource(
-            ref = self._background_music_ref,
-            cycle = cycle,
             audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name=music),
+            time = 0,
             play = True
         ))
 
 
-    def update(self, events, current_cycle):
-        eat_food = False
+    def _change_pacman_animation(self, state_name, cycle = None):
+        self._scene.add_action(scene_actions.ChangeAnimatorState(
+            ref = self._pacman_ref,
+            cycle = cycle,
+            state_name = state_name
+        ))
 
+
+    def _stop_eating_sound(self):
+        self._scene.add_action(scene_actions.ChangeAudioSource(
+            ref = self._wakawaka_music_ref,
+            play = False
+        ))
+
+
+    def update(self, events, current_cycle):
+        is_eat_food = False
+        is_kill_ghost = False
+        is_pacman_dead = False
+        dead_ghosts_id = []
+
+        # Update Status
+        self._game_status.update_statuses(current_cycle)
+
+        # Manage events
         for event in events:
 
             # Move
             if event.type in [GuiEventType.MovePacman, GuiEventType.MoveGhost]:
-                ref = self._pacman_ref if event.type == GuiEventType.MovePacman else self._ghosts_ref[event.payload["id"]]
-                pos = self._get_scene_position(event.payload["new_pos"][0], event.payload["new_pos"][1])
+                ref = self._pacman_ref if event.type == GuiEventType.MovePacman else self._ghosts_ref[event.payload['id']]
+                pos = self._get_scene_position(event.payload['new_pos'][0], event.payload['new_pos'][1])
+                is_ghost_dead = 'id' in event.payload and event.payload['id'] in dead_ghosts_id
+
                 self._scene.add_action(scene_actions.ChangeTransform(
                     ref = ref,
-                    duration_cycles = 1,
-                    position = scene_actions.Vector3(x=pos['x'], y=pos['y'])
+                    cycle = 1 if is_ghost_dead else None,
+                    duration_cycles = 1 if not is_pacman_dead and not is_ghost_dead else None,
+                    position = scene_actions.Vector3(x=pos['x'], y=pos['y']),
+                    change_local = False
                 ))
 
             # Change Pacman direction
             elif event.type == GuiEventType.ChangePacmanDirection:
-                angle = self._angle[event.payload["direction"].name]
+                angle = self._angle[event.payload['direction'].name]
                 self._scene.add_action(scene_actions.ChangeTransform(
                     ref = self._pacman_ref,
-                    rotation = scene_actions.Vector3(z=angle)
+                    rotation = scene_actions.Vector3(z=angle),
+                    change_local = False
                 ))
 
             # Change Ghost direction
             elif event.type == GuiEventType.ChangeGhostDirection:
-                self._set_ghost_eyes(event.payload["id"], event.payload["direction"])
+                self._set_ghost_eyes(
+                    event.payload['id'],
+                    event.payload['direction'],
+                    cycle = 1 if event.payload['id'] in dead_ghosts_id else None
+                )
 
-            # Remove food
+            # Eat Food
             elif event.type == GuiEventType.EatFood:
-                eat_food = True
+                is_eat_food = True
+                # Remove food
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
                     ref = self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
                 ))
 
+            # Eat Super Food
             elif event.type == GuiEventType.EatSuperFood:
-                eat_food = True
+                is_eat_food = True
                 # Remove super food
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
@@ -348,55 +399,78 @@ class GuiHandler():
                 ))
 
                 # Pacman giant form
-                self._scene.add_action(scene_actions.ChangeAnimatorState(
-                    cycle = self._eat_delay,
-                    ref = self._pacman_ref,
-                    state_name = 'PacmanSuper'
-                ))
-
+                self._change_pacman_animation('PacmanSuper', self._eat_delay)
                 self._change_background_music('intermission', self._eat_delay)
 
+            # End Giant Form
             elif event.type == GuiEventType.EndGiantForm:
                 # Go to default mode
-                self._scene.add_action(scene_actions.ChangeAnimatorState(
-                    ref = self._pacman_ref,
-                    state_name = 'PacmanNormal'
-                ))
-
+                self._change_pacman_animation('PacmanNormal')
                 self._change_background_music('siren')
 
-            elif event.type == GuiEventType.UpdateHealth:
+            # Kill Pacman
+            elif event.type == GuiEventType.KillPacman:
+                is_pacman_dead = True
+                self._scene.add_action(scene_actions.EndCycle())
+
+                # stop eating sound
+                if self._eating_food:
+                    self._eating_food = False
+                    self._stop_eating_sound()
+
+                # Update health
                 self._game_status.decrease_health()
-                print 'update health'
 
-                # Stop background music for one cycle
-                self._scene.add_action(scene_actions.ChangeAudioSource(
-                    ref = self._background_music_ref,
-                    stop = True
+                # Play death animation and music
+                self._scene.add_action(scene_actions.ChangeTransform(
+                    ref = self._pacman_ref,
+                    rotation = scene_actions.Vector3(z=0),
+                    change_local = False
                 ))
-                self._scene.add_action(scene_actions.ChangeAudioSource(
-                    ref = self._background_music_ref,
-                    cycle = 1,
-                    play = True
-                ))
+                self._change_pacman_animation('PacmanDie')
+                self._change_background_music('death')
 
-        # Status
-        self._game_status.update_statuses(current_cycle)
+                self._scene.add_action(scene_actions.EndCycle())
+                self._scene.add_action(scene_actions.EndCycle())
+                self._scene.add_action(scene_actions.EndCycle())
+
+                # Back to normal after 3 cycle
+                self._change_pacman_animation('PacmanNormal')
+                self._change_background_music('siren')
+
+            # Update giant form status
+            elif event.type == GuiEventType.UpdateGiantFormStatus:
+                self._game_status.update_super_text(event.payload['remaining'])
+
+            # Kill Ghost
+            elif event.type == GuiEventType.KillGhost:
+                is_kill_ghost = True
+                dead_ghosts_id.append(event.payload['id'])
+
+        # kill ghost sound
+        if is_kill_ghost:
+            self._scene.add_action(scene_actions.ChangeAudioSource(
+                ref = self._eat_ghost_music_ref,
+                cycle = self._eat_delay,
+                play = True,
+                time = 0
+            ))
 
         # eating sound
-        if eat_food and not self._eating_food:
+        if is_eat_food and not self._eating_food:
             self._scene.add_action(scene_actions.ChangeAudioSource(
                 ref = self._wakawaka_music_ref,
                 cycle = self._eat_delay,
                 play = True
             ))
-        elif not eat_food and self._eating_food:
-            self._scene.add_action(scene_actions.ChangeAudioSource(
-                ref = self._wakawaka_music_ref,
-                play = False
-            ))
+        elif not is_eat_food and self._eating_food:
+            self._stop_eating_sound()
 
-        self._eating_food = eat_food
+
+        self._eating_food = is_eat_food
+
+        if not is_pacman_dead:
+            self._scene.add_action(scene_actions.EndCycle())
 
 
     def _get_scene_position(self, x, y):

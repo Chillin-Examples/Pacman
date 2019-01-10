@@ -22,3 +22,9 @@ def calculate_new_position(self):
 
 def can_move(self, world, position):
     return world.board[(position[1])][(position[0])] != ECell.Wall
+
+
+def recover(self):
+    self.x = self.init_x
+    self.y = self.init_y
+    self.direction = self.init_direction
