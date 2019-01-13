@@ -78,16 +78,20 @@ class GuiHandler():
 
 
     def _init_camera(self):
+        orthographic_size = self._world.height * self._cell_size / 2 + 2
+
         self._scene.add_action(scene_actions.ChangeCamera(
             ref = self._rm.get('MainCamera'),
             clear_flag = scene_actions.ECameraClearFlag.SolidColor,
             background_color = scene_actions.Vector4(x=0, y=19/255, z=48/255),
             is_orthographic = True,
-            orthographic_size = self._world.height * self._cell_size / 2 + 2,
-            min_position = scene_actions.Vector3(x=0, y=0, z=-10),
-            max_position = scene_actions.Vector3(x=0, y=0, z=-10),
+            orthographic_size = orthographic_size,
+            min_position = scene_actions.Vector3(x=self._x_offset, y=self._y_offset, z=-10),
+            max_position = scene_actions.Vector3(x=-self._x_offset, y=-self._y_offset, z=-10),
             min_rotation = scene_actions.Vector2(x=0, y=0),
-            max_rotation = scene_actions.Vector2(x=0, y=0)
+            max_rotation = scene_actions.Vector2(x=0, y=0),
+            min_zoom = self._cell_size * 2,
+            max_zoom = orthographic_size * 2
         ))
 
 
