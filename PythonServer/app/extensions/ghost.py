@@ -2,7 +2,7 @@
 
 # project imports
 from ..ks.models import Ghost, ECell
-from ..extensions.agent import get_position, calculate_new_position, can_move
+from ..extensions.agent import get_position, calculate_new_position, can_move, recover as recover_agent
 from ..gui_events import GuiEvent, GuiEventType
 
 
@@ -15,24 +15,20 @@ def move(self,world, ghost):
     gui_events = []
     new_position = ghost.calculate_new_position()
 
-    if ghost.can_move(world, new_position) and not ghost.is_dead:
+    if ghost.can_move(world, new_position):
         ghost.x = new_position[0]
         ghost.y = new_position[1]
-        if not ghost.is_dead:
-            gui_events.append(GuiEvent(GuiEventType.MoveGhost, new_pos=new_position, id=ghost.id))
+        gui_events.append(GuiEvent(GuiEventType.MoveGhost, id=ghost.id, new_pos=new_position))
 
     return gui_events
 
 
-def recover_ghost(self, ghost_id, world):
-    world.ghosts[ghost_id].x = world.ghosts[ghost_id].init_x
-    world.ghosts[ghost_id].y = world.ghosts[ghost_id].init_y
-    world.ghosts[ghost_id].direction = world.ghosts[ghost_id].init_direction
-    world.ghosts[ghost_id].is_dead = False
+def recover(self, world):
+    recover_agent(self)
 
     return [
-        GuiEvent(GuiEventType.ChangeGhostDirection, id=ghost_id, direction=world.ghosts[ghost_id].direction),
-        GuiEvent(GuiEventType.MoveGhost, new_pos=(world.ghosts[ghost_id].x, world.ghosts[ghost_id].y), id=ghost_id)
+        GuiEvent(GuiEventType.ChangeGhostDirection, id=self.id, direction=self.direction),
+        GuiEvent(GuiEventType.MoveGhost, id=self.id, new_pos=(self.x, self.y))
     ]
 
 
@@ -66,6 +62,6 @@ Ghost.get_position = get_position
 Ghost.calculate_new_position = calculate_new_position
 Ghost.can_move = can_move
 Ghost.move = move
-Ghost.recover_ghost = recover_ghost
+Ghost.recover = recover
 Ghost.kill_pacman = kill_pacman
 Ghost.can_change_direction = can_change_direction

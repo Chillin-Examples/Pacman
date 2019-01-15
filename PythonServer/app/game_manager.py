@@ -31,14 +31,15 @@ class GameManager(RealtimeGameHandler):
     def on_initialize_gui(self):
         print('initialize gui')
 
-        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.get_client_world(), self.sides, self.canvas)
+        self.gui_handler = gui_handler.GuiHandler(self._logic_handler.world, self.scene)
         self.gui_handler.initialize(self.config)
-        self.canvas.apply_actions()
+
+        self.scene.apply_actions()
 
 
     def on_process_cycle(self):
         print('cycle %i' % (self.current_cycle, ))
-
+        
         self._gui_events = self._logic_handler.process(self.current_cycle)
 
         end_game, winner, details = self._logic_handler.check_end_game(self.current_cycle)
@@ -57,5 +58,6 @@ class GameManager(RealtimeGameHandler):
     def on_update_gui(self):
         print('update gui')
 
-        self.gui_handler.update(self._gui_events, self.current_cycle)
-        self.canvas.apply_actions()
+        self.gui_handler.update(self.current_cycle, self._gui_events)
+
+        self.scene.apply_actions()

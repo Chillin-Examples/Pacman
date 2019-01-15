@@ -2,7 +2,7 @@
 
 # project imports
 from ..ks.models import Pacman, ECell
-from ..extensions.agent import get_position, calculate_new_position, can_move
+from ..extensions.agent import get_position, calculate_new_position, can_move, recover as recover_agent
 from ..gui_events import GuiEvent, GuiEventType
 
 
@@ -58,13 +58,22 @@ def move(self, world):
     return gui_events
 
 
+def recover(self, world):
+    recover_agent(self)
+
+    return [
+        GuiEvent(GuiEventType.ChangePacmanDirection, direction=self.direction),
+        GuiEvent(GuiEventType.MovePacman, new_pos=(self.x, self.y))
+    ]
+
+
 def kill_ghost(self, world):
     world.scores["Pacman"] += world.constants.ghost_death_score
 
 
 def giant_form(self, world):
     self.is_giant_form = True
-    world.pacman.giant_form_remaining_time = world.constants.pacman_giant_form_duration
+    world.pacman.giant_form_remaining_time = world.constants.pacman_giant_form_duration + 1
 
 
 def can_change_direction(self, position, world):
@@ -80,6 +89,7 @@ Pacman.can_eat_food = can_eat_food
 Pacman.can_eat_super_food = can_eat_super_food
 Pacman.can_move = can_move
 Pacman.move = move
+Pacman.recover = recover
 Pacman.kill_ghost = kill_ghost
 Pacman.giant_form = giant_form
 Pacman.can_change_direction = can_change_direction

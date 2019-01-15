@@ -1,15 +1,15 @@
 {
     "board": [
         "wwwwwwwwwww",
-        "weefffffeew",
-        "weswwwwweew",
-        "wsfesfeweew",
-        "wffwwwwwefw",
-        "wsfweeeeesw",
-        "weewwwwwefw",
-        "wseesfewefw",
-        "wfewwwwwefw",
-        "wsefffffeew",
+        "weffsfffffw",
+        "wfswwwwwffw",
+        "wsffsffwffw",
+        "wffwwwwwffw",
+        "wsfwfffffsw",
+        "wffwwwwwffw",
+        "wsffsffwffw",
+        "wffwwwwwffw",
+        "wsffffffffw",
         "wwwwwwwwwww"
     ],
 
@@ -26,16 +26,20 @@
             },
             {
                 "position": [6, 5],
-                "direction": "Right" 
+                "direction": "Right"
+            },
+            {
+                "position": [9, 1],
+                "direction": "Left"
             }
         ],
         
         "pacman": 
-            {
-                "position": [1,1],
-                "direction": "Left",
-                "health": 8
-            }
+        {
+            "position": [1, 1],
+            "direction": "Right",
+            "health": 3
+        }
     },
 
     "constants": {
@@ -43,7 +47,7 @@
         "super_food_score": 5,
         "ghost_death_score": 15,
         "pacman_death_score": 20,
-        "pacman_giant_form_duration": 5,
+        "pacman_giant_form_duration": 20,
         "max_cycles" : 200
     }
 }

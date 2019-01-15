@@ -3,54 +3,88 @@
 # python imports
 
 # chillin imports
-from chillin_server.gui.canvas_elements import ScaleType
+from chillin_server.gui import scene_actions
 
 
 class GameStatus:
 
-    def __init__(self, config, canvas, sides, world):
-        self._config = config
-        self._canvas = canvas
-        self._sides = sides
+    def __init__(self, world, scene, eat_delay):
         self._world = world
+        self._scene = scene
+        self._rm = scene.rm
+        self._eat_delay = eat_delay
 
 
     def initialize(self):
-        self._title_font_size = 55 * self._config['statuses_width'] // 1000
-
-        self._start_x = self._canvas.width - self._config['statuses_width']
-        self._mid_x = self._canvas.width - (self._config['statuses_width'] // 2)
-        self._end_x = self._canvas.width
-
-        self._logo_width = self._config['cell_size'] * self._config['statuses_width'] // 1000
-
-        self._mid_x_Pacman = (self._start_x + self._mid_x) // 2
-        self._mid_x_Ghost = (self._mid_x + self._end_x) // 2
-        self._start_y = 5 * (self._title_font_size + 10) + self._logo_width + 10
+        self._top_panel_ref = self._rm.new()
+        self._health_panel_ref = 'HealthPanel'
+        self._health_images_ref = []
+        self._cycle_text_ref = 'CycleText'
+        self._super_text_ref = 'SuperText'
+        self._pacman_score_ref = 'ScorePanel/PacmanScore'
+        self._ghost_score_ref = 'ScorePanel/GhostScore'
 
 
     def draw_statuses(self):
-        self._cycle_ref = self._canvas.create_text('Cycle: 0', self._mid_x, self._title_font_size, self._canvas.make_rgba(0, 0, 0, 255), self._title_font_size, center_origin=True)
+        self._scene.add_action(scene_actions.InstantiateBundleAsset(
+            ref = self._top_panel_ref,
+            asset = scene_actions.Asset(bundle_name='main', asset_name='TopPanel'),
+            default_parent = scene_actions.EDefaultParent.RootCanvas
+        ))
 
-        self._canvas.create_text('Score', self._mid_x, 2 * (self._title_font_size + 10), self._canvas.make_rgba(0, 0, 0, 255), self._title_font_size, center_origin=True)
-        self._scores_Pacman = self._canvas.create_text('0', self._mid_x_Pacman, 2 * (self._title_font_size + 10), self._canvas.make_rgba(0, 0, 255, 255), self._title_font_size, center_origin=True)
-        self._scores_Ghost = self._canvas.create_text('0', self._mid_x_Ghost, 2 * (self._title_font_size + 10), self._canvas.make_rgba(255, 0, 0, 255), self._title_font_size, center_origin=True)
+        # Cycle
+        self._set_cycle_text(0)
 
-        self._canvas.create_image('PacmanLogo', self._mid_x_Pacman, self._start_y - self._logo_width // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._logo_width, center_origin=True)
-        self._canvas.create_image('GhostLogo', self._mid_x_Ghost, self._start_y - self._logo_width // 2 - 15, scale_type=ScaleType.ScaleToWidth, scale_value=self._logo_width, center_origin=True)
-        self._canvas.create_line(self._mid_x, self._start_y - self._logo_width, self._mid_x, self._canvas.height, self._canvas.make_rgba(0, 0, 0, 150), stroke_width=1)
+        # Pacman health
+        for i in range(self._world.pacman.health):
+            new_ref = self._rm.new()
+            self._health_images_ref.append(new_ref)
 
-        self._canvas.create_text('Health', self._mid_x_Pacman, self._start_y - self._logo_width // 2 - 15 + 200, self._canvas.make_rgba(0, 0, 255, 255), self._title_font_size, center_origin=True)
-        self._health_pacman = self._canvas.create_text(str(self._world.pacman.health), self._mid_x_Pacman, self._start_y - self._logo_width // 2 - 15 + 250, self._canvas.make_rgba(0, 0, 255, 255), self._title_font_size, center_origin=True)
+            self._scene.add_action(scene_actions.InstantiateBundleAsset(
+                ref = new_ref,
+                asset = scene_actions.Asset(bundle_name='main', asset_name='PacmanImage'),
+                parent_ref = self._top_panel_ref,
+                parent_child_ref = self._health_panel_ref
+            ))
 
 
     def update_statuses(self, current_cycle):
         # Cycle
-        self._canvas.edit_text(self._cycle_ref, 'Cycle: ' + str(current_cycle))
+        self._set_cycle_text(current_cycle)
+
         # Scores
-        self._canvas.edit_text(self._scores_Pacman, text=str(self._world.scores['Pacman']))
-        self._canvas.edit_text(self._scores_Ghost, text=str(self._world.scores['Ghost']))
+        self._scene.add_action(scene_actions.ChangeText(
+            cycle = self._eat_delay,
+            ref = self._top_panel_ref,
+            child_ref = self._pacman_score_ref,
+            text = str(self._world.scores['Pacman'])
+        ))
+
+        self._scene.add_action(scene_actions.ChangeText(
+            cycle = self._eat_delay,
+            ref = self._top_panel_ref,
+            child_ref = self._ghost_score_ref,
+            text = str(self._world.scores['Ghost'])
+        ))
 
 
-    def update_health(self):
-        self._canvas.edit_text(self._health_pacman, str(self._world.pacman.health))
+    def _set_cycle_text(self, cycle):
+        self._scene.add_action(scene_actions.ChangeText(
+            ref = self._top_panel_ref,
+            child_ref = self._cycle_text_ref,
+            text = 'Cycle: {:d}/{:d}'.format(cycle, self._world.constants.max_cycles)
+        ))
+
+
+    def decrease_health(self):
+        self._scene.add_action(scene_actions.Destroy(
+            ref = self._health_images_ref.pop()
+        ))
+
+
+    def update_super_text(self, remaining_time):
+        self._scene.add_action(scene_actions.ChangeText(
+            ref = self._top_panel_ref,
+            child_ref = self._super_text_ref,
+            text = str(remaining_time) if remaining_time > 0 else ''
+        ))
