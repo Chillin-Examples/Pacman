@@ -58,6 +58,6 @@ class GameManager(RealtimeGameHandler):
     def on_update_gui(self):
         print('update gui')
 
-        self.gui_handler.update(self._gui_events, self.current_cycle)
+        self.gui_handler.update(self.current_cycle, self._gui_events)
 
         self.scene.apply_actions()

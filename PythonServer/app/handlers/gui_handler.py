@@ -342,7 +342,7 @@ class GuiHandler():
         ))
 
 
-    def update(self, events, current_cycle):
+    def update(self, current_cycle, events):
         is_eat_food = False
         is_kill_ghost = False
         is_pacman_dead = False
