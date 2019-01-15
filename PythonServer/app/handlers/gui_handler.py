@@ -129,7 +129,8 @@ class GuiHandler():
         self._scene.add_action(scene_actions.ChangeAudioSource(
             ref = self._eat_ghost_music_ref,
             audio_clip_asset = scene_actions.Asset(bundle_name='main', asset_name='eatghost'),
-            spatial_blend = 0
+            spatial_blend = 0,
+            loop = True
         ))
 
 
@@ -458,6 +459,11 @@ class GuiHandler():
                 cycle = self._eat_delay,
                 play = True,
                 time = 0
+            ))
+            self._scene.add_action(scene_actions.ChangeAudioSource(
+                ref = self._eat_ghost_music_ref,
+                cycle = self._eat_delay + 1,
+                play = False
             ))
 
         # eating sound
