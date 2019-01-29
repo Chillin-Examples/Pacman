@@ -38,7 +38,7 @@ def kill_pacman(self, world):
 
 
 def can_change_direction(self, new_position, current_position, command, world):
-
+    print(len(world.board))
     if world.board[(new_position[1])][(new_position[0])] == ECell.Wall:
         # It's a wall
         return False
