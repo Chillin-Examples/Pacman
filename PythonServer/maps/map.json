@@ -22,21 +22,14 @@
             {
                 "position": [6, 4],
                 "direction": "Right"
-            },
-            {
-                "position": [9, 1],
-                "direction": "Left"
-            },
-            {
-                "position": [9, 9],
-                "direction": "Up"
             }
+           
         ],
 
         "pacman": {
             "position": [1, 1],
             "direction": "Left",
-            "health": 8
+            "health": 4
         }
     },
 
