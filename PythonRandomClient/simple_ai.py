@@ -33,7 +33,7 @@ def decide(width, height, my_score, other_score,
            my_side, other_side, current_cycle, cycle_duration):
 
     if my_side == 'Pacman':
-        move_pacman(random.choice([
+        change_pacman_direction(random.choice([
             DIR_UP,
             DIR_RIGHT,
             DIR_DOWN,
@@ -42,7 +42,7 @@ def decide(width, height, my_score, other_score,
 
     elif my_side == 'Ghost':
         for ghost in ghosts:
-            move_ghosts(ghost.id, random.choice([
+            change_ghost_direction(ghost.id, random.choice([
                         DIR_UP,
                         DIR_RIGHT,
                         DIR_DOWN,
@@ -50,9 +50,9 @@ def decide(width, height, my_score, other_score,
                     ]))
 
 
-def move_pacman(dir):
+def change_pacman_direction(dir):
     ai.send_command(ChangePacmanDirection(direction=dir))
 
 
-def move_ghosts(id, dir):
+def change_ghost_direction(id, dir):
     ai.send_command(ChangeGhostDirection(id=id, direction=dir))
