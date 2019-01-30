@@ -19,15 +19,37 @@ namespace simple_ai {
 AI *ai;
 
 
-void move(int bananaId, int dir)
+const int CELL_EMPTY = ECell::Empty;
+const int CELL_FOOD = ECell::Food;
+const int CELL_SUPER_FOOD = ECell::SuperFood;
+const int CELL_WALL = ECell::Wall;
+
+const int DIR_UP = EDirection::Up;
+const int DIR_RIGHT = EDirection::Right;
+const int DIR_DOWN = EDirection::Down;
+const int DIR_LEFT = EDirection::Left;
+
+
+void change_pacman_direction(int dir)
 {
+    ChangePacmanDirection move;
+    move.direction((ECommandDirection) dir);
     ai->sendCommand(&move);
 }
 
+void change_ghost_direction(int id,int dir)
+{
+    ChangeGhostDirection move;
+    move.id(id);
+    move.direction((ECommandDirection) dir);
+    ai->sendCommand(&move);
+}
+
+
 void initialize(
     int width, int height, int myScore, int otherScore, int **board,
-    Banana myBananas[], int myBananasCount, Banana otherBananas[], int otherBananasCount,
-    PowerUp powerups[], int powerupsCount, int enter_score,
+    Pacman Pacman, Ghost ghosts[], int ghostsCount,
+    Constants constants,
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
 }
@@ -35,10 +57,20 @@ void initialize(
 
 void decide(
     int width, int height, int myScore, int otherScore, int **board,
-    Banana myBananas[], int myBananasCount, Banana otherBananas[], int otherBananasCount,
-    PowerUp powerups[], int powerupsCount, int enter_score,
+    Pacman Pacman, Ghost ghosts[], int ghostsCount,
+    Constants constants,
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
+    if (mySide == "Pacman"){
+        int dir = ai->getRandInt(0,3);
+        change_pacman_direction(dir);
+    }
+    else if (mySide == "Ghost"){
+        for (int i=0; i<ghostsCount; i++){
+            int dir = ai->getRandInt(0,3);
+            change_ghost_direction(ghosts[i].id, dir);
+        }
+    }
     
 }
 
