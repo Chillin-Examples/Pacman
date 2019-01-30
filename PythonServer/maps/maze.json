@@ -1,15 +1,15 @@
 {
     "board": [
         "wwwwwwwwwww",
-        "weffsfffffw",
-        "wfswwwwwffw",
-        "wsffsffwffw",
+        "weffffffffw",
         "wffwwwwwffw",
-        "wsfwfffffsw",
+        "wfffffswffw",
         "wffwwwwwffw",
-        "wsffsffwffw",
+        "wffwseeeefw",
         "wffwwwwwffw",
-        "wsffffffffw",
+        "wfffffswffw",
+        "wffwwwwwffw",
+        "wfffffffffw",
         "wwwwwwwwwww"
     ],
 
@@ -23,18 +23,15 @@
             {
                 "position": [9, 9],
                 "direction": "Right"
-            },
-            {
-                "position": [6, 5],
-                "direction": "Right"
             }
+            
         ],
         
         "pacman": 
         {
             "position": [1, 1],
             "direction": "Right",
-            "health": 4
+            "health": 3
         }
     },
 

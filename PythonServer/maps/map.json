@@ -46,6 +46,6 @@
         "ghost_death_score": 15,
         "pacman_death_score": 20,
         "pacman_giant_form_duration": 15,
-        "max_cycles" : 100
+        "max_cycles" : 200
     }
 }
