@@ -52,8 +52,7 @@ def decide(width, height, my_score, other_score,
 
 def move_pacman(dir):
     ai.send_command(ChangePacmanDirection(direction=dir))
-    print "PACMAN"
+
 
 def move_ghosts(id, dir):
     ai.send_command(ChangeGhostDirection(id=id, direction=dir))
-    print "GHOST"
