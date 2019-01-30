@@ -27,10 +27,6 @@
             {
                 "position": [6, 5],
                 "direction": "Right"
-            },
-            {
-                "position": [9, 1],
-                "direction": "Left"
             }
         ],
         
@@ -38,7 +34,7 @@
         {
             "position": [1, 1],
             "direction": "Right",
-            "health": 3
+            "health": 4
         }
     },
 
