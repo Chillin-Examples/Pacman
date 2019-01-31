@@ -49,4 +49,5 @@ DISTFILES += \
 HEADERS += \
     ks/commands.h \
     ks/models.h \
-    ai.h
+    ai.h \
+    simple_ai.h

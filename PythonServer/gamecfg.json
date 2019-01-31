@@ -2,7 +2,7 @@
 	"general": {
 		"game_name": "Pacman",
 		"command_files": [
-			"ks/commands"
+			"app/ks/commands"
 		],
 		"allowed_teams": {},
 		"offline_mode": true,
@@ -24,9 +24,11 @@
 		"save_replay": true,
 		"replay_dir": "replays",
 		"replay_filename": null,
-		"width": 500,
-		"height": 500,
-		"images": {}
+		"cycle_duration": 0.5,
+		"side_colors": {
+			"Pacman": "#FFFF00",
+			"Ghost": "#FF0000"
+		}
 	},
 
 	"sides": {
@@ -43,9 +45,8 @@
 		"max_total_commands": 200,
 		"max_team_commands": 100,
 		"max_agent_commands": 100,
-		"": "turnbased game handler configs",
-		"auto_change_turn": true,
-		"auto_change_turn_sequence": ["Pacman", "Ghost"],
-		"": "my configs"
+		"": "my configs",
+		"cell_size": 1.125,
+		"map": "maps/pacman.json"
 	}
 }
