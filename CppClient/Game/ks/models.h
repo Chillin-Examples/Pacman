@@ -28,7 +28,7 @@ public:
 namespace models
 {
 
-enum class ECell
+enum ECell
 {
 	Empty = 0,
 	Food = 1,
@@ -37,7 +37,7 @@ enum class ECell
 };
 
 
-enum class EDirection
+enum EDirection
 {
 	Up = 0,
 	Right = 1,
