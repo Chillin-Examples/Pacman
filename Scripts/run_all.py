@@ -19,9 +19,9 @@ code_base_directory = configs["code_base_directory"]
 
 if platform.system() == 'Windows':
     monitor_exe = 'ChillinMonitor2.exe'
-elif platform.system == 'Linux':
-    monitor_exe = './ChillinMonitor.x86_64'
-elif platform.system == 'Darwin':
+elif platform.system() == 'Linux':
+    monitor_exe = './ChillinMonitor2.x86_64'
+elif platform.system() == 'Darwin':
     monitor_exe = 'open ChillinMonitor2.app'
 
 
