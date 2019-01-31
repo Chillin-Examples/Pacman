@@ -1,7 +1,7 @@
 ###############################################################
 ###                                                         ###
 ###     Don't forget to set directories in configs.json     ###
-###       * set code_base_directory to the address wehre    ###
+###       * set code_base_directory to the address where    ###
 ###         your whole game folder is.                      ###
 ###       * set monitor_directory to your monitor folder    ###
 ###                                                         ###
@@ -17,7 +17,7 @@ configs = json.loads(open(("configs.json"), "r").read())
 monitor_directory = configs["monitor_directory"]
 code_base_directory = configs["code_base_directory"]
 
-if platform.system() == 'Windows'
+if platform.system() == 'Windows':
     monitor_exe = 'ChillinMonitor2.exe'
 elif platform.system == 'Linux':
     monitor_exe = './ChillinMonitor.x86_64'
