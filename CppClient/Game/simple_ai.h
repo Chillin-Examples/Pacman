@@ -30,14 +30,14 @@ const int DIR_DOWN = EDirection::Down;
 const int DIR_LEFT = EDirection::Left;
 
 
-void change_pacman_direction(int dir)
+void changePacmanDirection(int dir)
 {
     ChangePacmanDirection changeDir;
     changeDir.direction((ECommandDirection) dir);
     ai->sendCommand(&changeDir);
 }
 
-void change_ghost_direction(int id, int dir)
+void changeGhostDirection(int id, int dir)
 {
     ChangeGhostDirection changeDir;
     changeDir.id(id);
@@ -62,6 +62,18 @@ void decide(
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
     // Write your own AI code here
+    if (mySide == "Pacman")
+    {
+        changePacmanDirection(DIR_UP);
+    }
+    else if (mySide == "Ghost")
+    {
+        for (int i = 0; i < ghostsCount; i++)
+        {
+            Ghost ghost = ghosts[i];
+            changeGhostDirection(ghost.id(), DIR_UP);
+        }
+    }
 }
 
 }
