@@ -1,4 +1,4 @@
 {
-  "code_base_directory": "../../chillinwars-junior/",
-  "monitor_directory": "../../ChilinWars/Monitors/Chillin-Monitor-2-Linux64bit/"
+  "code_base_directory": "../",
+  "monitor_directory": "../../Chillin-Monitor-2-Windows64bit-2.0.0/"
 }
