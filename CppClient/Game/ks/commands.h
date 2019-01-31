@@ -28,7 +28,7 @@ public:
 namespace commands
 {
 
-enum class ECommandDirection
+enum ECommandDirection
 {
 	Up = 0,
 	Right = 1,

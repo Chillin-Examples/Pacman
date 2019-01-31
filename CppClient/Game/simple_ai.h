@@ -32,46 +32,36 @@ const int DIR_LEFT = EDirection::Left;
 
 void change_pacman_direction(int dir)
 {
-    ChangePacmanDirection move;
-    move.direction((ECommandDirection) dir);
-    ai->sendCommand(&move);
+    ChangePacmanDirection changeDir;
+    changeDir.direction((ECommandDirection) dir);
+    ai->sendCommand(&changeDir);
 }
 
-void change_ghost_direction(int id,int dir)
+void change_ghost_direction(int id, int dir)
 {
-    ChangeGhostDirection move;
-    move.id(id);
-    move.direction((ECommandDirection) dir);
-    ai->sendCommand(&move);
+    ChangeGhostDirection changeDir;
+    changeDir.id(id);
+    changeDir.direction((ECommandDirection) dir);
+    ai->sendCommand(&changeDir);
 }
 
 
 void initialize(
-    int width, int height, int myScore, int otherScore, int **board,
-    Pacman Pacman, Ghost ghosts[], int ghostsCount,
-    Constants constants,
+    int width, int height, int myScore, int otherScore, std::vector<std::vector<ECell>>& board,
+    Pacman& Pacman, Ghost ghosts[], int ghostsCount,
+    Constants& constants,
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
 }
 
 
 void decide(
-    int width, int height, int myScore, int otherScore, int **board,
-    Pacman Pacman, Ghost ghosts[], int ghostsCount,
-    Constants constants,
+    int width, int height, int myScore, int otherScore, std::vector<std::vector<ECell>>& board,
+    Pacman& Pacman, Ghost ghosts[], int ghostsCount,
+    Constants& constants,
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
-    if (mySide == "Pacman"){
-        int dir = ai->getRandInt(0,3);
-        change_pacman_direction(dir);
-    }
-    else if (mySide == "Ghost"){
-        for (int i=0; i<ghostsCount; i++){
-            int dir = ai->getRandInt(0,3);
-            change_ghost_direction(ghosts[i].id, dir);
-        }
-    }
-    
+    // Write your own AI code here
 }
 
 }
