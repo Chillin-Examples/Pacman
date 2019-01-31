@@ -26,7 +26,7 @@ class AI(RealtimeAI):
 
     def decide(self):
         print('decide')
-        
+
         world = self.world
         simple_ai.decide(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
                              world.board, world.pacman, world.ghosts, world.constants,
