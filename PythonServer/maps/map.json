@@ -22,21 +22,14 @@
             {
                 "position": [6, 4],
                 "direction": "Right"
-            },
-            {
-                "position": [9, 1],
-                "direction": "Left"
-            },
-            {
-                "position": [9, 9],
-                "direction": "Up"
             }
+           
         ],
 
         "pacman": {
             "position": [1, 1],
             "direction": "Left",
-            "health": 8
+            "health": 4
         }
     },
 
@@ -46,6 +39,6 @@
         "ghost_death_score": 15,
         "pacman_death_score": 20,
         "pacman_giant_form_duration": 15,
-        "max_cycles" : 100
+        "max_cycles" : 200
     }
 }

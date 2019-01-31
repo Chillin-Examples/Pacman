@@ -13,7 +13,7 @@ def change_direction(self, world, command):
 def eat_food(self, world):
 
     gui_events = []
-     # Add score to pacman
+    # Add score to pacman
     world.scores["Pacman"] += world.constants.food_score
     # Change Food to Empty
     world.board[self.y][self.x] = ECell.Empty

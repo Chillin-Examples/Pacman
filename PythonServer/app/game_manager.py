@@ -50,14 +50,11 @@ class GameManager(RealtimeGameHandler):
 
 
     def on_update_clients(self):
-        print('update clients')
 
         self.send_snapshot(self._logic_handler.get_client_world())
 
 
     def on_update_gui(self):
-        print('update gui')
 
         self.gui_handler.update(self.current_cycle, self._gui_events)
-
         self.scene.apply_actions()
