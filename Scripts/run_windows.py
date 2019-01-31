@@ -19,7 +19,7 @@ code_base_directory = configs["code_base_directory"]
 class RunMonitor(threading.Thread):
     def run(self):
         print("Running Monitor...")
-        os.system('cd {} && ./ChillinMonitor.x86_64'.format(monitor_directory))
+        os.system('cd {} && Chillin Monitor 2.exe'.format(monitor_directory))
 
 
 class RunServer(threading.Thread):
@@ -41,7 +41,6 @@ class RunRandomClient(threading.Thread):
 
 
 if __name__ == '__main__':
-
     run_monitor = RunMonitor(name="RunMonitor")
     run_server = RunServer(name="RunServer")
     run_random_client = RunRandomClient(name="RunRandomClient")
