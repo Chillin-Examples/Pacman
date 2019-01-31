@@ -1,8 +1,9 @@
 #include "ai.h"
 
-#include <ctime>
 #include <vector>
 #include <iostream>
+
+#include "simple_ai.h"
 
 using namespace std;
 using namespace koala::chillin::client;
@@ -12,34 +13,54 @@ using namespace ks::commands;
 
 AI::AI(World *world): RealtimeAI<World*>(world)
 {
-    srand(time(0));
+    simple_ai::ai = this;
 }
 
 AI::~AI()
 {
-    if (board)
-    {
-        for (int i = 0; i < world->height(); i++)
-            delete[] board[i];
-        delete[] board;
-    }
 }
 
 void AI::initialize()
 {
     cout << "initialize" << endl;
+
+    simple_ai::initialize(
+        world->width(),
+        world->height(),
+        world->ref_scores()[mySide],
+        world->ref_scores()[otherSide],
+        world->ref_board(),
+        world->ref_pacman(),
+        &world->ref_ghosts()[0],
+        world->ref_ghosts().size(),
+        world->ref_constants(),
+        mySide,
+        otherSide,
+        currentCycle,
+        cycleDuration
+    );
 }
 
 void AI::decide()
 {
     cout << "decide" << endl;
-}
 
-int AI::getRandInt(int start, int end)
-{
-    return (rand() % (end - start + 1)) + start;
+    simple_ai::decide(
+        world->width(),
+        world->height(),
+        world->ref_scores()[mySide],
+        world->ref_scores()[otherSide],
+        world->ref_board(),
+        world->ref_pacman(),
+        &world->ref_ghosts()[0],
+        world->ref_ghosts().size(),
+        world->ref_constants(),
+        mySide,
+        otherSide,
+        currentCycle,
+        cycleDuration
+    );
 }
-
 
 void AI::sendCommand(ks::KSObject *command)
 {

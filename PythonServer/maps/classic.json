@@ -1,0 +1,45 @@
+{
+    "board": [
+        "wwwwwwwwwwwwwwwww",
+        "wfeeeeeeweeeeeefw",
+        "wfwwwfffwfffwwwfw",
+        "wsweeeeeeeeeeewsw",
+        "wfeeeewwwwweeeefw",
+        "wfffffffwfffffffw",
+        "wfeeeewwwwweeeefw",
+        "wsweeeeeeeeeeewsw",
+        "wfwwwfffwfffwwwfw",
+        "wfeeeeeeweeeeeefw",
+        "wwwwwwwwwwwwwwwww"
+
+    ],
+
+    "players": {
+        "ghosts": [
+            {
+                "position": [14, 1],
+                "direction": "Left"
+            },
+            {
+                "position": [2, 9],
+                "direction": "Up"
+            }
+           
+        ],
+
+        "pacman": {
+            "position": [1, 1],
+            "direction": "Right",
+            "health": 5
+        }
+    },
+
+    "constants": {
+        "food_score" : 2,
+        "super_food_score": 5,
+        "ghost_death_score": 15,
+        "pacman_death_score": 20,
+        "pacman_giant_form_duration": 15,
+        "max_cycles" : 200
+    }
+}

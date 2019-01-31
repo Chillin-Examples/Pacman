@@ -32,9 +32,6 @@ def decide(width, height, my_score, other_score,
            board, pacman, ghosts, constants,
            my_side, other_side, current_cycle, cycle_duration):
 
-    """
-        Write your own AI code here
-    """
     if my_side == 'Pacman':
         change_pacman_direction(random.choice([
             DIR_UP,

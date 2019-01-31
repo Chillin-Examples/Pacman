@@ -19,27 +19,61 @@ namespace simple_ai {
 AI *ai;
 
 
-void move(int bananaId, int dir)
+const int CELL_EMPTY = ECell::Empty;
+const int CELL_FOOD = ECell::Food;
+const int CELL_SUPER_FOOD = ECell::SuperFood;
+const int CELL_WALL = ECell::Wall;
+
+const int DIR_UP = EDirection::Up;
+const int DIR_RIGHT = EDirection::Right;
+const int DIR_DOWN = EDirection::Down;
+const int DIR_LEFT = EDirection::Left;
+
+
+void changePacmanDirection(int dir)
 {
-    ai->sendCommand(&move);
+    ChangePacmanDirection changeDir;
+    changeDir.direction((ECommandDirection) dir);
+    ai->sendCommand(&changeDir);
 }
 
+void changeGhostDirection(int id, int dir)
+{
+    ChangeGhostDirection changeDir;
+    changeDir.id(id);
+    changeDir.direction((ECommandDirection) dir);
+    ai->sendCommand(&changeDir);
+}
+
+
 void initialize(
-    int width, int height, int myScore, int otherScore, int **board,
-    Banana myBananas[], int myBananasCount, Banana otherBananas[], int otherBananasCount,
-    PowerUp powerups[], int powerupsCount, int enter_score,
+    int width, int height, int myScore, int otherScore, std::vector<std::vector<ECell>>& board,
+    Pacman& Pacman, Ghost ghosts[], int ghostsCount,
+    Constants& constants,
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
 }
 
 
 void decide(
-    int width, int height, int myScore, int otherScore, int **board,
-    Banana myBananas[], int myBananasCount, Banana otherBananas[], int otherBananasCount,
-    PowerUp powerups[], int powerupsCount, int enter_score,
+    int width, int height, int myScore, int otherScore, std::vector<std::vector<ECell>>& board,
+    Pacman& Pacman, Ghost ghosts[], int ghostsCount,
+    Constants& constants,
     string mySide, string otherSide, int currentCycle, float cycleDuration)
 {
-    
+    // Write your own AI code here
+    if (mySide == "Pacman")
+    {
+        changePacmanDirection(DIR_UP);
+    }
+    else if (mySide == "Ghost")
+    {
+        for (int i = 0; i < ghostsCount; i++)
+        {
+            Ghost ghost = ghosts[i];
+            changeGhostDirection(ghost.id(), DIR_UP);
+        }
+    }
 }
 
 }
