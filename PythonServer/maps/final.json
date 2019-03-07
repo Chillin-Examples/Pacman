@@ -1,0 +1,61 @@
+{
+    "board": [
+        "wwwwwwwwwwwwwwwwwwwwwwwww",
+        "wfffffffffffwfffffffffffw",
+        "wfwwwwwfwwwwwwwwwfwwwwwfw",
+        "wfffsfffwfffffffwfffsfffw",
+        "wfwwwwwfwfwwwwwfwfwwwwwfw",
+        "wfweeewfwfwfffwfwfweeewfw",
+        "wfwwwwwfwfwfwfwfwfwwwwwfw",
+        "wfffffffffffwfffffffffffw",
+        "wfwwwwwwfwwwwwwwfwwwwwwfw",
+        "wfffffffeeeeeeeeefffffffw",
+        "wfwwwwfwewweeewwewfwwwwfw",
+        "wffffwfweweeeeewewfwffffw",
+        "wwfwfwfweweeeeewewfwfwfww",
+        "wffwfwfweweeeeewewfwfwffw",
+        "wfwwfwfwewwwwwwwewfwfwwfw",
+        "wfffffffffffwfffffffffffw",
+        "wwwfwwwwfwwwwwwwfwwwwfwww",
+        "wfffffffffffefffffffffffw",
+        "wfwwwwwfwwwwwwwwwfwwwwwfw",
+        "wfffffffffffwfffffffffffw",
+        "wfwwwwwfwfwwwwwfwfwwwwwfw",
+        "wfweeewfwfffffffwfweeewfw",
+        "wfwwwwwfwwwwwwwwwfwwwwwfw",
+        "wfffsfffffffffffffffsfffw",
+        "wwwwwwwwwwwwwwwwwwwwwwwww"
+    ],
+
+    "players": {
+        "ghosts": [
+            {
+                "position": [12, 11],
+                "direction": "Up"
+            },
+            {
+                "position": [11, 12],
+                "direction": "Up"
+            },
+            {
+                "position": [13, 12],
+                "direction": "Up"
+            }
+        ],
+
+        "pacman": {
+            "position": [12, 17],
+            "direction": "Left",
+            "health": 3
+        }
+    },
+
+    "constants": {
+        "food_score" : 1,
+        "super_food_score": 5,
+        "ghost_death_score": 20,
+        "pacman_death_score": 50,
+        "pacman_giant_form_duration": 35,
+        "max_cycles" : 300
+    }
+}
