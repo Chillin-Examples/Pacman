@@ -46,7 +46,6 @@
 		"max_team_commands": 100,
 		"max_agent_commands": 100,
 		"": "my configs",
-		"cell_size": 1.125,
-		"map": "maps/final.json"
+		"map_path": "maps/final.json"
 	}
 }

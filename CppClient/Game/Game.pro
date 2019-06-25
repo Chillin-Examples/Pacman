@@ -50,4 +50,4 @@ HEADERS += \
     ks/commands.h \
     ks/models.h \
     ai.h \
-    simple_ai.h
+    effolkronium/random.hpp

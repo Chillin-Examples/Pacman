@@ -14,11 +14,9 @@
         "wfeeeeeseeeeeeefeeeeeeefw",
         "wffsffffffffffffffffffffw",
         "wwwwwwwwwwwwwwwwwwwwwwwww"
-
     ],
 
-    "players":{
-
+    "agents":{
         "ghosts": [
             {
                 "position": [8, 1],

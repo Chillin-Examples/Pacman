@@ -13,7 +13,7 @@
         "wwwwwwwwwww"
     ],
 
-    "players": {
+    "agents": {
         "ghosts": [
             {
                 "position": [1, 5],
@@ -23,7 +23,6 @@
                 "position": [6, 4],
                 "direction": "Right"
             }
-           
         ],
 
         "pacman": {

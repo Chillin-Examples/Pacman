@@ -27,7 +27,7 @@
         "wwwwwwwwwwwwwwwwwwwwwwwww"
     ],
 
-    "players": {
+    "agents": {
         "ghosts": [
             {
                 "position": [12, 11],

@@ -28,21 +28,27 @@ pacman_giant_form_duration = int
 max_cycles = int
 
 
-[Pacman]
+[Position]
 _def = class
 x = int
 y = int
+
+
+[Agent]
+_def = class
+position = Position
 direction = EDirection
+
+
+[Pacman]
+_def = class(Agent)
 health = int
 giant_form_remaining_time = int
 
 
 [Ghost]
-_def = class
-x = int
-y = int
+_def = class(Agent)
 id = int
-direction = EDirection
 
 
 [World]

@@ -28,7 +28,7 @@ public:
 namespace models
 {
 
-enum ECell
+enum class ECell
 {
 	Empty = 0,
 	Food = 1,
@@ -37,7 +37,7 @@ enum ECell
 };
 
 
-enum EDirection
+enum class EDirection
 {
 	Up = 0,
 	Right = 1,
@@ -381,22 +381,16 @@ public:
 };
 
 
-class Pacman : public KSObject
+class Position : public KSObject
 {
 
 protected:
 
 	int __x;
 	int __y;
-	EDirection __direction;
-	int __health;
-	int __giantFormRemainingTime;
 
 	bool __has_x;
 	bool __has_y;
-	bool __has_direction;
-	bool __has_health;
-	bool __has_giantFormRemainingTime;
 
 
 public: // getters
@@ -411,21 +405,6 @@ public: // getters
 		return __y;
 	}
 	
-	inline EDirection direction() const
-	{
-		return __direction;
-	}
-	
-	inline int health() const
-	{
-		return __health;
-	}
-	
-	inline int giantFormRemainingTime() const
-	{
-		return __giantFormRemainingTime;
-	}
-	
 
 public: // reference getters
 
@@ -437,21 +416,6 @@ public: // reference getters
 	inline int &ref_y() const
 	{
 		return (int&) __y;
-	}
-	
-	inline EDirection &ref_direction() const
-	{
-		return (EDirection&) __direction;
-	}
-	
-	inline int &ref_health() const
-	{
-		return (int&) __health;
-	}
-	
-	inline int &ref_giantFormRemainingTime() const
-	{
-		return (int&) __giantFormRemainingTime;
 	}
 	
 
@@ -469,24 +433,6 @@ public: // setters
 		has_y(true);
 	}
 	
-	inline void direction(const EDirection &direction)
-	{
-		__direction = direction;
-		has_direction(true);
-	}
-	
-	inline void health(const int &health)
-	{
-		__health = health;
-		has_health(true);
-	}
-	
-	inline void giantFormRemainingTime(const int &giantFormRemainingTime)
-	{
-		__giantFormRemainingTime = giantFormRemainingTime;
-		has_giantFormRemainingTime(true);
-	}
-	
 
 public: // has_attribute getters
 
@@ -498,21 +444,6 @@ public: // has_attribute getters
 	inline bool has_y() const
 	{
 		return __has_y;
-	}
-	
-	inline bool has_direction() const
-	{
-		return __has_direction;
-	}
-	
-	inline bool has_health() const
-	{
-		return __has_health;
-	}
-	
-	inline bool has_giantFormRemainingTime() const
-	{
-		return __has_giantFormRemainingTime;
 	}
 	
 
@@ -528,41 +459,23 @@ public: // has_attribute setters
 		__has_y = has_y;
 	}
 	
-	inline void has_direction(const bool &has_direction)
-	{
-		__has_direction = has_direction;
-	}
-	
-	inline void has_health(const bool &has_health)
-	{
-		__has_health = has_health;
-	}
-	
-	inline void has_giantFormRemainingTime(const bool &has_giantFormRemainingTime)
-	{
-		__has_giantFormRemainingTime = has_giantFormRemainingTime;
-	}
-	
 
 public:
 
-	Pacman()
+	Position()
 	{
 		has_x(false);
 		has_y(false);
-		has_direction(false);
-		has_health(false);
-		has_giantFormRemainingTime(false);
 	}
 	
 	static inline const std::string nameStatic()
 	{
-		return "Pacman";
+		return "Position";
 	}
 	
 	virtual inline const std::string name() const
 	{
-		return "Pacman";
+		return "Position";
 	}
 	
 	std::string serialize() const
@@ -587,33 +500,6 @@ public:
 			s += std::string(tmp23, sizeof(int));
 		}
 		
-		// serialize direction
-		s += __has_direction;
-		if (__has_direction)
-		{
-			char tmp25 = (char) __direction;
-			auto tmp26 = reinterpret_cast<char*>(&tmp25);
-			s += std::string(tmp26, sizeof(char));
-		}
-		
-		// serialize health
-		s += __has_health;
-		if (__has_health)
-		{
-			int tmp28 = __health;
-			auto tmp29 = reinterpret_cast<char*>(&tmp28);
-			s += std::string(tmp29, sizeof(int));
-		}
-		
-		// serialize giantFormRemainingTime
-		s += __has_giantFormRemainingTime;
-		if (__has_giantFormRemainingTime)
-		{
-			int tmp31 = __giantFormRemainingTime;
-			auto tmp32 = reinterpret_cast<char*>(&tmp31);
-			s += std::string(tmp32, sizeof(int));
-		}
-		
 		return s;
 	}
 	
@@ -637,16 +523,286 @@ public:
 			offset += sizeof(int);
 		}
 		
+		return offset;
+	}
+};
+
+
+class Agent : public KSObject
+{
+
+protected:
+
+	Position __position;
+	EDirection __direction;
+
+	bool __has_position;
+	bool __has_direction;
+
+
+public: // getters
+
+	inline Position position() const
+	{
+		return __position;
+	}
+	
+	inline EDirection direction() const
+	{
+		return __direction;
+	}
+	
+
+public: // reference getters
+
+	inline Position &ref_position() const
+	{
+		return (Position&) __position;
+	}
+	
+	inline EDirection &ref_direction() const
+	{
+		return (EDirection&) __direction;
+	}
+	
+
+public: // setters
+
+	inline void position(const Position &position)
+	{
+		__position = position;
+		has_position(true);
+	}
+	
+	inline void direction(const EDirection &direction)
+	{
+		__direction = direction;
+		has_direction(true);
+	}
+	
+
+public: // has_attribute getters
+
+	inline bool has_position() const
+	{
+		return __has_position;
+	}
+	
+	inline bool has_direction() const
+	{
+		return __has_direction;
+	}
+	
+
+public: // has_attribute setters
+
+	inline void has_position(const bool &has_position)
+	{
+		__has_position = has_position;
+	}
+	
+	inline void has_direction(const bool &has_direction)
+	{
+		__has_direction = has_direction;
+	}
+	
+
+public:
+
+	Agent()
+	{
+		has_position(false);
+		has_direction(false);
+	}
+	
+	static inline const std::string nameStatic()
+	{
+		return "Agent";
+	}
+	
+	virtual inline const std::string name() const
+	{
+		return "Agent";
+	}
+	
+	std::string serialize() const
+	{
+		std::string s = "";
+		
+		// serialize position
+		s += __has_position;
+		if (__has_position)
+		{
+			s += __position.serialize();
+		}
+		
+		// serialize direction
+		s += __has_direction;
+		if (__has_direction)
+		{
+			char tmp25 = (char) __direction;
+			auto tmp26 = reinterpret_cast<char*>(&tmp25);
+			s += std::string(tmp26, sizeof(char));
+		}
+		
+		return s;
+	}
+	
+	unsigned int deserialize(const std::string &s, unsigned int offset=0)
+	{
+		// deserialize position
+		__has_position = *((unsigned char*) (&s[offset]));
+		offset += sizeof(unsigned char);
+		if (__has_position)
+		{
+			offset = __position.deserialize(s, offset);
+		}
+		
 		// deserialize direction
 		__has_direction = *((unsigned char*) (&s[offset]));
 		offset += sizeof(unsigned char);
 		if (__has_direction)
 		{
-			char tmp33;
-			tmp33 = *((char*) (&s[offset]));
+			char tmp27;
+			tmp27 = *((char*) (&s[offset]));
 			offset += sizeof(char);
-			__direction = (EDirection) tmp33;
+			__direction = (EDirection) tmp27;
 		}
+		
+		return offset;
+	}
+};
+
+
+class Pacman : public Agent
+{
+
+protected:
+
+	int __health;
+	int __giantFormRemainingTime;
+
+	bool __has_health;
+	bool __has_giantFormRemainingTime;
+
+
+public: // getters
+
+	inline int health() const
+	{
+		return __health;
+	}
+	
+	inline int giantFormRemainingTime() const
+	{
+		return __giantFormRemainingTime;
+	}
+	
+
+public: // reference getters
+
+	inline int &ref_health() const
+	{
+		return (int&) __health;
+	}
+	
+	inline int &ref_giantFormRemainingTime() const
+	{
+		return (int&) __giantFormRemainingTime;
+	}
+	
+
+public: // setters
+
+	inline void health(const int &health)
+	{
+		__health = health;
+		has_health(true);
+	}
+	
+	inline void giantFormRemainingTime(const int &giantFormRemainingTime)
+	{
+		__giantFormRemainingTime = giantFormRemainingTime;
+		has_giantFormRemainingTime(true);
+	}
+	
+
+public: // has_attribute getters
+
+	inline bool has_health() const
+	{
+		return __has_health;
+	}
+	
+	inline bool has_giantFormRemainingTime() const
+	{
+		return __has_giantFormRemainingTime;
+	}
+	
+
+public: // has_attribute setters
+
+	inline void has_health(const bool &has_health)
+	{
+		__has_health = has_health;
+	}
+	
+	inline void has_giantFormRemainingTime(const bool &has_giantFormRemainingTime)
+	{
+		__has_giantFormRemainingTime = has_giantFormRemainingTime;
+	}
+	
+
+public:
+
+	Pacman()
+	{
+		has_health(false);
+		has_giantFormRemainingTime(false);
+	}
+	
+	static inline const std::string nameStatic()
+	{
+		return "Pacman";
+	}
+	
+	virtual inline const std::string name() const
+	{
+		return "Pacman";
+	}
+	
+	std::string serialize() const
+	{
+		std::string s = "";
+		
+		// serialize parents
+		s += Agent::serialize();
+		
+		// serialize health
+		s += __has_health;
+		if (__has_health)
+		{
+			int tmp29 = __health;
+			auto tmp30 = reinterpret_cast<char*>(&tmp29);
+			s += std::string(tmp30, sizeof(int));
+		}
+		
+		// serialize giantFormRemainingTime
+		s += __has_giantFormRemainingTime;
+		if (__has_giantFormRemainingTime)
+		{
+			int tmp32 = __giantFormRemainingTime;
+			auto tmp33 = reinterpret_cast<char*>(&tmp32);
+			s += std::string(tmp33, sizeof(int));
+		}
+		
+		return s;
+	}
+	
+	unsigned int deserialize(const std::string &s, unsigned int offset=0)
+	{
+		// deserialize parents
+		offset = Agent::deserialize(s, offset);
 		
 		// deserialize health
 		__has_health = *((unsigned char*) (&s[offset]));
@@ -671,138 +827,54 @@ public:
 };
 
 
-class Ghost : public KSObject
+class Ghost : public Agent
 {
 
 protected:
 
-	int __x;
-	int __y;
 	int __id;
-	EDirection __direction;
 
-	bool __has_x;
-	bool __has_y;
 	bool __has_id;
-	bool __has_direction;
 
 
 public: // getters
 
-	inline int x() const
-	{
-		return __x;
-	}
-	
-	inline int y() const
-	{
-		return __y;
-	}
-	
 	inline int id() const
 	{
 		return __id;
 	}
 	
-	inline EDirection direction() const
-	{
-		return __direction;
-	}
-	
 
 public: // reference getters
 
-	inline int &ref_x() const
-	{
-		return (int&) __x;
-	}
-	
-	inline int &ref_y() const
-	{
-		return (int&) __y;
-	}
-	
 	inline int &ref_id() const
 	{
 		return (int&) __id;
 	}
 	
-	inline EDirection &ref_direction() const
-	{
-		return (EDirection&) __direction;
-	}
-	
 
 public: // setters
 
-	inline void x(const int &x)
-	{
-		__x = x;
-		has_x(true);
-	}
-	
-	inline void y(const int &y)
-	{
-		__y = y;
-		has_y(true);
-	}
-	
 	inline void id(const int &id)
 	{
 		__id = id;
 		has_id(true);
 	}
 	
-	inline void direction(const EDirection &direction)
-	{
-		__direction = direction;
-		has_direction(true);
-	}
-	
 
 public: // has_attribute getters
 
-	inline bool has_x() const
-	{
-		return __has_x;
-	}
-	
-	inline bool has_y() const
-	{
-		return __has_y;
-	}
-	
 	inline bool has_id() const
 	{
 		return __has_id;
 	}
 	
-	inline bool has_direction() const
-	{
-		return __has_direction;
-	}
-	
 
 public: // has_attribute setters
 
-	inline void has_x(const bool &has_x)
-	{
-		__has_x = has_x;
-	}
-	
-	inline void has_y(const bool &has_y)
-	{
-		__has_y = has_y;
-	}
-	
 	inline void has_id(const bool &has_id)
 	{
 		__has_id = has_id;
-	}
-	
-	inline void has_direction(const bool &has_direction)
-	{
-		__has_direction = has_direction;
 	}
 	
 
@@ -810,10 +882,7 @@ public:
 
 	Ghost()
 	{
-		has_x(false);
-		has_y(false);
 		has_id(false);
-		has_direction(false);
 	}
 	
 	static inline const std::string nameStatic()
@@ -830,40 +899,16 @@ public:
 	{
 		std::string s = "";
 		
-		// serialize x
-		s += __has_x;
-		if (__has_x)
-		{
-			int tmp35 = __x;
-			auto tmp36 = reinterpret_cast<char*>(&tmp35);
-			s += std::string(tmp36, sizeof(int));
-		}
-		
-		// serialize y
-		s += __has_y;
-		if (__has_y)
-		{
-			int tmp38 = __y;
-			auto tmp39 = reinterpret_cast<char*>(&tmp38);
-			s += std::string(tmp39, sizeof(int));
-		}
+		// serialize parents
+		s += Agent::serialize();
 		
 		// serialize id
 		s += __has_id;
 		if (__has_id)
 		{
-			int tmp41 = __id;
-			auto tmp42 = reinterpret_cast<char*>(&tmp41);
-			s += std::string(tmp42, sizeof(int));
-		}
-		
-		// serialize direction
-		s += __has_direction;
-		if (__has_direction)
-		{
-			char tmp44 = (char) __direction;
-			auto tmp45 = reinterpret_cast<char*>(&tmp44);
-			s += std::string(tmp45, sizeof(char));
+			int tmp35 = __id;
+			auto tmp36 = reinterpret_cast<char*>(&tmp35);
+			s += std::string(tmp36, sizeof(int));
 		}
 		
 		return s;
@@ -871,23 +916,8 @@ public:
 	
 	unsigned int deserialize(const std::string &s, unsigned int offset=0)
 	{
-		// deserialize x
-		__has_x = *((unsigned char*) (&s[offset]));
-		offset += sizeof(unsigned char);
-		if (__has_x)
-		{
-			__x = *((int*) (&s[offset]));
-			offset += sizeof(int);
-		}
-		
-		// deserialize y
-		__has_y = *((unsigned char*) (&s[offset]));
-		offset += sizeof(unsigned char);
-		if (__has_y)
-		{
-			__y = *((int*) (&s[offset]));
-			offset += sizeof(int);
-		}
+		// deserialize parents
+		offset = Agent::deserialize(s, offset);
 		
 		// deserialize id
 		__has_id = *((unsigned char*) (&s[offset]));
@@ -896,17 +926,6 @@ public:
 		{
 			__id = *((int*) (&s[offset]));
 			offset += sizeof(int);
-		}
-		
-		// deserialize direction
-		__has_direction = *((unsigned char*) (&s[offset]));
-		offset += sizeof(unsigned char);
-		if (__has_direction)
-		{
-			char tmp46;
-			tmp46 = *((char*) (&s[offset]));
-			offset += sizeof(char);
-			__direction = (EDirection) tmp46;
 		}
 		
 		return offset;
@@ -1164,55 +1183,55 @@ public:
 		s += __has_width;
 		if (__has_width)
 		{
-			int tmp48 = __width;
-			auto tmp49 = reinterpret_cast<char*>(&tmp48);
-			s += std::string(tmp49, sizeof(int));
+			int tmp38 = __width;
+			auto tmp39 = reinterpret_cast<char*>(&tmp38);
+			s += std::string(tmp39, sizeof(int));
 		}
 		
 		// serialize height
 		s += __has_height;
 		if (__has_height)
 		{
-			int tmp51 = __height;
-			auto tmp52 = reinterpret_cast<char*>(&tmp51);
-			s += std::string(tmp52, sizeof(int));
+			int tmp41 = __height;
+			auto tmp42 = reinterpret_cast<char*>(&tmp41);
+			s += std::string(tmp42, sizeof(int));
 		}
 		
 		// serialize board
 		s += __has_board;
 		if (__has_board)
 		{
-			std::string tmp53 = "";
-			unsigned int tmp55 = __board.size();
-			auto tmp56 = reinterpret_cast<char*>(&tmp55);
-			tmp53 += std::string(tmp56, sizeof(unsigned int));
-			while (tmp53.size() && tmp53.back() == 0)
-				tmp53.pop_back();
-			unsigned char tmp58 = tmp53.size();
-			auto tmp59 = reinterpret_cast<char*>(&tmp58);
-			s += std::string(tmp59, sizeof(unsigned char));
-			s += tmp53;
+			std::string tmp43 = "";
+			unsigned int tmp45 = __board.size();
+			auto tmp46 = reinterpret_cast<char*>(&tmp45);
+			tmp43 += std::string(tmp46, sizeof(unsigned int));
+			while (tmp43.size() && tmp43.back() == 0)
+				tmp43.pop_back();
+			unsigned char tmp48 = tmp43.size();
+			auto tmp49 = reinterpret_cast<char*>(&tmp48);
+			s += std::string(tmp49, sizeof(unsigned char));
+			s += tmp43;
 			
-			for (auto &tmp60 : __board)
+			for (auto &tmp50 : __board)
 			{
 				s += '\x01';
-				std::string tmp61 = "";
-				unsigned int tmp63 = tmp60.size();
-				auto tmp64 = reinterpret_cast<char*>(&tmp63);
-				tmp61 += std::string(tmp64, sizeof(unsigned int));
-				while (tmp61.size() && tmp61.back() == 0)
-					tmp61.pop_back();
-				unsigned char tmp66 = tmp61.size();
-				auto tmp67 = reinterpret_cast<char*>(&tmp66);
-				s += std::string(tmp67, sizeof(unsigned char));
-				s += tmp61;
+				std::string tmp51 = "";
+				unsigned int tmp53 = tmp50.size();
+				auto tmp54 = reinterpret_cast<char*>(&tmp53);
+				tmp51 += std::string(tmp54, sizeof(unsigned int));
+				while (tmp51.size() && tmp51.back() == 0)
+					tmp51.pop_back();
+				unsigned char tmp56 = tmp51.size();
+				auto tmp57 = reinterpret_cast<char*>(&tmp56);
+				s += std::string(tmp57, sizeof(unsigned char));
+				s += tmp51;
 				
-				for (auto &tmp68 : tmp60)
+				for (auto &tmp58 : tmp50)
 				{
 					s += '\x01';
-					char tmp70 = (char) tmp68;
-					auto tmp71 = reinterpret_cast<char*>(&tmp70);
-					s += std::string(tmp71, sizeof(char));
+					char tmp60 = (char) tmp58;
+					auto tmp61 = reinterpret_cast<char*>(&tmp60);
+					s += std::string(tmp61, sizeof(char));
 				}
 			}
 		}
@@ -1221,37 +1240,37 @@ public:
 		s += __has_scores;
 		if (__has_scores)
 		{
-			std::string tmp72 = "";
-			unsigned int tmp74 = __scores.size();
-			auto tmp75 = reinterpret_cast<char*>(&tmp74);
-			tmp72 += std::string(tmp75, sizeof(unsigned int));
-			while (tmp72.size() && tmp72.back() == 0)
-				tmp72.pop_back();
-			unsigned char tmp77 = tmp72.size();
-			auto tmp78 = reinterpret_cast<char*>(&tmp77);
-			s += std::string(tmp78, sizeof(unsigned char));
-			s += tmp72;
+			std::string tmp62 = "";
+			unsigned int tmp64 = __scores.size();
+			auto tmp65 = reinterpret_cast<char*>(&tmp64);
+			tmp62 += std::string(tmp65, sizeof(unsigned int));
+			while (tmp62.size() && tmp62.back() == 0)
+				tmp62.pop_back();
+			unsigned char tmp67 = tmp62.size();
+			auto tmp68 = reinterpret_cast<char*>(&tmp67);
+			s += std::string(tmp68, sizeof(unsigned char));
+			s += tmp62;
 			
-			for (auto &tmp79 : __scores)
+			for (auto &tmp69 : __scores)
 			{
 				s += '\x01';
-				std::string tmp80 = "";
-				unsigned int tmp82 = tmp79.first.size();
-				auto tmp83 = reinterpret_cast<char*>(&tmp82);
-				tmp80 += std::string(tmp83, sizeof(unsigned int));
-				while (tmp80.size() && tmp80.back() == 0)
-					tmp80.pop_back();
-				unsigned char tmp85 = tmp80.size();
-				auto tmp86 = reinterpret_cast<char*>(&tmp85);
-				s += std::string(tmp86, sizeof(unsigned char));
-				s += tmp80;
+				std::string tmp70 = "";
+				unsigned int tmp72 = tmp69.first.size();
+				auto tmp73 = reinterpret_cast<char*>(&tmp72);
+				tmp70 += std::string(tmp73, sizeof(unsigned int));
+				while (tmp70.size() && tmp70.back() == 0)
+					tmp70.pop_back();
+				unsigned char tmp75 = tmp70.size();
+				auto tmp76 = reinterpret_cast<char*>(&tmp75);
+				s += std::string(tmp76, sizeof(unsigned char));
+				s += tmp70;
 				
-				s += tmp79.first;
+				s += tmp69.first;
 				
 				s += '\x01';
-				int tmp88 = tmp79.second;
-				auto tmp89 = reinterpret_cast<char*>(&tmp88);
-				s += std::string(tmp89, sizeof(int));
+				int tmp78 = tmp69.second;
+				auto tmp79 = reinterpret_cast<char*>(&tmp78);
+				s += std::string(tmp79, sizeof(int));
 			}
 		}
 		
@@ -1266,21 +1285,21 @@ public:
 		s += __has_ghosts;
 		if (__has_ghosts)
 		{
-			std::string tmp90 = "";
-			unsigned int tmp92 = __ghosts.size();
-			auto tmp93 = reinterpret_cast<char*>(&tmp92);
-			tmp90 += std::string(tmp93, sizeof(unsigned int));
-			while (tmp90.size() && tmp90.back() == 0)
-				tmp90.pop_back();
-			unsigned char tmp95 = tmp90.size();
-			auto tmp96 = reinterpret_cast<char*>(&tmp95);
-			s += std::string(tmp96, sizeof(unsigned char));
-			s += tmp90;
+			std::string tmp80 = "";
+			unsigned int tmp82 = __ghosts.size();
+			auto tmp83 = reinterpret_cast<char*>(&tmp82);
+			tmp80 += std::string(tmp83, sizeof(unsigned int));
+			while (tmp80.size() && tmp80.back() == 0)
+				tmp80.pop_back();
+			unsigned char tmp85 = tmp80.size();
+			auto tmp86 = reinterpret_cast<char*>(&tmp85);
+			s += std::string(tmp86, sizeof(unsigned char));
+			s += tmp80;
 			
-			for (auto &tmp97 : __ghosts)
+			for (auto &tmp87 : __ghosts)
 			{
 				s += '\x01';
-				s += tmp97.serialize();
+				s += tmp87.serialize();
 			}
 		}
 		
@@ -1319,43 +1338,43 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_board)
 		{
-			unsigned char tmp98;
-			tmp98 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp88;
+			tmp88 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp99 = std::string(&s[offset], tmp98);
-			offset += tmp98;
-			while (tmp99.size() < sizeof(unsigned int))
-				tmp99 += '\x00';
-			unsigned int tmp100;
-			tmp100 = *((unsigned int*) (&tmp99[0]));
+			std::string tmp89 = std::string(&s[offset], tmp88);
+			offset += tmp88;
+			while (tmp89.size() < sizeof(unsigned int))
+				tmp89 += '\x00';
+			unsigned int tmp90;
+			tmp90 = *((unsigned int*) (&tmp89[0]));
 			
 			__board.clear();
-			for (unsigned int tmp101 = 0; tmp101 < tmp100; tmp101++)
+			for (unsigned int tmp91 = 0; tmp91 < tmp90; tmp91++)
 			{
-				std::vector<ECell> tmp102;
+				std::vector<ECell> tmp92;
 				offset++;
-				unsigned char tmp103;
-				tmp103 = *((unsigned char*) (&s[offset]));
+				unsigned char tmp93;
+				tmp93 = *((unsigned char*) (&s[offset]));
 				offset += sizeof(unsigned char);
-				std::string tmp104 = std::string(&s[offset], tmp103);
-				offset += tmp103;
-				while (tmp104.size() < sizeof(unsigned int))
-					tmp104 += '\x00';
-				unsigned int tmp105;
-				tmp105 = *((unsigned int*) (&tmp104[0]));
+				std::string tmp94 = std::string(&s[offset], tmp93);
+				offset += tmp93;
+				while (tmp94.size() < sizeof(unsigned int))
+					tmp94 += '\x00';
+				unsigned int tmp95;
+				tmp95 = *((unsigned int*) (&tmp94[0]));
 				
-				tmp102.clear();
-				for (unsigned int tmp106 = 0; tmp106 < tmp105; tmp106++)
+				tmp92.clear();
+				for (unsigned int tmp96 = 0; tmp96 < tmp95; tmp96++)
 				{
-					ECell tmp107;
+					ECell tmp97;
 					offset++;
-					char tmp108;
-					tmp108 = *((char*) (&s[offset]));
+					char tmp98;
+					tmp98 = *((char*) (&s[offset]));
 					offset += sizeof(char);
-					tmp107 = (ECell) tmp108;
-					tmp102.push_back(tmp107);
+					tmp97 = (ECell) tmp98;
+					tmp92.push_back(tmp97);
 				}
-				__board.push_back(tmp102);
+				__board.push_back(tmp92);
 			}
 		}
 		
@@ -1364,40 +1383,40 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_scores)
 		{
-			unsigned char tmp109;
-			tmp109 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp99;
+			tmp99 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp110 = std::string(&s[offset], tmp109);
-			offset += tmp109;
-			while (tmp110.size() < sizeof(unsigned int))
-				tmp110 += '\x00';
-			unsigned int tmp111;
-			tmp111 = *((unsigned int*) (&tmp110[0]));
+			std::string tmp100 = std::string(&s[offset], tmp99);
+			offset += tmp99;
+			while (tmp100.size() < sizeof(unsigned int))
+				tmp100 += '\x00';
+			unsigned int tmp101;
+			tmp101 = *((unsigned int*) (&tmp100[0]));
 			
 			__scores.clear();
-			for (unsigned int tmp112 = 0; tmp112 < tmp111; tmp112++)
+			for (unsigned int tmp102 = 0; tmp102 < tmp101; tmp102++)
 			{
-				std::string tmp113;
+				std::string tmp103;
 				offset++;
-				unsigned char tmp115;
-				tmp115 = *((unsigned char*) (&s[offset]));
+				unsigned char tmp105;
+				tmp105 = *((unsigned char*) (&s[offset]));
 				offset += sizeof(unsigned char);
-				std::string tmp116 = std::string(&s[offset], tmp115);
-				offset += tmp115;
-				while (tmp116.size() < sizeof(unsigned int))
-					tmp116 += '\x00';
-				unsigned int tmp117;
-				tmp117 = *((unsigned int*) (&tmp116[0]));
+				std::string tmp106 = std::string(&s[offset], tmp105);
+				offset += tmp105;
+				while (tmp106.size() < sizeof(unsigned int))
+					tmp106 += '\x00';
+				unsigned int tmp107;
+				tmp107 = *((unsigned int*) (&tmp106[0]));
 				
-				tmp113 = s.substr(offset, tmp117);
-				offset += tmp117;
+				tmp103 = s.substr(offset, tmp107);
+				offset += tmp107;
 				
-				int tmp114;
+				int tmp104;
 				offset++;
-				tmp114 = *((int*) (&s[offset]));
+				tmp104 = *((int*) (&s[offset]));
 				offset += sizeof(int);
 				
-				__scores[tmp113] = tmp114;
+				__scores[tmp103] = tmp104;
 			}
 		}
 		
@@ -1414,23 +1433,23 @@ public:
 		offset += sizeof(unsigned char);
 		if (__has_ghosts)
 		{
-			unsigned char tmp118;
-			tmp118 = *((unsigned char*) (&s[offset]));
+			unsigned char tmp108;
+			tmp108 = *((unsigned char*) (&s[offset]));
 			offset += sizeof(unsigned char);
-			std::string tmp119 = std::string(&s[offset], tmp118);
-			offset += tmp118;
-			while (tmp119.size() < sizeof(unsigned int))
-				tmp119 += '\x00';
-			unsigned int tmp120;
-			tmp120 = *((unsigned int*) (&tmp119[0]));
+			std::string tmp109 = std::string(&s[offset], tmp108);
+			offset += tmp108;
+			while (tmp109.size() < sizeof(unsigned int))
+				tmp109 += '\x00';
+			unsigned int tmp110;
+			tmp110 = *((unsigned int*) (&tmp109[0]));
 			
 			__ghosts.clear();
-			for (unsigned int tmp121 = 0; tmp121 < tmp120; tmp121++)
+			for (unsigned int tmp111 = 0; tmp111 < tmp110; tmp111++)
 			{
-				Ghost tmp122;
+				Ghost tmp112;
 				offset++;
-				offset = tmp122.deserialize(s, offset);
-				__ghosts.push_back(tmp122);
+				offset = tmp112.deserialize(s, offset);
+				__ghosts.push_back(tmp112);
 			}
 		}
 		

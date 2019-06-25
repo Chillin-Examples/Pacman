@@ -8,11 +8,11 @@ from chillin_server.gui import scene_actions
 
 class GameStatus:
 
-    def __init__(self, world, scene, eat_delay):
+    def __init__(self, world, scene, **kwargs):
         self._world = world
         self._scene = scene
         self._rm = scene.rm
-        self._eat_delay = eat_delay
+        self._eat_delay = kwargs['eat_delay']
 
 
     def initialize(self):
@@ -36,7 +36,7 @@ class GameStatus:
         self._set_cycle_text(0)
 
         # Pacman health
-        for i in range(self._world.pacman.health):
+        for _ in range(self._world.pacman.health):
             new_ref = self._rm.new()
             self._health_images_ref.append(new_ref)
 
@@ -72,7 +72,7 @@ class GameStatus:
         self._scene.add_action(scene_actions.ChangeText(
             ref = self._top_panel_ref,
             child_ref = self._cycle_text_ref,
-            text = 'Cycle: {:d}/{:d}'.format(cycle, self._world.constants.max_cycles)
+            text = "Cycle: {:d}/{:d}".format(cycle, self._world.constants.max_cycles)
         ))
 
 

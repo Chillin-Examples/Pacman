@@ -30,8 +30,7 @@
         "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"   
     ],
 
-    "players":{
-
+    "agents":{
         "ghosts": [
             {
                 "position": [3, 17],
@@ -67,6 +66,4 @@
         "pacman_giant_form_duration": 20,
         "max_cycles" : 200
     }
-
-
 }

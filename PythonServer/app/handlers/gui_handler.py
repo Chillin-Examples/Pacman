@@ -8,35 +8,32 @@ import math
 from chillin_server.gui import scene_actions
 
 # project imports
-from ..ks.models import World, Pacman, Ghost, Constants, ECell, EDirection
-from ..ks.commands import ECommandDirection
+from ..ks.models import Position, Pacman, Ghost, World, ECell, EDirection
 from ..gui_events import GuiEventType
 from . import game_status
 
 
-class GuiHandler():
+class GuiHandler:
 
     def __init__(self, world, scene):
-
         self._world = world
         self._scene = scene
         self._rm = scene.rm
 
 
     def initialize(self, config):
-
         self._angle = {
-            EDirection.Up.name:    90,
-            EDirection.Right.name: 0,
-            EDirection.Down.name:  -90,
-            EDirection.Left.name:  180,
+            EDirection.Up: 90,
+            EDirection.Right: 0,
+            EDirection.Down: -90,
+            EDirection.Left: 180,
         }
 
         self._ghost_eyes_index = {
-            EDirection.Up.name:    5,
-            EDirection.Right.name: 3,
-            EDirection.Down.name:  1,
-            EDirection.Left.name:  2,
+            EDirection.Up: 5,
+            EDirection.Right: 3,
+            EDirection.Down: 1,
+            EDirection.Left: 2,
         }
 
         self._ghosts_color = [
@@ -57,22 +54,22 @@ class GuiHandler():
         self._foods_ref = {}
         self._super_foods_ref = {}
 
-        self._config(config)
+        self._configure(config)
         self._init_camera()
         self._init_sounds()
         self._draw_board()
         self._draw_players()
 
         # Status
-        self._game_status = game_status.GameStatus(self._world, self._scene, self._eat_delay)
+        self._game_status = game_status.GameStatus(self._world, self._scene, eat_delay=self._eat_delay)
         self._game_status.initialize()
         self._game_status.draw_statuses()
 
         self._scene.add_action(scene_actions.EndCycle())
 
 
-    def _config(self, config):
-        self._cell_size = config['cell_size']
+    def _configure(self, config):
+        self._cell_size = 1.125
         self._x_offset = -self._world.width / 2.0 * self._cell_size
         self._y_offset = -self._world.height / 2.0 * self._cell_size
 
@@ -109,7 +106,7 @@ class GuiHandler():
             loop = True
         ))
 
-        # wakawaka Music
+        # Wakawaka Music
         self._scene.add_action(scene_actions.CreateBasicObject(
             ref = self._wakawaka_music_ref,
             type = scene_actions.EBasicObjectType.AudioSource
@@ -140,7 +137,7 @@ class GuiHandler():
                 cell = self._world.board[y][x]
                 if cell == ECell.Empty: continue
 
-                scene_pos = self._get_scene_position(x=x, y=y)
+                scene_pos = self._get_scene_position(Position(x, y))
                 z = 5
                 reference = self._rm.new()
 
@@ -204,7 +201,7 @@ class GuiHandler():
         wall_angle = 0
 
         if num_neighbor_walls == 1:
-            wall_type = 0 # End
+            wall_type = 0  # End
 
             if has_top_wall:
                 wall_angle = 180
@@ -217,14 +214,14 @@ class GuiHandler():
 
         elif num_neighbor_walls == 2:
             if (has_top_wall and has_bot_wall) or (has_left_wall and has_right_wall):
-                wall_type = 2 # Straight
+                wall_type = 2  # Straight
 
                 if has_top_wall:
                     wall_angle = 0
                 else:
                     wall_angle = 90
             else:
-                wall_type = 1 # Corner
+                wall_type = 1  # Corner
 
                 if has_top_wall and has_right_wall:
                     wall_angle = -90
@@ -251,10 +248,9 @@ class GuiHandler():
 
 
     def _draw_players(self):
-
         # Draw pacman
-        pacman_angle = self._angle[self._world.pacman.direction.name]
-        scene_pos = self._get_scene_position(x=self._world.pacman.x, y=self._world.pacman.y)
+        pacman_angle = self._angle[self._world.pacman.direction]
+        scene_pos = self._get_scene_position(self._world.pacman.position)
         self._pacman_ref = self._rm.new()
 
         self._scene.add_action(scene_actions.InstantiateBundleAsset(
@@ -270,7 +266,7 @@ class GuiHandler():
 
         # Draw ghosts
         for ghost in self._world.ghosts:
-            scene_pos = self._get_scene_position(x=ghost.x, y=ghost.y)
+            scene_pos = self._get_scene_position(ghost.position)
             self._ghosts_ref[ghost.id] = self._rm.new()
             color = self._ghosts_color[ghost.id % len(self._ghosts_color)]
 
@@ -313,7 +309,7 @@ class GuiHandler():
                 ref = ghost_ref,
                 cycle = cycle,
                 child_ref = self._ghost_eyes_ref,
-                sprite_asset = scene_actions.Asset(bundle_name='main', asset_name='GhostParts', index=self._ghost_eyes_index[direction.name])
+                sprite_asset = scene_actions.Asset(bundle_name='main', asset_name='GhostParts', index=self._ghost_eyes_index[direction])
             ))
 
 
@@ -357,7 +353,7 @@ class GuiHandler():
             # Move
             if event.type in [GuiEventType.MovePacman, GuiEventType.MoveGhost]:
                 ref = self._pacman_ref if event.type == GuiEventType.MovePacman else self._ghosts_ref[event.payload['id']]
-                pos = self._get_scene_position(event.payload['new_pos'][0], event.payload['new_pos'][1])
+                pos = self._get_scene_position(event.payload['new_pos'])
                 is_ghost_dead = 'id' in event.payload and event.payload['id'] in dead_ghosts_id
 
                 self._scene.add_action(scene_actions.ChangeTransform(
@@ -370,7 +366,7 @@ class GuiHandler():
 
             # Change Pacman direction
             elif event.type == GuiEventType.ChangePacmanDirection:
-                angle = self._angle[event.payload['direction'].name]
+                angle = self._angle[event.payload['direction']]
                 self._scene.add_action(scene_actions.ChangeTransform(
                     ref = self._pacman_ref,
                     rotation = scene_actions.Vector3(z=angle),
@@ -391,7 +387,7 @@ class GuiHandler():
                 # Remove food
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
-                    ref = self._foods_ref[event.payload["position"][0], event.payload["position"][1]]
+                    ref = self._foods_ref[event.payload["position"].x, event.payload["position"].y]
                 ))
 
             # Eat Super Food
@@ -400,7 +396,7 @@ class GuiHandler():
                 # Remove super food
                 self._scene.add_action(scene_actions.Destroy(
                     cycle = self._eat_delay,
-                    ref = self._super_foods_ref[event.payload["position"][0], event.payload["position"][1]]
+                    ref = self._super_foods_ref[event.payload["position"].x, event.payload["position"].y]
                 ))
 
                 # Pacman giant form
@@ -483,10 +479,9 @@ class GuiHandler():
             self._scene.add_action(scene_actions.EndCycle())
 
 
-    def _get_scene_position(self, x, y):
-
+    def _get_scene_position(self, position):
         addition = self._cell_size / 2
         return {
-            'x': x * self._cell_size + addition + self._x_offset,
-            'y': -(y * self._cell_size + addition + self._y_offset)
+            'x': position.x * self._cell_size + addition + self._x_offset,
+            'y': -(position.y * self._cell_size + addition + self._y_offset)
         }

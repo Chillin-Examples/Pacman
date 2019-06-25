@@ -136,23 +136,20 @@ class Constants(object):
 		return offset
 
 
-class Pacman(object):
+class Position(object):
 
 	@staticmethod
 	def name():
-		return 'Pacman'
+		return 'Position'
 
 
-	def __init__(self, x=None, y=None, direction=None, health=None, giant_form_remaining_time=None):
-		self.initialize(x, y, direction, health, giant_form_remaining_time)
+	def __init__(self, x=None, y=None):
+		self.initialize(x, y)
 	
 
-	def initialize(self, x=None, y=None, direction=None, health=None, giant_form_remaining_time=None):
+	def initialize(self, x=None, y=None):
 		self.x = x
 		self.y = y
-		self.direction = direction
-		self.health = health
-		self.giant_form_remaining_time = giant_form_remaining_time
 	
 
 	def serialize(self):
@@ -167,21 +164,6 @@ class Pacman(object):
 		s += b'\x00' if self.y is None else b'\x01'
 		if self.y is not None:
 			s += struct.pack('i', self.y)
-		
-		# serialize self.direction
-		s += b'\x00' if self.direction is None else b'\x01'
-		if self.direction is not None:
-			s += struct.pack('b', self.direction.value)
-		
-		# serialize self.health
-		s += b'\x00' if self.health is None else b'\x01'
-		if self.health is not None:
-			s += struct.pack('i', self.health)
-		
-		# serialize self.giant_form_remaining_time
-		s += b'\x00' if self.giant_form_remaining_time is None else b'\x01'
-		if self.giant_form_remaining_time is not None:
-			s += struct.pack('i', self.giant_form_remaining_time)
 		
 		return s
 	
@@ -205,72 +187,32 @@ class Pacman(object):
 		else:
 			self.y = None
 		
-		# deserialize self.direction
-		tmp8 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp8:
-			tmp9 = struct.unpack('b', s[offset:offset + 1])[0]
-			offset += 1
-			self.direction = EDirection(tmp9)
-		else:
-			self.direction = None
-		
-		# deserialize self.health
-		tmp10 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp10:
-			self.health = struct.unpack('i', s[offset:offset + 4])[0]
-			offset += 4
-		else:
-			self.health = None
-		
-		# deserialize self.giant_form_remaining_time
-		tmp11 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp11:
-			self.giant_form_remaining_time = struct.unpack('i', s[offset:offset + 4])[0]
-			offset += 4
-		else:
-			self.giant_form_remaining_time = None
-		
 		return offset
 
 
-class Ghost(object):
+class Agent(object):
 
 	@staticmethod
 	def name():
-		return 'Ghost'
+		return 'Agent'
 
 
-	def __init__(self, x=None, y=None, id=None, direction=None):
-		self.initialize(x, y, id, direction)
+	def __init__(self, position=None, direction=None):
+		self.initialize(position, direction)
 	
 
-	def initialize(self, x=None, y=None, id=None, direction=None):
-		self.x = x
-		self.y = y
-		self.id = id
+	def initialize(self, position=None, direction=None):
+		self.position = position
 		self.direction = direction
 	
 
 	def serialize(self):
 		s = b''
 		
-		# serialize self.x
-		s += b'\x00' if self.x is None else b'\x01'
-		if self.x is not None:
-			s += struct.pack('i', self.x)
-		
-		# serialize self.y
-		s += b'\x00' if self.y is None else b'\x01'
-		if self.y is not None:
-			s += struct.pack('i', self.y)
-		
-		# serialize self.id
-		s += b'\x00' if self.id is None else b'\x01'
-		if self.id is not None:
-			s += struct.pack('i', self.id)
+		# serialize self.position
+		s += b'\x00' if self.position is None else b'\x01'
+		if self.position is not None:
+			s += self.position.serialize()
 		
 		# serialize self.direction
 		s += b'\x00' if self.direction is None else b'\x01'
@@ -281,42 +223,133 @@ class Ghost(object):
 	
 
 	def deserialize(self, s, offset=0):
-		# deserialize self.x
+		# deserialize self.position
+		tmp8 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp8:
+			self.position = Position()
+			offset = self.position.deserialize(s, offset)
+		else:
+			self.position = None
+		
+		# deserialize self.direction
+		tmp9 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp9:
+			tmp10 = struct.unpack('b', s[offset:offset + 1])[0]
+			offset += 1
+			self.direction = EDirection(tmp10)
+		else:
+			self.direction = None
+		
+		return offset
+
+
+class Pacman(Agent):
+
+	@staticmethod
+	def name():
+		return 'Pacman'
+
+
+	def __init__(self, position=None, direction=None, health=None, giant_form_remaining_time=None):
+		self.initialize(position, direction, health, giant_form_remaining_time)
+	
+
+	def initialize(self, position=None, direction=None, health=None, giant_form_remaining_time=None):
+		Agent.initialize(self, position, direction)
+		
+		self.health = health
+		self.giant_form_remaining_time = giant_form_remaining_time
+	
+
+	def serialize(self):
+		s = b''
+		
+		# serialize parents
+		s += Agent.serialize(self)
+		
+		# serialize self.health
+		s += b'\x00' if self.health is None else b'\x01'
+		if self.health is not None:
+			s += struct.pack('i', self.health)
+		
+		# serialize self.giant_form_remaining_time
+		s += b'\x00' if self.giant_form_remaining_time is None else b'\x01'
+		if self.giant_form_remaining_time is not None:
+			s += struct.pack('i', self.giant_form_remaining_time)
+		
+		return s
+	
+
+	def deserialize(self, s, offset=0):
+		# deserialize parents
+		offset = Agent.deserialize(self, s, offset)
+		
+		# deserialize self.health
+		tmp11 = struct.unpack('B', s[offset:offset + 1])[0]
+		offset += 1
+		if tmp11:
+			self.health = struct.unpack('i', s[offset:offset + 4])[0]
+			offset += 4
+		else:
+			self.health = None
+		
+		# deserialize self.giant_form_remaining_time
 		tmp12 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
 		if tmp12:
-			self.x = struct.unpack('i', s[offset:offset + 4])[0]
+			self.giant_form_remaining_time = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
-			self.x = None
+			self.giant_form_remaining_time = None
 		
-		# deserialize self.y
+		return offset
+
+
+class Ghost(Agent):
+
+	@staticmethod
+	def name():
+		return 'Ghost'
+
+
+	def __init__(self, position=None, direction=None, id=None):
+		self.initialize(position, direction, id)
+	
+
+	def initialize(self, position=None, direction=None, id=None):
+		Agent.initialize(self, position, direction)
+		
+		self.id = id
+	
+
+	def serialize(self):
+		s = b''
+		
+		# serialize parents
+		s += Agent.serialize(self)
+		
+		# serialize self.id
+		s += b'\x00' if self.id is None else b'\x01'
+		if self.id is not None:
+			s += struct.pack('i', self.id)
+		
+		return s
+	
+
+	def deserialize(self, s, offset=0):
+		# deserialize parents
+		offset = Agent.deserialize(self, s, offset)
+		
+		# deserialize self.id
 		tmp13 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
 		if tmp13:
-			self.y = struct.unpack('i', s[offset:offset + 4])[0]
-			offset += 4
-		else:
-			self.y = None
-		
-		# deserialize self.id
-		tmp14 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp14:
 			self.id = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.id = None
-		
-		# deserialize self.direction
-		tmp15 = struct.unpack('B', s[offset:offset + 1])[0]
-		offset += 1
-		if tmp15:
-			tmp16 = struct.unpack('b', s[offset:offset + 1])[0]
-			offset += 1
-			self.direction = EDirection(tmp16)
-		else:
-			self.direction = None
 		
 		return offset
 
@@ -358,52 +391,52 @@ class World(object):
 		# serialize self.board
 		s += b'\x00' if self.board is None else b'\x01'
 		if self.board is not None:
-			tmp17 = b''
-			tmp17 += struct.pack('I', len(self.board))
-			while len(tmp17) and tmp17[-1] == b'\x00'[0]:
-				tmp17 = tmp17[:-1]
-			s += struct.pack('B', len(tmp17))
-			s += tmp17
+			tmp14 = b''
+			tmp14 += struct.pack('I', len(self.board))
+			while len(tmp14) and tmp14[-1] == b'\x00'[0]:
+				tmp14 = tmp14[:-1]
+			s += struct.pack('B', len(tmp14))
+			s += tmp14
 			
-			for tmp18 in self.board:
-				s += b'\x00' if tmp18 is None else b'\x01'
-				if tmp18 is not None:
-					tmp19 = b''
-					tmp19 += struct.pack('I', len(tmp18))
-					while len(tmp19) and tmp19[-1] == b'\x00'[0]:
-						tmp19 = tmp19[:-1]
-					s += struct.pack('B', len(tmp19))
-					s += tmp19
+			for tmp15 in self.board:
+				s += b'\x00' if tmp15 is None else b'\x01'
+				if tmp15 is not None:
+					tmp16 = b''
+					tmp16 += struct.pack('I', len(tmp15))
+					while len(tmp16) and tmp16[-1] == b'\x00'[0]:
+						tmp16 = tmp16[:-1]
+					s += struct.pack('B', len(tmp16))
+					s += tmp16
 					
-					for tmp20 in tmp18:
-						s += b'\x00' if tmp20 is None else b'\x01'
-						if tmp20 is not None:
-							s += struct.pack('b', tmp20.value)
+					for tmp17 in tmp15:
+						s += b'\x00' if tmp17 is None else b'\x01'
+						if tmp17 is not None:
+							s += struct.pack('b', tmp17.value)
 		
 		# serialize self.scores
 		s += b'\x00' if self.scores is None else b'\x01'
 		if self.scores is not None:
-			tmp21 = b''
-			tmp21 += struct.pack('I', len(self.scores))
-			while len(tmp21) and tmp21[-1] == b'\x00'[0]:
-				tmp21 = tmp21[:-1]
-			s += struct.pack('B', len(tmp21))
-			s += tmp21
+			tmp18 = b''
+			tmp18 += struct.pack('I', len(self.scores))
+			while len(tmp18) and tmp18[-1] == b'\x00'[0]:
+				tmp18 = tmp18[:-1]
+			s += struct.pack('B', len(tmp18))
+			s += tmp18
 			
-			for tmp22 in self.scores:
-				s += b'\x00' if tmp22 is None else b'\x01'
-				if tmp22 is not None:
-					tmp23 = b''
-					tmp23 += struct.pack('I', len(tmp22))
-					while len(tmp23) and tmp23[-1] == b'\x00'[0]:
-						tmp23 = tmp23[:-1]
-					s += struct.pack('B', len(tmp23))
-					s += tmp23
+			for tmp19 in self.scores:
+				s += b'\x00' if tmp19 is None else b'\x01'
+				if tmp19 is not None:
+					tmp20 = b''
+					tmp20 += struct.pack('I', len(tmp19))
+					while len(tmp20) and tmp20[-1] == b'\x00'[0]:
+						tmp20 = tmp20[:-1]
+					s += struct.pack('B', len(tmp20))
+					s += tmp20
 					
-					s += tmp22.encode('ISO-8859-1') if PY3 else tmp22
-				s += b'\x00' if self.scores[tmp22] is None else b'\x01'
-				if self.scores[tmp22] is not None:
-					s += struct.pack('i', self.scores[tmp22])
+					s += tmp19.encode('ISO-8859-1') if PY3 else tmp19
+				s += b'\x00' if self.scores[tmp19] is None else b'\x01'
+				if self.scores[tmp19] is not None:
+					s += struct.pack('i', self.scores[tmp19])
 		
 		# serialize self.pacman
 		s += b'\x00' if self.pacman is None else b'\x01'
@@ -413,17 +446,17 @@ class World(object):
 		# serialize self.ghosts
 		s += b'\x00' if self.ghosts is None else b'\x01'
 		if self.ghosts is not None:
-			tmp24 = b''
-			tmp24 += struct.pack('I', len(self.ghosts))
-			while len(tmp24) and tmp24[-1] == b'\x00'[0]:
-				tmp24 = tmp24[:-1]
-			s += struct.pack('B', len(tmp24))
-			s += tmp24
+			tmp21 = b''
+			tmp21 += struct.pack('I', len(self.ghosts))
+			while len(tmp21) and tmp21[-1] == b'\x00'[0]:
+				tmp21 = tmp21[:-1]
+			s += struct.pack('B', len(tmp21))
+			s += tmp21
 			
-			for tmp25 in self.ghosts:
-				s += b'\x00' if tmp25 is None else b'\x01'
-				if tmp25 is not None:
-					s += tmp25.serialize()
+			for tmp22 in self.ghosts:
+				s += b'\x00' if tmp22 is None else b'\x01'
+				if tmp22 is not None:
+					s += tmp22.serialize()
 		
 		# serialize self.constants
 		s += b'\x00' if self.constants is None else b'\x01'
@@ -435,138 +468,138 @@ class World(object):
 
 	def deserialize(self, s, offset=0):
 		# deserialize self.width
-		tmp26 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp23 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp26:
+		if tmp23:
 			self.width = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.width = None
 		
 		# deserialize self.height
-		tmp27 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp24 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp27:
+		if tmp24:
 			self.height = struct.unpack('i', s[offset:offset + 4])[0]
 			offset += 4
 		else:
 			self.height = None
 		
 		# deserialize self.board
-		tmp28 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp25 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp28:
-			tmp29 = struct.unpack('B', s[offset:offset + 1])[0]
+		if tmp25:
+			tmp26 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
-			tmp30 = s[offset:offset + tmp29]
-			offset += tmp29
-			tmp30 += b'\x00' * (4 - tmp29)
-			tmp31 = struct.unpack('I', tmp30)[0]
+			tmp27 = s[offset:offset + tmp26]
+			offset += tmp26
+			tmp27 += b'\x00' * (4 - tmp26)
+			tmp28 = struct.unpack('I', tmp27)[0]
 			
 			self.board = []
-			for tmp32 in range(tmp31):
-				tmp34 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp29 in range(tmp28):
+				tmp31 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp34:
-					tmp35 = struct.unpack('B', s[offset:offset + 1])[0]
+				if tmp31:
+					tmp32 = struct.unpack('B', s[offset:offset + 1])[0]
 					offset += 1
-					tmp36 = s[offset:offset + tmp35]
-					offset += tmp35
-					tmp36 += b'\x00' * (4 - tmp35)
-					tmp37 = struct.unpack('I', tmp36)[0]
+					tmp33 = s[offset:offset + tmp32]
+					offset += tmp32
+					tmp33 += b'\x00' * (4 - tmp32)
+					tmp34 = struct.unpack('I', tmp33)[0]
 					
-					tmp33 = []
-					for tmp38 in range(tmp37):
-						tmp40 = struct.unpack('B', s[offset:offset + 1])[0]
+					tmp30 = []
+					for tmp35 in range(tmp34):
+						tmp37 = struct.unpack('B', s[offset:offset + 1])[0]
 						offset += 1
-						if tmp40:
-							tmp41 = struct.unpack('b', s[offset:offset + 1])[0]
+						if tmp37:
+							tmp38 = struct.unpack('b', s[offset:offset + 1])[0]
 							offset += 1
-							tmp39 = ECell(tmp41)
+							tmp36 = ECell(tmp38)
 						else:
-							tmp39 = None
-						tmp33.append(tmp39)
+							tmp36 = None
+						tmp30.append(tmp36)
 				else:
-					tmp33 = None
-				self.board.append(tmp33)
+					tmp30 = None
+				self.board.append(tmp30)
 		else:
 			self.board = None
 		
 		# deserialize self.scores
-		tmp42 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp39 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp42:
-			tmp43 = struct.unpack('B', s[offset:offset + 1])[0]
+		if tmp39:
+			tmp40 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
-			tmp44 = s[offset:offset + tmp43]
-			offset += tmp43
-			tmp44 += b'\x00' * (4 - tmp43)
-			tmp45 = struct.unpack('I', tmp44)[0]
+			tmp41 = s[offset:offset + tmp40]
+			offset += tmp40
+			tmp41 += b'\x00' * (4 - tmp40)
+			tmp42 = struct.unpack('I', tmp41)[0]
 			
 			self.scores = {}
-			for tmp46 in range(tmp45):
-				tmp49 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp43 in range(tmp42):
+				tmp46 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp49:
-					tmp50 = struct.unpack('B', s[offset:offset + 1])[0]
+				if tmp46:
+					tmp47 = struct.unpack('B', s[offset:offset + 1])[0]
 					offset += 1
-					tmp51 = s[offset:offset + tmp50]
-					offset += tmp50
-					tmp51 += b'\x00' * (4 - tmp50)
-					tmp52 = struct.unpack('I', tmp51)[0]
+					tmp48 = s[offset:offset + tmp47]
+					offset += tmp47
+					tmp48 += b'\x00' * (4 - tmp47)
+					tmp49 = struct.unpack('I', tmp48)[0]
 					
-					tmp47 = s[offset:offset + tmp52].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp52]
-					offset += tmp52
+					tmp44 = s[offset:offset + tmp49].decode('ISO-8859-1') if PY3 else s[offset:offset + tmp49]
+					offset += tmp49
 				else:
-					tmp47 = None
-				tmp53 = struct.unpack('B', s[offset:offset + 1])[0]
+					tmp44 = None
+				tmp50 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp53:
-					tmp48 = struct.unpack('i', s[offset:offset + 4])[0]
+				if tmp50:
+					tmp45 = struct.unpack('i', s[offset:offset + 4])[0]
 					offset += 4
 				else:
-					tmp48 = None
-				self.scores[tmp47] = tmp48
+					tmp45 = None
+				self.scores[tmp44] = tmp45
 		else:
 			self.scores = None
 		
 		# deserialize self.pacman
-		tmp54 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp51 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp54:
+		if tmp51:
 			self.pacman = Pacman()
 			offset = self.pacman.deserialize(s, offset)
 		else:
 			self.pacman = None
 		
 		# deserialize self.ghosts
-		tmp55 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp52 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp55:
-			tmp56 = struct.unpack('B', s[offset:offset + 1])[0]
+		if tmp52:
+			tmp53 = struct.unpack('B', s[offset:offset + 1])[0]
 			offset += 1
-			tmp57 = s[offset:offset + tmp56]
-			offset += tmp56
-			tmp57 += b'\x00' * (4 - tmp56)
-			tmp58 = struct.unpack('I', tmp57)[0]
+			tmp54 = s[offset:offset + tmp53]
+			offset += tmp53
+			tmp54 += b'\x00' * (4 - tmp53)
+			tmp55 = struct.unpack('I', tmp54)[0]
 			
 			self.ghosts = []
-			for tmp59 in range(tmp58):
-				tmp61 = struct.unpack('B', s[offset:offset + 1])[0]
+			for tmp56 in range(tmp55):
+				tmp58 = struct.unpack('B', s[offset:offset + 1])[0]
 				offset += 1
-				if tmp61:
-					tmp60 = Ghost()
-					offset = tmp60.deserialize(s, offset)
+				if tmp58:
+					tmp57 = Ghost()
+					offset = tmp57.deserialize(s, offset)
 				else:
-					tmp60 = None
-				self.ghosts.append(tmp60)
+					tmp57 = None
+				self.ghosts.append(tmp57)
 		else:
 			self.ghosts = None
 		
 		# deserialize self.constants
-		tmp62 = struct.unpack('B', s[offset:offset + 1])[0]
+		tmp59 = struct.unpack('B', s[offset:offset + 1])[0]
 		offset += 1
-		if tmp62:
+		if tmp59:
 			self.constants = Constants()
 			offset = self.constants.deserialize(s, offset)
 		else:

@@ -1,33 +1,31 @@
 # -*- coding: utf-8 -*-
 
+# python imports
+import random
+
 # chillin imports
 from chillin_client import RealtimeAI
 
 # project imports
-import simple_ai
-from ks.models import World
+from ks.models import World, EDirection
+from ks.commands import ChangeGhostDirection, ChangePacmanDirection
 
 
 class AI(RealtimeAI):
 
     def __init__(self, world):
         super(AI, self).__init__(world)
-        simple_ai.ai = self
 
 
     def initialize(self):
         print('initialize')
 
-        world = self.world
-        simple_ai.initialize(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
-                             world.board, world.pacman, world.ghosts, world.constants,
-                             self.my_side, self.other_side, self.current_cycle, self.cycle_duration)
-
 
     def decide(self):
         print('decide')
 
-        world = self.world
-        simple_ai.decide(world.width, world.height, world.scores[self.my_side], world.scores[self.other_side],
-                             world.board, world.pacman, world.ghosts, world.constants,
-                             self.my_side, self.other_side, self.current_cycle, self.cycle_duration)
+        if self.my_side == 'Pacman':
+            self.send_command(ChangePacmanDirection(random.choice(list(EDirection))))
+        elif self.my_side == 'Ghost':
+            for ghost in self.world.ghosts:
+                self.send_command(ChangeGhostDirection(ghost.id, random.choice(list(EDirection))))

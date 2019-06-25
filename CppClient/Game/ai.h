@@ -15,7 +15,9 @@ public:
 
     void initialize();
     void decide();
-    void sendCommand(ks::KSObject *command);
+
+    void changePacmanDirection(ks::models::EDirection direction);
+    void changeGhostDirection(int id, ks::models::EDirection direction);
 };
 
 #endif // AI_H

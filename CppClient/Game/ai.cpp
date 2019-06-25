@@ -1,11 +1,13 @@
 #include "ai.h"
 
-#include <vector>
 #include <iostream>
+#include <vector>
 
-#include "simple_ai.h"
+#include "effolkronium/random.hpp"
 
 using namespace std;
+using Random = effolkronium::random_static;
+
 using namespace koala::chillin::client;
 using namespace ks::models;
 using namespace ks::commands;
@@ -13,7 +15,6 @@ using namespace ks::commands;
 
 AI::AI(World *world): RealtimeAI<World*>(world)
 {
-    simple_ai::ai = this;
 }
 
 AI::~AI()
@@ -23,46 +24,39 @@ AI::~AI()
 void AI::initialize()
 {
     cout << "initialize" << endl;
-
-    simple_ai::initialize(
-        world->width(),
-        world->height(),
-        world->ref_scores()[mySide],
-        world->ref_scores()[otherSide],
-        world->ref_board(),
-        world->ref_pacman(),
-        &world->ref_ghosts()[0],
-        world->ref_ghosts().size(),
-        world->ref_constants(),
-        mySide,
-        otherSide,
-        currentCycle,
-        cycleDuration
-    );
 }
 
 void AI::decide()
 {
     cout << "decide" << endl;
 
-    simple_ai::decide(
-        world->width(),
-        world->height(),
-        world->ref_scores()[mySide],
-        world->ref_scores()[otherSide],
-        world->ref_board(),
-        world->ref_pacman(),
-        &world->ref_ghosts()[0],
-        world->ref_ghosts().size(),
-        world->ref_constants(),
-        mySide,
-        otherSide,
-        currentCycle,
-        cycleDuration
-    );
+    if (this->mySide == "Pacman")
+    {
+        auto random_direction = Random::get({EDirection::Up, EDirection::Right, EDirection::Down, EDirection::Left});
+        changePacmanDirection(random_direction);
+    }
+    else if (this->mySide == "Ghost")
+    {
+        for (Ghost &ghost : this->world->ghosts())
+        {
+            auto random_direction = Random::get({EDirection::Up, EDirection::Right, EDirection::Down, EDirection::Left});
+            changeGhostDirection(ghost.id(), random_direction);
+        }
+    }
 }
 
-void AI::sendCommand(ks::KSObject *command)
+
+void AI::changePacmanDirection(EDirection direction)
 {
-    BaseAI::sendCommand(command);
+    ChangePacmanDirection cmd;
+    cmd.direction((ECommandDirection) direction);
+    this->sendCommand(&cmd);
+}
+
+void AI::changeGhostDirection(int id, EDirection direction)
+{
+    ChangeGhostDirection cmd;
+    cmd.id(id);
+    cmd.direction((ECommandDirection) direction);
+    this->sendCommand(&cmd);
 }
