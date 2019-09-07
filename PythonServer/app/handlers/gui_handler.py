@@ -5,7 +5,8 @@ from __future__ import division
 import math
 
 # chillin imports
-from chillin_server.gui import scene_actions
+from chillin_server.gui import GuiTools, scene_actions
+from chillin_server.gui.reference_manager import default_reference_manager as drm
 
 # project imports
 from ..ks.models import Position, Pacman, Ghost, World, ECell, EDirection
@@ -18,7 +19,6 @@ class GuiHandler:
     def __init__(self, world, scene):
         self._world = world
         self._scene = scene
-        self._rm = scene.rm
 
 
     def initialize(self, config):
@@ -45,9 +45,9 @@ class GuiHandler:
 
         self._eat_delay = 0.75
         self._ghost_eyes_ref = 'Eyes'
-        self._background_music_ref = self._rm.new()
-        self._wakawaka_music_ref = self._rm.new()
-        self._eat_ghost_music_ref = self._rm.new()
+        self._background_music_ref = drm.new()
+        self._wakawaka_music_ref = drm.new()
+        self._eat_ghost_music_ref = drm.new()
         self._eating_food = False
 
         self._ghosts_ref = {}
@@ -78,7 +78,7 @@ class GuiHandler:
         orthographic_size = self._world.height * self._cell_size / 2 + 2
 
         self._scene.add_action(scene_actions.ChangeCamera(
-            ref = self._rm.get('MainCamera'),
+            ref = drm.get('MainCamera'),
             clear_flag = scene_actions.ECameraClearFlag.SolidColor,
             background_color = scene_actions.Vector4(x=0, y=19/255, z=48/255),
             is_orthographic = True,
@@ -139,7 +139,7 @@ class GuiHandler:
 
                 scene_pos = self._get_scene_position(Position(x, y))
                 z = 5
-                reference = self._rm.new()
+                reference = drm.new()
 
                 # if cell == ECell.Wall and (y == self._world.height - 1 or y == 0 or x == self._world.width - 1 or x == 0):
                 #     self._scene.add_action(scene_actions.InstantiateBundleAsset(
@@ -251,7 +251,7 @@ class GuiHandler:
         # Draw pacman
         pacman_angle = self._angle[self._world.pacman.direction]
         scene_pos = self._get_scene_position(self._world.pacman.position)
-        self._pacman_ref = self._rm.new()
+        self._pacman_ref = drm.new()
 
         self._scene.add_action(scene_actions.InstantiateBundleAsset(
             ref = self._pacman_ref,
@@ -267,7 +267,7 @@ class GuiHandler:
         # Draw ghosts
         for ghost in self._world.ghosts:
             scene_pos = self._get_scene_position(ghost.position)
-            self._ghosts_ref[ghost.id] = self._rm.new()
+            self._ghosts_ref[ghost.id] = drm.new()
             color = self._ghosts_color[ghost.id % len(self._ghosts_color)]
 
             self._scene.add_action(scene_actions.InstantiateBundleAsset(

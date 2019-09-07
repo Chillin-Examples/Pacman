@@ -3,7 +3,8 @@
 # python imports
 
 # chillin imports
-from chillin_server.gui import scene_actions
+from chillin_server.gui import GuiTools, scene_actions
+from chillin_server.gui.reference_manager import default_reference_manager as drm
 
 
 class GameStatus:
@@ -11,12 +12,11 @@ class GameStatus:
     def __init__(self, world, scene, **kwargs):
         self._world = world
         self._scene = scene
-        self._rm = scene.rm
         self._eat_delay = kwargs['eat_delay']
 
 
     def initialize(self):
-        self._top_panel_ref = self._rm.new()
+        self._top_panel_ref = drm.new()
         self._health_panel_ref = 'HealthPanel'
         self._health_images_ref = []
         self._cycle_text_ref = 'CycleText'
@@ -37,7 +37,7 @@ class GameStatus:
 
         # Pacman health
         for _ in range(self._world.pacman.health):
-            new_ref = self._rm.new()
+            new_ref = drm.new()
             self._health_images_ref.append(new_ref)
 
             self._scene.add_action(scene_actions.InstantiateBundleAsset(
