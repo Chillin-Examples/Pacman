@@ -1,9 +1,9 @@
 {
 	"general": {
-	"command_files": [
-		"ks/commands"
-	],
-	"offline_mode": true
+		"command_files": [
+			"ks/commands"
+		],
+		"offline_mode": true
 	},
 
 	"net": {

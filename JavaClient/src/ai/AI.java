@@ -21,19 +21,19 @@ public class AI extends RealtimeAI<World, KSObject> {
 	public void decide() {
 		System.out.println("decide");
 
-        if (this.mySide.equals("Pacman")) {
-        	int randIndex = (int) (Math.random() * EDirection.values().length);
-        	EDirection randDir = EDirection.values()[randIndex];
-            changePacmanDirection(randDir);
-        }
+		if (this.mySide.equals("Pacman")) {
+			int randIndex = (int) (Math.random() * EDirection.values().length);
+			EDirection randDir = EDirection.values()[randIndex];
+			changePacmanDirection(randDir);
+		}
 
-        else if (this.mySide.equals("Ghost")) {
-            for (Ghost ghost : this.world.getGhosts()) {
-            	int randIndex = (int) (Math.random() * EDirection.values().length);
-            	EDirection randDir = EDirection.values()[randIndex];
-            	changeGhostDirection(ghost.getId(), randDir);
-            }
-        }
+		else if (this.mySide.equals("Ghost")) {
+			for (Ghost ghost : this.world.getGhosts()) {
+				int randIndex = (int) (Math.random() * EDirection.values().length);
+				EDirection randDir = EDirection.values()[randIndex];
+				changeGhostDirection(ghost.getId(), randDir);
+			}
+		}
 	}
 
 
